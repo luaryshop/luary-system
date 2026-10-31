@@ -1,254 +1,396 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full bg-[#FAFAFA]">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luary Atacado de Joias - Catálogo Exclusivo</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome para Ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Elegantes (Playfair Display e Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .font-serif-luxury { font-family: 'Playfair Display', serif; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#23384a">
+  <meta name="description" content="Luary Shop — acessórios com significado. Confira o catálogo, monte seu pedido de atacado e encontre a loja oficial no varejo.">
+  <meta property="og:title" content="Luary Shop | Acessórios com significado">
+  <meta property="og:description" content="Fé, estilo e revenda. Conheça a coleção Luary Shop.">
+  <title>Luary Shop | Acessórios com significado</title>
+  <link rel="icon" type="image/webp" href="public/images/luary-logo-instagram.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root{font-family:'DM Sans',Arial,sans-serif;color:#1c2631;background:#fbf9f4;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;--ink:#1c2631;--navy:#23384a;--navy-deep:#182a38;--cream:#fbf9f4;--paper:#f4f0e7;--white:#fffefa;--gold:#b28a4b;--gold-light:#dbc394;--rose:#d48c9a;--muted:#747a7a;--line:#e6e0d5;--serif:'Cormorant Garamond',Georgia,serif;scroll-behavior:smooth}
+    *{box-sizing:border-box}body{margin:0;min-width:320px;background:var(--cream);color:var(--ink)}a{color:inherit;text-decoration:none}button,input{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{color:inherit}img{display:block;max-width:100%}::selection{color:#fff;background:var(--navy)}.container{width:min(100% - 72px,1230px);margin:0 auto}.wide-container{width:min(100% - 72px,1344px);margin:0 auto}
+    .announcement{min-height:31px;display:flex;justify-content:center;align-items:center;gap:15px;padding:5px 12px;color:#f8f3e7;background:var(--navy-deep);font-size:9px;letter-spacing:.19em;font-weight:600;text-align:center}.announcement-star{color:var(--gold-light)}
+    .site-header{position:sticky;z-index:30;top:0;border-bottom:1px solid rgba(35,56,74,.08);background:rgba(251,249,244,.96);backdrop-filter:blur(14px)}.header-inner{min-height:81px;display:flex;align-items:center;justify-content:space-between;gap:28px}.brand{display:inline-flex;align-items:center;gap:11px;min-width:max-content}.brand-emblem{width:34px;height:34px;display:grid;place-items:center;border:1px solid rgba(178,138,75,.55);border-radius:50%;color:var(--gold);font-size:15px}.brand-wordmark{display:flex;flex-direction:column;gap:2px}.brand-name{color:var(--navy);font:600 32px/.78 var(--serif);letter-spacing:-.035em}.brand-subtitle{margin-top:4px;color:#79736a;font-size:7px;font-weight:600;letter-spacing:.14em}.main-nav{display:flex;align-items:center;gap:clamp(22px,3vw,48px);margin-left:auto}.main-nav a{position:relative;padding:8px 0;color:#40484c;font-size:12px}.main-nav a:after{position:absolute;right:0;bottom:2px;left:0;height:1px;content:'';background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .2s}.main-nav a:hover{color:var(--gold)}.main-nav a:hover:after{transform:scaleX(1)}.header-actions{display:flex;align-items:center;gap:10px}.header-quote-button{min-height:42px;display:flex;align-items:center;gap:9px;padding:0 12px;border:1px solid #cfc5b3;color:var(--navy);background:transparent;font-size:10px;font-weight:600}.header-quote-button:hover{background:#f3efe7}.header-count{min-width:19px;height:19px;display:grid;place-items:center;padding:0 3px;border-radius:50%;color:#fff;background:var(--navy);font-size:10px}.header-contact{min-height:42px;display:flex;align-items:center;gap:9px;padding:0 13px;color:#fff;background:var(--navy-deep);font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase}.header-contact:hover{background:#29455a}.mobile-menu-toggle{display:none;width:36px;height:36px;place-items:center;border:0;background:transparent;color:var(--navy);font-size:18px}
+    .hero{position:relative;isolation:isolate;min-height:535px;display:flex;align-items:center;overflow:hidden;background:#e9e4d9}.hero:before{position:absolute;z-index:-2;inset:0;content:'';background:url('public/images/luary-hero.webp') center/cover no-repeat}.hero:after{position:absolute;z-index:-1;inset:0;content:'';background:linear-gradient(90deg,rgba(251,249,244,.97) 0%,rgba(251,249,244,.91) 35%,rgba(251,249,244,.43) 62%,rgba(23,39,51,.08) 100%)}.hero-inner{min-height:535px;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(280px,.92fr);align-items:center}.hero-copy{max-width:610px;padding:70px 0 80px}.eyebrow{display:flex;align-items:center;gap:10px;margin:0 0 22px;color:var(--gold);font-size:9px;font-weight:700;letter-spacing:.19em}.eyebrow-line{width:28px;height:1px;background:currentColor}.hero h1,.section-heading h2,.wholesale-content h2,.retail-copy h2,.about-inner h2,.instagram-heading h2{margin:0;color:var(--navy);font:500 clamp(54px,6.1vw,86px)/.92 var(--serif);letter-spacing:-.035em}.hero h1 em,.section-heading h2 em,.wholesale-content h2 em,.retail-copy h2 em,.about-inner h2 em,.instagram-heading h2 em{color:var(--gold);font-weight:400}.hero-description{max-width:430px;margin:24px 0 0;color:#596168;font-size:13px;line-height:1.8}.hero-actions{display:flex;align-items:center;gap:25px;margin-top:28px}.button{min-height:49px;display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:0 18px;border:1px solid transparent;font-size:10px;letter-spacing:.06em;font-weight:600;transition:transform .2s,background .2s}.button:hover{transform:translateY(-2px)}.button-dark{color:#fffdf8;background:var(--navy)}.button-dark:hover{background:var(--navy-deep)}.button-cream{color:var(--navy);background:var(--cream)}.button-cream:hover{background:white}.text-link{display:inline-flex;align-items:center;gap:8px;border:0;color:var(--navy);background:transparent;font-size:10px;font-weight:600}.text-link:hover{color:var(--gold)}.hero-signature{display:flex;align-items:center;gap:10px;margin-top:38px;color:#73736d;font:italic 16px var(--serif)}.signature-star{color:var(--rose);font-size:21px}.hero-aside{position:relative;align-self:stretch;display:flex;align-items:center;justify-content:center;min-height:430px}.hero-orbit{position:absolute;width:min(30vw,350px);aspect-ratio:1;border:1px solid rgba(178,138,75,.6);border-radius:50%;transform:rotate(-28deg) scaleY(.74)}.hero-orbit-one{box-shadow:inset 0 0 0 15px rgba(255,255,255,.07),0 0 0 14px rgba(255,255,255,.12)}.hero-orbit-two{width:min(24vw,285px);border-color:rgba(35,56,74,.24);transform:rotate(37deg) scaleY(.78)}.hero-stamp{width:145px;height:145px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid rgba(178,138,75,.65);border-radius:50%;color:var(--navy);background:rgba(251,249,244,.83);box-shadow:0 15px 45px rgba(36,44,48,.09);transform:rotate(-9deg)}.hero-stamp strong{font:600 27px var(--serif);letter-spacing:.04em}.hero-stamp small{font-size:8px;letter-spacing:.26em}.hero-stamp i{margin-top:7px;color:var(--rose);font-size:14px}.hero-note{position:absolute;right:4%;bottom:17%;display:flex;align-items:center;gap:7px;color:#f8f3e8;font-size:8px;letter-spacing:.16em;text-transform:uppercase}.hero-note strong{color:var(--gold-light);font:500 20px var(--serif)}.scroll-cue{position:absolute;right:36px;bottom:22px;display:flex;align-items:center;gap:9px;color:#7e817e;font-size:8px;letter-spacing:.15em}.scroll-cue i{color:var(--gold)}
+    .promise-strip{min-height:105px;display:flex;justify-content:center;align-items:center;gap:clamp(30px,7vw,100px);padding:17px 25px;color:#faf6ed;background:var(--navy)}.promise-item{display:flex;align-items:center;gap:14px;color:#d9d9d1;font-size:10px;line-height:1.5}.promise-item strong{color:#fffdf8;font-weight:500}.promise-number{color:var(--gold-light);font:italic 23px var(--serif)}.promise-divider{width:1px;height:34px;background:rgba(255,255,255,.2)}
+    .collection-section{padding:104px 0 110px}.section-heading{display:flex;align-items:end;justify-content:space-between;gap:40px}.section-heading .eyebrow{margin-bottom:17px}.section-heading h2,.retail-copy h2,.instagram-heading h2{font-size:clamp(45px,5vw,66px);line-height:.98}.section-intro{max-width:330px;margin:0 0 5px;color:#767b7a;font-size:11px;line-height:1.85}.catalog-toolbar{display:flex;align-items:center;gap:18px;margin:36px 0 22px;padding-bottom:14px;border-bottom:1px solid var(--line)}.filter-label{color:#8a887f;font-size:8px;font-weight:700;letter-spacing:.16em}.filter-list{display:flex;flex-wrap:wrap;gap:7px}.category-btn{min-height:30px;padding:0 11px;border:1px solid #ded8cd;border-radius:30px;color:#666d6e;background:transparent;font-size:9px;transition:all .18s}.category-btn:hover,.category-btn.active{border-color:var(--navy);color:white;background:var(--navy)}.catalog-count{margin-left:auto;color:#96948c;font-size:8px;letter-spacing:.14em}.product-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.product-card{width:100%;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);min-height:320px;overflow:hidden;border:1px solid #ebe6dc;color:inherit;background:var(--white);text-align:left;cursor:pointer;transition:box-shadow .25s,border-color .25s}.product-card:hover{border-color:#d2c3a5;box-shadow:0 16px 35px rgba(35,56,74,.1)}.product-photo{position:relative;min-height:320px;overflow:hidden;background:#e5e0d6}.product-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s}.product-card:hover .product-photo img{transform:scale(1.035)}.product-photo .photo-secondary{opacity:0}.product-ref{position:absolute;z-index:1;top:13px;left:13px;padding:7px 8px;color:var(--navy);background:rgba(251,249,244,.94);font-size:7px;letter-spacing:.12em}.product-details{min-width:0;display:flex;flex-direction:column;align-items:flex-start;padding:22px 21px 17px}.product-category{color:#a59d8f;font-size:7px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}.product-name{margin:18px 0 8px;color:var(--navy);font:600 26px/1.02 var(--serif)}.product-description{margin:0;color:#747977;font-size:10px;line-height:1.7}.product-card-footer{width:100%;display:flex;align-items:end;justify-content:space-between;gap:10px;margin-top:auto;padding-top:17px;border-top:1px solid var(--line)}.product-price-label{color:#969187;font-size:8px;line-height:1.5}.product-price{display:block;color:var(--navy);font-size:10px;font-weight:600}.view-details{display:inline-flex;align-items:center;gap:5px;color:var(--navy);font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}.empty-catalog{min-height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;border:1px dashed #d7cebd;text-align:center}.empty-symbol{color:var(--rose);font-size:24px}.empty-catalog h3{margin:11px 0 5px;color:var(--navy);font:500 29px var(--serif)}.empty-catalog p{max-width:410px;margin:0 0 14px;color:#757a78;font-size:10px;line-height:1.7}.catalog-footnote{display:flex;align-items:center;gap:8px;margin-top:20px;color:#918d82;font-size:8px}.tiny-star{color:var(--gold)}
+    .wholesale-section{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);min-height:475px;color:white;background:var(--navy)}.wholesale-art{position:relative;min-height:475px;overflow:hidden;background:linear-gradient(145deg,rgba(17,35,49,.2),rgba(17,35,49,.9)),url('public/images/luary-hero.webp') center/cover}.wholesale-art:before,.wholesale-art:after{position:absolute;content:'';border:1px solid rgba(219,195,148,.5);border-radius:50%;transform:rotate(-30deg) scaleY(.68)}.wholesale-art:before{width:370px;height:370px;top:13%;left:11%;box-shadow:0 0 0 12px rgba(219,195,148,.05),0 0 0 26px rgba(219,195,148,.04)}.wholesale-art:after{width:285px;height:285px;top:25%;left:21%;transform:rotate(34deg) scaleY(.75)}.wholesale-ring{position:absolute;z-index:1;width:60px;height:60px;top:42%;left:48%;border:1px solid rgba(219,195,148,.68);border-radius:50%}.wholesale-ring-two{position:absolute;z-index:2;width:14px;height:14px;top:calc(42% + 23px);left:calc(48% + 23px);border-radius:50%;background:var(--gold)}.wholesale-art-word{position:absolute;right:8%;bottom:8%;color:rgba(255,255,255,.14);font:clamp(65px,9vw,126px) var(--serif);letter-spacing:.04em}.wholesale-content{align-self:center;max-width:660px;padding:65px clamp(35px,8vw,110px) 65px 65px}.eyebrow-light{color:var(--gold-light)}.wholesale-content h2{color:#fffdf8;font-size:clamp(46px,5vw,68px)}.wholesale-content h2 em{color:var(--gold-light)}.wholesale-copy{max-width:460px;margin:20px 0 24px;color:#d0d4d3;font-size:11px;line-height:1.85}.wholesale-steps{display:flex;gap:19px;margin:0 0 26px}.wholesale-step{display:flex;align-items:center;gap:8px;color:#e5e4dd;font-size:8px;line-height:1.45}.wholesale-step b{width:23px;height:23px;display:grid;place-items:center;flex:0 0 auto;border:1px solid rgba(219,195,148,.6);border-radius:50%;color:var(--gold-light);font:14px var(--serif)}.payment-note{display:flex;align-items:center;gap:6px;margin:12px 0 0;color:#d4d4cb;font-size:8px}
+    .retail-section{position:relative;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:clamp(45px,10vw,145px);padding:105px 0 120px}.retail-copy{max-width:530px}.retail-copy .eyebrow{margin-bottom:17px}.retail-copy>p:not(.eyebrow){max-width:440px;margin:18px 0 23px;color:#747a7a;font-size:11px;line-height:1.8}.retail-card{position:relative;min-height:300px;overflow:hidden;padding:27px;border:1px solid #dfd7c7;background:var(--paper)}.retail-card-top{display:flex;align-items:center;justify-content:space-between}.retail-mark{width:34px;height:34px;display:grid;place-items:center;border:1px solid rgba(178,138,75,.6);border-radius:50%;color:var(--gold);font:600 21px var(--serif)}.retail-live{display:flex;align-items:center;gap:6px;color:#767c79;font-size:7px;font-weight:700;letter-spacing:.12em}.retail-live i{width:6px;height:6px;border-radius:50%;background:#8caa81}.retail-label{margin:25px 0 8px;color:#a0875c;font-size:7px;font-weight:700;letter-spacing:.17em}.retail-card h3{margin:0;color:var(--navy);font:600 39px/.95 var(--serif)}.retail-card h3 em{color:var(--gold);font-weight:400}.retail-card>p:not(.retail-label){max-width:265px;color:#747a7a;font-size:9px;line-height:1.7}.retail-card-link{display:inline-flex;align-items:center;gap:7px;margin-top:9px;color:var(--navy);font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}.retail-card-stamp{position:absolute;right:20px;bottom:18px;width:74px;height:74px;display:grid;place-items:center;border:1px solid rgba(178,138,75,.5);border-radius:50%;color:var(--gold);font-size:19px}.marketplace-note{position:absolute;right:0;bottom:48px;display:flex;align-items:center;gap:11px;color:#7f827d;font-size:8px}.marketplace-note span{padding:5px 7px;border:1px solid #d8cdb6;color:#9b7c48;font-size:7px;letter-spacing:.11em}
+    .about-section{min-height:365px;display:grid;grid-template-columns:1fr .7fr;align-items:center;gap:45px;padding:65px max(36px,calc((100vw - 1230px)/2));background:#f1eee6}.about-inner{max-width:510px}.about-kicker{display:flex;align-items:center;gap:9px;margin-bottom:15px;color:#9e8a68;font-size:8px;font-weight:700;letter-spacing:.15em}.about-inner h2{font-size:clamp(48px,5vw,66px)}.about-inner>p{max-width:470px;color:#727876;font-size:11px;line-height:1.85}.instagram-link{width:max-content;max-width:100%;display:flex;align-items:center;gap:11px;margin-top:19px;padding:10px 13px;border:1px solid #ded6c7;background:rgba(255,255,255,.5)}.instagram-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;color:white;background:linear-gradient(135deg,#915ac2,#e04e76,#f2a447)}.instagram-link span:nth-child(2){display:flex;flex-direction:column;gap:2px}.instagram-link small{color:#8a867d;font-size:7px;letter-spacing:.12em}.instagram-link strong{color:var(--navy);font-size:10px}.instagram-link>i{margin-left:16px;color:var(--gold)}.about-mark{width:min(255px,100%);aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;justify-self:center;gap:6px;border:1px solid rgba(178,138,75,.54);border-radius:50%;color:var(--navy);font:500 25px var(--serif);letter-spacing:.08em}.about-mark i{color:var(--gold);font-size:12px}
+    .instagram-section{padding:95px 0 105px}.instagram-heading{display:flex;align-items:end;justify-content:space-between;gap:25px;margin-bottom:25px}.instagram-heading .eyebrow{margin-bottom:15px}.instagram-post-card{display:grid;grid-template-columns:.95fr 1.05fr;overflow:hidden;border:1px solid #e5dfd3;background:#fffefa}.instagram-post-photo{position:relative;min-height:350px;overflow:hidden;background:#e7e1d7}.instagram-post-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.instagram-post-photo>span{position:absolute;top:14px;left:14px;padding:7px 9px;color:var(--navy);background:rgba(251,249,244,.94);font-size:7px;font-weight:700;letter-spacing:.12em}.instagram-post-copy{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:clamp(25px,5vw,60px)}.post-handle{display:flex;align-items:center;gap:7px;color:#818781;font-size:9px}.post-handle i{color:#a85e91}.instagram-post-copy h3{margin:20px 0 8px;color:var(--navy);font:600 clamp(30px,4vw,45px)/.98 var(--serif)}.instagram-post-copy p{max-width:380px;color:#737a78;font-size:10px;line-height:1.8}.post-cta{display:inline-flex;align-items:center;gap:7px;margin-top:17px;color:var(--navy);font-size:8px;font-weight:700;letter-spacing:.13em}
+    .site-footer{padding:43px 0 18px;color:#d2d6d2;background:var(--navy-deep)}.footer-main{display:grid;grid-template-columns:minmax(190px,.8fr) 1fr 1fr;align-items:center;gap:30px;padding-bottom:30px}.footer-main .brand-name{color:#fff}.footer-main .brand-subtitle{color:#aeb7b5}.footer-main .brand-emblem{color:var(--gold-light);border-color:rgba(219,195,148,.55)}.footer-main>p{max-width:240px;margin:0;color:#b8c0c0;font:italic 17px var(--serif)}.footer-links{display:flex;justify-content:end;flex-wrap:wrap;gap:16px}.footer-links a{display:inline-flex;align-items:center;gap:4px;color:#d5d6d2;font-size:8px}.footer-links a:hover{color:var(--gold-light)}.footer-bottom{display:flex;justify-content:space-between;gap:15px;padding-top:14px;border-top:1px solid rgba(255,255,255,.14);color:#9ca6a7;font-size:8px;letter-spacing:.04em}.floating-contact{position:fixed;z-index:25;right:24px;bottom:22px;min-height:45px;display:flex;align-items:center;gap:9px;padding:0 15px;border:1px solid rgba(255,255,255,.4);border-radius:30px;color:white;background:var(--navy);box-shadow:0 6px 22px rgba(20,35,45,.2);font-size:9px;font-weight:600}.floating-contact:hover{background:var(--navy-deep)}
+    /* Janela de peça, seletor de quantidade e lista do pedido */
+    .overlay{position:fixed;z-index:60;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;background:rgba(15,26,34,.78);backdrop-filter:blur(4px)}.overlay[hidden]{display:none}.detail-dialog{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);width:min(920px,100%);max-height:min(680px,calc(100dvh - 40px));min-height:500px;overflow:hidden;background:#fff;box-shadow:0 28px 90px rgba(0,0,0,.38)}.detail-gallery{min-width:0;display:flex;flex-direction:column;justify-content:center;padding:24px;background:#f7f7f6}.detail-main-photo{position:relative;min-height:250px;height:min(48vh,390px);display:grid;place-items:center;overflow:hidden;border:1px solid #ececea;background:#fff}.detail-main-photo img{width:100%;height:100%;object-fit:contain}.gallery-nav{position:absolute;top:50%;width:36px;height:36px;display:grid;place-items:center;transform:translateY(-50%);border:1px solid #e8e8e8;border-radius:50%;color:var(--navy);background:rgba(255,255,255,.94);cursor:pointer}.gallery-nav:hover{color:white;background:var(--navy)}.gallery-prev{left:12px}.gallery-next{right:12px}.gallery-count{position:absolute;right:12px;bottom:12px;padding:6px 9px;color:white;background:rgba(23,39,53,.83);font-size:9px}.thumbnails{display:flex;gap:8px;max-width:100%;overflow-x:auto;padding:13px 1px 4px;scrollbar-width:thin}.thumbnail{width:64px;height:64px;flex:0 0 auto;padding:3px;border:1px solid #dfe1e1;background:#fff;cursor:pointer}.thumbnail.active,.thumbnail:hover{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}.thumbnail img{width:100%;height:100%;object-fit:cover}.detail-content{min-width:0;display:flex;flex-direction:column;overflow-y:auto;padding:34px 32px 28px}.detail-close{position:absolute;z-index:2;top:14px;right:14px;width:36px;height:36px;display:grid;place-items:center;border:0;color:#5d6a70;background:#f4f5f5;font-size:17px;cursor:pointer}.detail-close:hover{color:var(--navy);background:#e8ebec}.detail-category{align-self:flex-start;padding:6px 9px;color:#9e7739;background:#fbf5e9;font-size:9px;letter-spacing:.14em;text-transform:uppercase}.detail-sku{margin:10px 0 0;color:#969b9d;font-size:10px}.detail-title{margin:7px 42px 17px 0;color:var(--navy);font:600 clamp(27px,3.2vw,38px)/.98 var(--serif)}.price-box{margin:0 0 15px;padding:14px 0;border-top:1px solid #eceeed;border-bottom:1px solid #eceeed}.price-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.price-row+.price-row{margin-top:8px}.price-row-label{color:#6d7577;font-size:9px;letter-spacing:.08em;text-transform:uppercase}.wholesale-price{color:#1b2731;font-size:20px;font-weight:600;white-space:nowrap}.retail-price{color:#969b9d;font-size:12px;text-decoration:line-through;white-space:nowrap}.detail-description{margin:0;color:#777e80;font-size:11px;line-height:1.75}.purchase-area{margin-top:auto;padding-top:19px}.quantity-label{display:block;margin-bottom:8px;color:#747a7a;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.quantity-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}.quantity-control{height:42px;display:inline-flex;align-items:center;border:1px solid #d9d9d6;background:#fff}.quantity-control button{width:39px;height:40px;border:0;color:var(--navy);background:transparent;cursor:pointer}.quantity-control button:hover{background:#f1f0ec}.quantity-control input{width:48px;height:40px;border:0;outline:0;color:var(--navy);text-align:center;font:600 13px 'DM Sans',sans-serif;appearance:textfield}.quantity-control input::-webkit-inner-spin-button,.quantity-control input::-webkit-outer-spin-button{appearance:none;margin:0}.quantity-hint{color:#969b9d;font-size:9px}.add-cart-btn,.whatsapp-btn{width:100%;min-height:47px;display:flex;align-items:center;justify-content:center;gap:9px;padding:11px 14px;font-size:9px;font-weight:700;letter-spacing:.1em;text-align:center;text-transform:uppercase;transition:background .2s,color .2s,border-color .2s}.add-cart-btn{border:1px solid var(--navy-deep);color:#fff;background:var(--navy-deep);cursor:pointer}.add-cart-btn:hover{background:#2b4357}.whatsapp-btn{margin-top:8px;border:1px solid #d8d9d8;color:var(--navy);background:white;text-decoration:none}.whatsapp-btn:hover{border-color:var(--navy);background:#f7f7f5}.inline-status{min-height:15px;margin:8px 0 0;color:#597551;font-size:10px}.cart-dialog{position:relative;width:min(620px,100%);max-height:calc(100dvh - 40px);display:flex;flex-direction:column;overflow:hidden;background:#fff;box-shadow:0 28px 90px rgba(0,0,0,.38)}.cart-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:23px 25px 17px;border-bottom:1px solid var(--line)}.cart-heading h2{margin:0;color:var(--navy);font:600 32px/1 var(--serif)}.cart-heading p{margin:6px 0 0;color:#848985;font-size:10px}.cart-items{overflow-y:auto;padding:0 25px}.cart-item{display:grid;grid-template-columns:58px minmax(0,1fr) auto;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #eeece7}.cart-item>img{width:58px;height:58px;object-fit:cover;background:#f1f0ec}.cart-item-name{color:var(--navy);font:600 17px/1.05 var(--serif)}.cart-item-ref{margin-top:4px;color:#969b9d;font-size:8px}.cart-item-controls{display:flex;align-items:center;gap:6px}.cart-item-controls button{width:27px;height:27px;border:1px solid #e1ddd4;color:var(--navy);background:#fff;cursor:pointer}.cart-item-controls input{width:32px;border:0;text-align:center;font-size:11px}.cart-footer{padding:16px 25px 22px;border-top:1px solid var(--line)}.cart-total{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px;color:#737a7b;font-size:10px}.cart-total strong{color:var(--navy);font-size:13px}.cart-empty{padding:45px 15px;color:#788080;font-size:12px;text-align:center}.cart-note{margin:9px 0 0;color:#93958f;font-size:9px;line-height:1.6;text-align:center}.focus-ring:focus-visible,button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+    @media(max-width:980px){.wide-container,.hero-inner{width:min(100% - 48px,1230px)}.container{width:min(100% - 48px,1230px)}.main-nav{gap:18px}.main-nav a{font-size:10px}.product-card{grid-template-columns:1fr}.product-photo{min-height:280px;aspect-ratio:1.25}.product-details{min-height:225px}.wholesale-content{padding-left:40px;padding-right:30px}.footer-main{grid-template-columns:1fr 1fr}.footer-links{grid-column:1/-1;justify-content:flex-start}}
+    @media(max-width:700px){.announcement{min-height:29px;gap:8px;font-size:7px;letter-spacing:.12em}.wide-container,.hero-inner,.container{width:calc(100% - 38px)}.header-inner{min-height:68px;gap:10px}.brand-emblem{width:30px;height:30px}.brand-name{font-size:29px}.brand-subtitle{font-size:6px}.mobile-menu-toggle{display:grid;margin-left:auto}.header-actions{gap:6px}.header-contact{width:36px;height:36px;min-height:36px;justify-content:center;padding:0}.header-contact span{display:none}.header-quote-button{gap:5px;padding:0 8px;font-size:8px}.header-quote-button>span:nth-child(2){display:none}.header-quote-button svg{font-size:13px}.header-count{min-width:17px;height:17px;font-size:9px}.main-nav{position:absolute;top:calc(100% + 1px);right:0;left:0;display:none;flex-direction:column;align-items:stretch;gap:0;padding:8px 20px 14px;border-bottom:1px solid var(--line);background:var(--cream);box-shadow:0 14px 18px rgba(35,56,74,.06)}.main-nav.is-open{display:flex}.main-nav a{padding:12px 3px;border-bottom:1px solid #ece7df;font-size:12px}.main-nav a:after{display:none}.hero{min-height:610px;align-items:flex-start}.hero:before{background-position:64% center}.hero:after{background:linear-gradient(90deg,rgba(251,249,244,.95) 0%,rgba(251,249,244,.84) 58%,rgba(251,249,244,.31) 100%)}.hero-inner{min-height:610px;display:block}.hero-copy{position:relative;z-index:2;padding:74px 0 0}.hero h1{font-size:clamp(48px,12.5vw,68px)}.hero-description{max-width:340px;margin-top:18px;font-size:11px}.hero-actions{flex-wrap:wrap;gap:15px;margin-top:22px}.button{min-height:44px;padding:0 14px;font-size:9px}.hero-signature{margin-top:26px;font-size:14px}.hero-aside{position:absolute;right:0;bottom:0;width:47%;min-height:205px;opacity:.8}.hero-orbit{width:170px}.hero-orbit-two{width:140px}.hero-stamp{width:90px;height:90px}.hero-stamp strong{font-size:18px}.hero-stamp small{font-size:6px}.hero-stamp i{margin-top:3px;font-size:10px}.hero-note{right:0;bottom:11%;font-size:6px}.hero-note strong{font-size:15px}.scroll-cue{right:10px;bottom:14px;font-size:6px}.promise-strip{min-height:82px;justify-content:space-around;gap:8px;padding:12px 9px}.promise-item{gap:6px;font-size:7px}.promise-number{font-size:16px}.promise-divider{height:25px}.collection-section{padding:72px 0 76px}.section-heading{display:block}.section-heading .eyebrow{margin-bottom:14px}.section-heading h2,.retail-copy h2,.instagram-heading h2{font-size:clamp(41px,10vw,55px)}.section-intro{max-width:400px;margin-top:14px;font-size:10px}.catalog-toolbar{align-items:flex-start;flex-wrap:wrap;gap:9px;margin:25px 0 17px}.filter-label{width:100%}.filter-list{gap:5px}.category-btn{min-height:28px;padding:0 8px;font-size:7px}.catalog-count{align-self:center;font-size:7px}.product-grid{grid-template-columns:1fr;gap:13px}.product-card{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);min-height:260px}.product-photo{min-height:260px;aspect-ratio:auto}.product-details{min-height:260px;padding:16px 12px 13px}.product-category{font-size:6px}.product-name{margin-top:13px;font-size:22px}.product-description{font-size:8px}.product-ref{top:8px;left:8px;padding:5px;font-size:6px}.product-card-footer{flex-wrap:wrap;padding-top:11px}.product-price-label{font-size:7px}.product-price{font-size:9px}.view-details{font-size:6px}.empty-catalog{min-height:220px;padding:23px}.empty-catalog h3{font-size:25px}.catalog-footnote{align-items:flex-start;font-size:7px;line-height:1.5}.wholesale-section{grid-template-columns:1fr}.wholesale-art{min-height:205px;max-height:205px}.wholesale-art:before{width:205px;height:205px;top:0;left:25%}.wholesale-art:after{width:155px;height:155px;top:25px;left:33%}.wholesale-ring{top:37%;left:49%;width:45px;height:45px}.wholesale-ring-two{top:calc(37% + 16px);left:calc(49% + 16px);width:12px;height:12px}.wholesale-art-word{right:8px;bottom:0;font-size:58px}.wholesale-content{padding:39px 21px 43px}.wholesale-content .eyebrow{margin-bottom:15px}.wholesale-content h2{font-size:48px}.wholesale-copy{margin:15px 0 20px;font-size:10px}.wholesale-steps{justify-content:space-between;gap:6px}.wholesale-step{align-items:flex-start;gap:5px;font-size:7px}.wholesale-step b{width:19px;height:19px;font-size:10px}.payment-note{align-items:flex-start;font-size:7px;line-height:1.5}.retail-section{grid-template-columns:1fr;gap:23px;padding:72px 0 125px}.retail-copy>p:not(.eyebrow){font-size:10px}.retail-card{min-height:258px;padding:20px}.retail-card h3{font-size:34px}.marketplace-note{right:0;bottom:54px;width:100%;align-items:flex-start;font-size:7px}.about-section{min-height:0;grid-template-columns:1fr;gap:24px;padding:55px 21px}.about-inner h2{font-size:49px}.about-inner>p{font-size:10px}.about-mark{width:165px;font-size:22px}.instagram-section{padding:68px 0 75px}.instagram-heading{display:block;margin-bottom:19px}.instagram-heading .text-link{margin-top:12px}.instagram-post-card{grid-template-columns:1fr}.instagram-post-photo{min-height:290px}.instagram-post-copy{padding:22px}.instagram-post-copy h3{margin-top:14px;font-size:31px}.instagram-post-copy p{font-size:9px}.site-footer{padding:32px 0 15px}.footer-main{grid-template-columns:1fr;gap:14px;padding-bottom:22px}.footer-main>p{max-width:260px}.footer-links{grid-column:auto;justify-content:flex-start;gap:12px}.footer-links a{font-size:7px}.footer-bottom{flex-direction:column;gap:5px;font-size:7px}.floating-contact{right:12px;bottom:12px;min-height:39px;padding:0 12px;font-size:8px}.overlay{padding:9px}.detail-dialog{display:flex;flex-direction:column;max-height:calc(100dvh - 18px);min-height:0;overflow-y:auto}.detail-gallery{padding:14px 14px 7px}.detail-main-photo{height:33vh;min-height:175px;max-height:270px}.thumbnail{width:52px;height:52px}.detail-content{overflow:visible;padding:16px 19px 19px}.detail-close{top:9px;right:9px}.detail-title{margin-right:38px;margin-bottom:11px;font-size:28px}.price-box{padding:9px 0;margin-bottom:10px}.purchase-area{padding-top:11px}.cart-dialog{max-height:calc(100dvh - 18px)}.cart-heading,.cart-items{padding-right:16px;padding-left:16px}.cart-footer{padding-right:16px;padding-left:16px}.cart-item{grid-template-columns:45px minmax(0,1fr) auto;gap:8px}.cart-item>img{width:45px;height:45px}.cart-item-controls{gap:3px}.cart-item-controls button{width:23px;height:25px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
 </head>
-<body class="min-h-full flex flex-col justify-between text-gray-900 bg-[#FAFAFA]">
+<body>
+  <div class="announcement"><span>FÉ · ESTILO · REVENDA</span><span class="announcement-star" aria-hidden="true">✦</span><span>ENVIO PARA TODO O BRASIL</span></div>
+  <header class="site-header"><div class="header-inner wide-container">
+    <a class="brand" href="#inicio" aria-label="Luary Shop — início"><span class="brand-emblem" aria-hidden="true"><i class="fa-solid fa-sparkles"></i></span><span class="brand-wordmark"><span class="brand-name">luary</span><span class="brand-subtitle">SHOP · SEMIJOIAS &amp; PRESENTES</span></span></a>
+    <button id="mobile-menu-toggle" class="mobile-menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+    <nav id="main-nav" class="main-nav" aria-label="Navegação principal"><a href="#colecao">Coleção</a><a href="#atacado">Atacado</a><a href="#varejo">Onde comprar</a><a href="#sobre">A Luary</a></nav>
+    <div class="header-actions"><button id="open-cart-btn" class="header-quote-button" type="button" aria-label="Abrir meu pedido"><i class="fa-solid fa-bag-shopping"></i><span>Meu pedido</span><span id="cart-count" class="header-count">0</span></button><a class="header-contact" href="https://www.instagram.com/luaryshop.oficial/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i><span>Fale conosco</span></a></div>
+  </div></header>
 
-    <!-- CABEÇALHO LUXUOSO -->
-    <header class="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-xs">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <span class="text-2xl font-serif-luxury font-bold tracking-wider text-gray-900 uppercase">Luary Atacado</span>
-            </div>
-            <div class="flex items-center space-x-6">
-                <a href="admin.html" class="text-xs tracking-widest text-gray-500 hover:text-gray-900 uppercase font-medium transition">Área Restrita</a>
-                <a href="https://wa.me/5519999999999?text=Olá,%20gostaria%20de%20atendimento%20no%20atacado%20Luary." target="_blank" class="bg-gray-900 hover:bg-gray-800 text-white text-xs uppercase tracking-widest px-5 py-3 rounded-none font-medium transition shadow-sm flex items-center">
-                    <i class="fa-brands fa-whatsapp mr-2 text-sm"></i>Fale Conosco
-                </a>
-            </div>
-        </div>
-    </header>
+  <main id="inicio">
+    <section class="hero" aria-labelledby="hero-title"><div class="hero-inner wide-container"><div class="hero-copy"><p class="eyebrow"><span class="eyebrow-line"></span> ACESSÓRIOS COM SIGNIFICADO</p><h1 id="hero-title">Pequenos detalhes.<br><em>Grandes significados.</em></h1><p class="hero-description">Chaveiros folheados 18K que levam fé e estilo para a rotina — e novas possibilidades para quem revende.</p><div class="hero-actions"><a class="button button-dark" href="#colecao">Descobrir a coleção <i class="fa-solid fa-arrow-right"></i></a><a class="text-link" href="#atacado">Quero revender <i class="fa-solid fa-arrow-down"></i></a></div><div class="hero-signature"><span class="signature-star">✳</span><span>Uma escolha de fé, estilo e afeto.</span></div></div><div class="hero-aside" aria-hidden="true"><div class="hero-orbit hero-orbit-one"></div><div class="hero-orbit hero-orbit-two"></div><div class="hero-stamp"><strong>LUARY</strong><small>SHOP</small><i>✦</i></div><div class="hero-note">folheados <strong>18K</strong></div></div></div><a class="scroll-cue" href="#colecao"><span>ROLE PARA DESCOBRIR</span><i class="fa-solid fa-chevron-down"></i></a></section>
 
-    <!-- BANNER HERO (Estilo Alta Joalheria) -->
-    <section class="relative bg-[#1A1A1A] text-white overflow-hidden">
-        <div class="absolute inset-0 opacity-40 bg-cover bg-center" style="background-image: url('https://cdn.jsdelivr.net/gh/luaryshop/luary-cdn@main/settings/hero-bg.webp');"></div>
-        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 flex flex-col items-start justify-center">
-            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 mb-3 font-medium">Direto da Fábrica em Limeira/SP</span>
-            <h1 class="text-4xl sm:text-6xl font-serif-luxury font-bold tracking-tight max-w-2xl leading-tight mb-6">
-                Pequenos detalhes. <br><span class="italic font-normal text-gray-300">Grandes significados.</span>
-            </h1>
-            <p class="text-sm sm:text-base text-gray-300 max-w-lg font-light mb-8 leading-relaxed">
-                Joias brutas e semi-joias de alto padrão desenvolvidas especialmente para lojistas, revendedoras e sacoleiras elevarem suas vendas.
-            </p>
-            <a href="#catalogo" class="border border-white text-white hover:bg-white hover:text-gray-900 text-xs uppercase tracking-widest px-8 py-4 transition duration-300 font-medium">
-                Explorar Catálogo
-            </a>
-        </div>
+    <section class="promise-strip" aria-label="Informações da loja"><div class="promise-item"><span class="promise-number">01</span><span>Chaveiros<br><strong>folheados 18K</strong></span></div><span class="promise-divider" aria-hidden="true"></span><div class="promise-item"><span class="promise-number">02</span><span>Envio para<br><strong>todo o Brasil</strong></span></div><span class="promise-divider" aria-hidden="true"></span><div class="promise-item"><span class="promise-number">03</span><span>Para usar,<br><strong>presentear e revender</strong></span></div></section>
+
+    <section class="collection-section container" id="colecao" aria-labelledby="collection-title"><div class="section-heading"><div><p class="eyebrow"><span class="eyebrow-line"></span> CATÁLOGO LUARY</p><h2 id="collection-title">Escolha o seu <em>significado.</em></h2></div><p class="section-intro">Conheça as peças da Luary Shop. Para comprar no atacado, selecione os modelos e monte seu pedido de orçamento.</p></div>
+      <div class="catalog-toolbar"><span class="filter-label">FILTRAR POR</span><div id="category-filters" class="filter-list" role="group" aria-label="Filtrar produtos por categoria"><button type="button" data-category="TODOS" aria-pressed="true" class="category-btn active">Todos</button></div><span id="catalog-count" class="catalog-count"></span></div>
+      <div id="products-grid" class="product-grid" aria-live="polite"><div class="empty-catalog"><span class="empty-symbol">✳</span><h3>Preparando a coleção Luary…</h3><p>As peças do catálogo aparecerão aqui.</p></div></div>
+      <div class="catalog-footnote"><span class="tiny-star">✦</span> Fotos e referências são adicionadas pela equipe conforme os produtos reais são cadastrados.</div>
     </section>
 
-    <!-- CONTEÚDO PRINCIPAL: CATÁLOGO -->
-    <main id="catalogo" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="text-center max-w-xl mx-auto mb-12">
-            <h2 class="text-3xl font-serif-luxury font-bold text-gray-900 mb-3">Catálogo de Atacado</h2>
-            <p class="text-sm text-gray-500 font-light">Selecione suas referências exclusivas direto da fábrica para revenda com zero pedido mínimo.</p>
-        </div>
+    <section class="wholesale-section" id="atacado" aria-labelledby="wholesale-title"><div class="wholesale-art" aria-hidden="true"><div class="wholesale-ring"></div><div class="wholesale-ring-two"></div><span class="wholesale-art-word">LUARY</span></div><div class="wholesale-content"><p class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> LUARY PARA REVENDA</p><h2 id="wholesale-title">Sua próxima venda<br><em>começa aqui.</em></h2><p class="wholesale-copy">Monte uma lista com as peças que você gostou e envie sua solicitação para a equipe Luary. A equipe confirma valores, disponibilidade, quantidade mínima, frete e pagamento no atendimento.</p><div class="wholesale-steps"><div class="wholesale-step"><b>1</b><span>Escolha<br>os modelos</span></div><div class="wholesale-step"><b>2</b><span>Informe<br>as quantidades</span></div><div class="wholesale-step"><b>3</b><span>Combine os<br>detalhes no atendimento</span></div></div><button class="button button-cream" type="button" id="wholesale-open-cart">Montar meu pedido de orçamento <i class="fa-solid fa-arrow-right"></i></button><p class="payment-note"><i class="fa-solid fa-check"></i> Sem pagamento no site. Condições combinadas no atendimento.</p></div></section>
 
-        <!-- FILTROS DE CATEGORIA -->
-        <div id="category-filters" class="flex flex-wrap justify-center gap-2 mb-12">
-            <button onclick="filterCategory('TODOS')" class="category-btn active px-5 py-2 text-xs uppercase tracking-wider font-medium bg-gray-900 text-white rounded-none transition">Todos</button>
-            <!-- Inserido dinamicamente via JS -->
-        </div>
+    <section class="retail-section container" id="varejo" aria-labelledby="retail-title"><div class="retail-copy"><p class="eyebrow"><span class="eyebrow-line"></span> PARA COMPRAR NO VAREJO</p><h2 id="retail-title">Encontre a Luary<br><em>onde você compra.</em></h2><p>Prefere comprar uma peça por vez? Visite a loja oficial da Luary na Shopee. Novos canais serão adicionados quando os endereços oficiais estiverem confirmados.</p><a class="button button-dark" href="https://shopee.com.br/luaryshop" target="_blank" rel="noopener noreferrer">Comprar na Shopee <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div><div class="retail-card"><div class="retail-card-top"><span class="retail-mark">L</span><span class="retail-live"><i></i> LOJA OFICIAL</span></div><p class="retail-label">VAREJO · MARKETPLACE</p><h3>Luary Shop<br><em>na Shopee</em></h3><p>Confira modelos, disponibilidade e condições de compra diretamente na loja oficial.</p><a href="https://shopee.com.br/luaryshop" target="_blank" rel="noopener noreferrer" class="retail-card-link">Visitar loja <i class="fa-solid fa-arrow-up-right-from-square"></i></a><span class="retail-card-stamp" aria-hidden="true">✦</span></div><div class="marketplace-note"><span>EM BREVE</span><p>Mercado Livre e outros canais serão adicionados quando os links oficiais forem informados.</p></div></section>
 
-        <!-- GRID DE PRODUTOS -->
-        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="col-span-full text-center py-12 text-gray-400">Carregando catálogo...</div>
-        </div>
-    </main>
+    <section class="about-section" id="sobre" aria-labelledby="about-title"><div class="about-inner"><div class="about-kicker"><span class="signature-star">✳</span><span>FÉ · ESTILO · REVENDA</span></div><h2 id="about-title">Um presente com<br><em>intenção.</em></h2><p>A Luary Shop reúne chaveiros folheados e presentes para quem valoriza acessórios com significado. Uma marca feita para acompanhar o dia a dia e também inspirar quem empreende.</p><a class="instagram-link" href="https://www.instagram.com/luaryshop.oficial/" target="_blank" rel="noopener noreferrer"><span class="instagram-icon"><i class="fa-brands fa-instagram"></i></span><span><small>ACOMPANHE A LUARY</small><strong>@luaryshop.oficial</strong></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div><div class="about-mark" aria-hidden="true"><span>FÉ</span><i>✦</i><span>ESTILO</span><i>✦</i><span>AFETO</span></div></section>
 
-    <!-- MODAL DE VISUALIZAÇÃO DE FOTOS (Carrossel Completo de até 10 fotos) -->
-    <div id="product-modal" class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 hidden">
-        <div class="bg-white w-full max-w-4xl rounded-none overflow-hidden shadow-2xl relative grid grid-cols-1 md:grid-cols-2">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-900 z-10 text-xl w-10 h-10 flex items-center justify-center bg-gray-100"><i class="fa-solid fa-xmark"></i></button>
-            
-            <!-- Galeria de Fotos Modal -->
-            <div class="bg-gray-50 p-6 flex flex-col justify-center items-center relative">
-                <div class="w-full h-80 sm:h-96 flex items-center justify-center overflow-hidden bg-white border border-gray-100">
-                    <img id="modal-main-img" src="" class="max-h-full max-w-full object-contain transition duration-300" alt="Produto">
-                </div>
-                <!-- Miniaturas (Thumbnails 01 a 10) -->
-                <div id="modal-thumbnails" class="flex space-x-2 mt-4 overflow-x-auto max-w-full py-2"></div>
-            </div>
+    <section class="instagram-section container" aria-labelledby="instagram-title"><div class="instagram-heading"><div><p class="eyebrow"><span class="eyebrow-line"></span> A LUARY NO INSTAGRAM</p><h2 id="instagram-title">Inspiração para <em>compartilhar.</em></h2></div><a class="text-link" href="https://www.instagram.com/luaryshop.oficial/" target="_blank" rel="noopener noreferrer">Seguir no Instagram <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div><a class="instagram-post-card" href="https://www.instagram.com/luaryshop.oficial/p/DUtzfd4gA5F/" target="_blank" rel="noopener noreferrer"><div class="instagram-post-photo"><img src="public/images/luary-chaveiro-cruz-ouro.webp" alt="Chaveiro de cruz folheado a ouro Luary Shop" loading="lazy"><span>PUBLICAÇÃO OFICIAL</span></div><div class="instagram-post-copy"><span class="post-handle"><i class="fa-brands fa-instagram"></i> @luaryshop.oficial</span><h3>Fé que acompanha você.</h3><p>Conheça o chaveiro Cruz Estilizada e veja mais detalhes na publicação original da Luary Shop.</p><span class="post-cta">VER NO INSTAGRAM <i class="fa-solid fa-arrow-up-right-from-square"></i></span></div></a></section>
+  </main>
 
-            <!-- Detalhes do Produto Modal -->
-            <div class="p-8 flex flex-col justify-between">
-                <div>
-                    <span id="modal-category" class="text-xs uppercase tracking-widest text-amber-600 font-medium bg-amber-50 px-2.5 py-1"></span>
-                    <span id="modal-sku" class="text-xs text-gray-400 block mt-2">Ref: <span></span></span>
-                    <h3 id="modal-title" class="text-2xl font-serif-luxury font-bold text-gray-900 mt-1 mb-4"></h3>
-                    <div class="space-y-2 border-t border-b border-gray-100 py-4 my-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs uppercase tracking-wider text-gray-500 font-medium">Preço Atacado:</span>
-                            <span id="modal-price-wholesale" class="text-xl font-bold text-gray-900"></span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs uppercase tracking-wider text-gray-400">Preço Varejo Sugerido:</span>
-                            <span id="modal-price-retail" class="text-sm text-gray-500 line-through"></span>
-                        </div>
-                    </div>
-                    <p class="text-xs text-gray-500 font-light leading-relaxed">Produto com garantia de banho e acabamento impecável direto do polo joalheiro de Limeira/SP. Ideal para revenda.</p>
-                </div>
-                <div class="mt-8">
-                    <a id="modal-whatsapp-btn" href="#" target="_blank" class="w-full bg-gray-900 hover:bg-gray-800 text-white py-4 px-6 text-xs uppercase tracking-widest font-medium text-center transition block flex items-center justify-center">
-                        <i class="fa-brands fa-whatsapp mr-2 text-base"></i>Consultar Atacado no WhatsApp
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+  <footer class="site-footer"><div class="container"><div class="footer-main"><a class="brand" href="#inicio" aria-label="Luary Shop — início"><span class="brand-emblem"><i class="fa-solid fa-sparkles"></i></span><span class="brand-wordmark"><span class="brand-name">luary</span><span class="brand-subtitle">SHOP · SEMIJOIAS &amp; PRESENTES</span></span></a><p>Fé, estilo e presentes para acompanhar a sua história.</p><div class="footer-links"><a href="#colecao">Catálogo</a><a href="#atacado">Atacado</a><a href="#varejo">Onde comprar</a><a href="https://www.instagram.com/luaryshop.oficial/" target="_blank" rel="noopener noreferrer">Instagram <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div></div><div class="footer-bottom"><span>© <span id="current-year"></span> Luary Shop. Todos os direitos reservados.</span><span>Chaveiros folheados 18K · Envio para todo o Brasil</span></div></div></footer>
+  <a class="floating-contact" href="https://www.instagram.com/luaryshop.oficial/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i><span>Fale com a Luary</span></a>
 
-    <!-- RODAPÉ -->
-    <footer class="bg-white border-t border-gray-100 py-12 text-center text-xs text-gray-400 font-light">
-        <p>&copy; 2026 Luary Atacado de Joias. Todos os direitos reservados. Limeira - SP.</p>
-    </footer>
+  <!-- Product detail modal: image gallery, quantity, cart add and WhatsApp -->
+  <div id="product-modal" class="overlay" hidden><section class="detail-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description"><button type="button" class="detail-close" data-close-product aria-label="Fechar detalhes"><i class="fa-solid fa-xmark"></i></button><div class="detail-gallery"><div class="detail-main-photo"><img id="modal-main-img" src="" alt=""><button id="gallery-prev" type="button" class="gallery-nav gallery-prev" aria-label="Foto anterior"><i class="fa-solid fa-chevron-left"></i></button><button id="gallery-next" type="button" class="gallery-nav gallery-next" aria-label="Próxima foto"><i class="fa-solid fa-chevron-right"></i></button><span id="gallery-count" class="gallery-count"></span></div><div id="modal-thumbnails" class="thumbnails" aria-label="Fotos do produto"></div></div><div class="detail-content"><span id="modal-category" class="detail-category"></span><p class="detail-sku">Ref: <span id="modal-sku-value"></span></p><h2 id="modal-title" class="detail-title"></h2><div class="price-box"><div class="price-row"><span class="price-row-label">Preço atacado</span><strong id="modal-price-wholesale" class="wholesale-price"></strong></div><div class="price-row"><span class="price-row-label">Varejo sugerido</span><span id="modal-price-retail" class="retail-price"></span></div></div><p id="modal-description" class="detail-description"></p><div class="purchase-area"><label class="quantity-label" for="modal-quantity">Quantidade</label><div class="quantity-row"><div class="quantity-control"><button type="button" id="modal-quantity-minus" aria-label="Diminuir quantidade"><i class="fa-solid fa-minus"></i></button><input id="modal-quantity" type="number" min="1" max="999" value="1" inputmode="numeric" aria-label="Quantidade desejada"><button type="button" id="modal-quantity-plus" aria-label="Aumentar quantidade"><i class="fa-solid fa-plus"></i></button></div><span class="quantity-hint">Escolha quantas unidades deseja.</span></div><button type="button" id="add-to-cart-btn" class="add-cart-btn"><i class="fa-solid fa-bag-shopping"></i> Adicionar ao meu pedido</button><p id="modal-status" class="inline-status" role="status" aria-live="polite"></p><a id="modal-whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer" class="whatsapp-btn"><i class="fa-brands fa-whatsapp text-base"></i> Consultar atacado no WhatsApp</a></div></div></section></div>
 
-    <!-- SCRIPTS FIREBASE E RENDERIZAÇÃO DA VITRINE -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  <div id="cart-modal" class="overlay" hidden><section class="cart-dialog" role="dialog" aria-modal="true" aria-labelledby="cart-title"><header class="cart-heading"><div><h2 id="cart-title">Meu pedido</h2><p>Revise referências e quantidades antes de consultar.</p></div><button type="button" class="detail-close" data-close-cart aria-label="Fechar pedido"><i class="fa-solid fa-xmark"></i></button></header><div id="cart-items" class="cart-items"></div><footer class="cart-footer"><div class="cart-total"><span>Estimativa dos itens com preço informado</span><strong id="cart-total-value">—</strong></div><a id="cart-whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer" class="add-cart-btn"><i class="fa-brands fa-whatsapp text-base"></i> Enviar pedido pelo WhatsApp</a><p class="cart-note">Solicitação de consulta, sem pagamento no site. Valores e disponibilidade serão confirmados no atendimento.</p></footer></section></div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCanlMwdfuD9gmVt62nJYYetj4K2-BfWEc",
-            authDomain: "luary-system.firebaseapp.com",
-            projectId: "luary-system",
-            storageBucket: "luary-system.firebasestorage.app",
-            messagingSenderId: "996287172742",
-            appId: "1:996287172742:web:4ff8c22a01cabe4015c107"
-        };
+  <script type="module">
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        let allProducts = [];
-        let activeCategory = 'TODOS';
+    const firebaseConfig = {
+      apiKey: "AIzaSyCanlMwdfuD9gmVt62nJYYetj4K2-BfWEc",
+      authDomain: "luary-system.firebaseapp.com",
+      projectId: "luary-system",
+      storageBucket: "luary-system.firebasestorage.app",
+      messagingSenderId: "996287172742",
+      appId: "1:996287172742:web:4ff8c22a01cabe4015c107"
+    };
+    const WHATSAPP_NUMBER = "5519999999999";
+    const PLACEHOLDER_IMAGE = "https://via.placeholder.com/700x700?text=Luary+Shop";
+    const CART_STORAGE_KEY = "luary-atacado-cart-v1";
 
-        async function loadStorefront() {
-            const grid = document.getElementById('products-grid');
-            const categoryFilters = document.getElementById('category-filters');
-            
-            try {
-                const querySnapshot = await getDocs(collection(db, "products"));
-                allProducts = [];
-                
-                querySnapshot.forEach((docSnap) => {
-                    allProducts.push({ id: docSnap.id, ...docSnap.data() });
-                });
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    let allProducts = [];
+    let activeCategory = "TODOS";
+    let activeProduct = null;
+    let activeImages = [];
+    let activeImageIndex = 0;
+    let lastFocusedElement = null;
+    let cart = readCart();
 
-                if (allProducts.length === 0) {
-                    grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400 font-light">Nenhum produto cadastrado no momento.</div>`;
-                    return;
-                }
+    const $ = (id) => document.getElementById(id);
+    const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char]));
+    const normalizeCategory = (value) => String(value || "Outros").trim().toUpperCase();
+    const imageUrl = (image) => typeof image === "string" ? image : (image?.url || image?.src || "");
+    const productImages = (product) => (Array.isArray(product?.images) ? product.images.map(imageUrl).filter(Boolean) : []);
+    const productPrice = (value) => {
+      if (value === null || value === undefined || value === "") return null;
+      const number = Number(value);
+      return Number.isFinite(number) && number > 0 ? number : null;
+    };
+    const currency = (value) => Number(value).toLocaleString("pt-BR", { style:"currency", currency:"BRL" });
+    const formatPrice = (value) => productPrice(value) === null ? "Sob consulta" : currency(productPrice(value));
+    const clampQuantity = (value) => Math.max(1, Math.min(999, Number.parseInt(value, 10) || 1));
+    const productById = (id) => allProducts.find((product) => String(product.id) === String(id));
 
-                // Gerar categorias únicas
-                const categories = ['TODOS', ...new Set(allProducts.map(p => (p.category || 'Outros').toUpperCase()))];
-                categoryFilters.innerHTML = categories.map(cat => `
-                    <button onclick="window.filterCategory('${cat}')" class="category-btn px-5 py-2 text-xs uppercase tracking-wider font-medium transition ${cat === activeCategory ? 'bg-gray-900 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-900'}">${cat}</button>
-                `).join('');
+    function readCart() {
+      try {
+        const stored = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || "{}");
+        return stored && typeof stored === "object" ? stored : {};
+      } catch { return {}; }
+    }
+    function saveCart() {
+      try { localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart)); } catch (error) { console.warn("Não foi possível salvar o pedido neste navegador.", error); }
+      renderCart();
+      updateCartCount();
+    }
+    function updateCartCount() {
+      const count = Object.values(cart).reduce((sum, quantity) => sum + (Number(quantity) || 0), 0);
+      $("cart-count").textContent = String(count);
+      $("open-cart-btn").setAttribute("aria-label", `Abrir meu pedido, ${count} ${count === 1 ? "peça" : "peças"}`);
+    }
 
-                renderProducts(allProducts);
-            } catch (error) {
-                console.error("Erro ao carregar vitrine:", error);
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-red-400 font-light">Erro ao carregar o catálogo.</div>`;
-            }
+    async function loadStorefront() {
+      const grid = $("products-grid");
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        allProducts = querySnapshot.docs.map((docSnap) => ({ id:docSnap.id, ...docSnap.data() }));
+        if (!allProducts.length) {
+          grid.innerHTML = '<div class="empty-catalog"><span class="empty-symbol">✳</span><h3>Estamos atualizando o catálogo.</h3><p>As peças aparecerão aqui assim que forem cadastradas e publicadas pela equipe Luary.</p><a class="text-link" href="https://www.instagram.com/luaryshop.oficial/" target="_blank" rel="noopener noreferrer">Consultar com a Luary no Instagram <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>';
+          $("category-filters").innerHTML = '<button type="button" data-category="TODOS" class="category-btn active">Todos</button>';
+          updateCartCount();
+          return;
         }
+        const categories = ["TODOS", ...new Set(allProducts.map((product) => normalizeCategory(product.category)))];
+        $("category-filters").innerHTML = categories.map((category) => `<button type="button" data-category="${escapeHtml(category)}" aria-pressed="${category === activeCategory}" class="category-btn${category === activeCategory ? " active" : ""}">${category === "TODOS" ? "Todos" : escapeHtml(category)}</button>`).join("");
+        renderProducts(allProducts);
+        reconcileCart();
+      } catch (error) {
+        console.error("Erro ao carregar vitrine:", error);
+        grid.innerHTML = '<div class="empty-catalog" role="alert"><span class="empty-symbol">✳</span><h3>Estamos atualizando o catálogo.</h3><p>Não foi possível carregar as peças agora. Atualize a página e tente novamente.</p></div>';
+      }
+    }
 
-        window.filterCategory = (cat) => {
-            activeCategory = cat;
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                if (btn.textContent.trim().toUpperCase() === cat) {
-                    btn.className = "category-btn px-5 py-2 text-xs uppercase tracking-wider font-medium bg-gray-900 text-white transition";
-                } else {
-                    btn.className = "category-btn px-5 py-2 text-xs uppercase tracking-wider font-medium bg-white text-gray-600 border border-gray-200 hover:border-gray-900 transition";
-                }
-            });
+    function reconcileCart() {
+      const valid = {};
+      for (const [id, quantity] of Object.entries(cart)) {
+        if (productById(id) && Number(quantity) > 0) valid[id] = clampQuantity(quantity);
+      }
+      cart = valid;
+      saveCart();
+    }
 
-            if (cat === 'TODOS') {
-                renderProducts(allProducts);
-            } else {
-                renderProducts(allProducts.filter(p => (p.category || '').toUpperCase() === cat));
-            }
-        };
+    function renderProducts(products) {
+      const grid = $("products-grid");
+      if ($("catalog-count")) $("catalog-count").textContent = `${products.length} ${products.length === 1 ? "PEÇA" : "PEÇAS"}`;
+      if (!products.length) {
+        grid.innerHTML = '<div class="empty-catalog"><span class="empty-symbol">✳</span><h3>Novas peças chegando.</h3><p>Não encontramos produtos nesta categoria. Fale com a Luary para consultar a disponibilidade.</p><a class="text-link" href="https://www.instagram.com/luaryshop.oficial/" target="_blank" rel="noopener noreferrer">Consultar no Instagram <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>';
+        return;
+      }
+      grid.innerHTML = products.map((product) => {
+        const images = productImages(product);
+        const first = images[0] || PLACEHOLDER_IMAGE;
+        const second = images[1] || first;
+        const sku = product.sku || product.reference || "A confirmar";
+        const description = product.description || product.details || "Consulte os detalhes e a disponibilidade com a equipe Luary.";
+        return `
+          <button type="button" class="product-card group" data-open-product="${escapeHtml(product.id)}" aria-label="Ver detalhes de ${escapeHtml(product.name || "produto")}">
+            <span class="product-photo block">
+              <span class="product-ref">REF. ${escapeHtml(sku)}</span>
+              <img src="${escapeHtml(first)}" class="photo-primary" alt="${escapeHtml(product.name || "Produto Luary")}" loading="lazy">
+              <img src="${escapeHtml(second)}" class="photo-secondary" alt="" loading="lazy">
+            </span>
+            <span class="product-details text-left">
+              <span class="product-category">${escapeHtml(product.category || "Joias")}</span>
+              <span class="product-name font-serif-luxury">${escapeHtml(product.name || "Peça Luary")}</span>
+              <span class="product-description">${escapeHtml(description)}</span>
+              <span class="product-card-footer">
+                <span><span class="product-price-label">Atacado</span><span class="product-price">${escapeHtml(formatPrice(product.priceWholesale))}</span></span>
+                <span class="view-details">Ver detalhes <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></span>
+              </span>
+            </span>
+          </button>`;
+      }).join("");
+    }
 
-        function renderProducts(products) {
-            const grid = document.getElementById('products-grid');
-            grid.innerHTML = products.map(product => {
-                const mainImg = (product.images && product.images.length > 0) ? product.images[0] : 'https://via.placeholder.com/400?text=Sem+Foto';
-                const secondImg = (product.images && product.images.length > 1) ? product.images[1] : mainImg;
+    function setCategory(category) {
+      activeCategory = normalizeCategory(category);
+      document.querySelectorAll("[data-category]").forEach((button) => {
+        const selected = button.dataset.category === activeCategory;
+        button.classList.toggle("active", selected);
+        button.setAttribute("aria-pressed", String(selected));
+      });
+      renderProducts(activeCategory === "TODOS" ? allProducts : allProducts.filter((product) => normalizeCategory(product.category) === activeCategory));
+    }
+    window.filterCategory = setCategory;
 
-                return `
-                    <div class="group bg-white border border-gray-100 overflow-hidden shadow-xs hover:shadow-xl transition duration-500 flex flex-col justify-between cursor-pointer" onclick="openProductModal('${product.id}')">
-                        <div class="relative w-full h-80 bg-gray-50 overflow-hidden">
-                            <span class="absolute top-3 left-3 z-10 bg-white/90 backdrop-blur-xs text-gray-900 text-[10px] tracking-widest uppercase px-2.5 py-1 font-medium shadow-xs">Ref: ${product.sku}</span>
-                            <img src="${mainImg}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:opacity-0 transition duration-500">
-                            <img src="${secondImg}" class="absolute inset-0 w-full h-full object-cover object-center opacity-0 group-hover:opacity-100 transition duration-500">
-                        </div>
-                        <div class="p-6 flex flex-col justify-between flex-1">
-                            <div>
-                                <span class="text-[10px] uppercase tracking-widest text-gray-400 font-medium">${product.category || 'Joias'}</span>
-                                <h3 class="text-base font-serif-luxury font-bold text-gray-900 mt-1 mb-3 group-hover:text-amber-700 transition">${product.name}</h3>
-                            </div>
-                            <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
-                                <div>
-                                    <span class="text-[10px] uppercase tracking-wider text-gray-400 block">Atacado</span>
-                                    <span class="text-lg font-bold text-gray-900">R$ ${Number(product.priceWholesale || 0).toFixed(2)}</span>
-                                </div>
-                                <span class="text-xs uppercase tracking-widest text-gray-900 underline font-medium">Ver Detalhes</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
+    function updateGallery() {
+      const image = activeImages[activeImageIndex] || PLACEHOLDER_IMAGE;
+      $("modal-main-img").src = image;
+      $("modal-main-img").alt = `${activeProduct?.name || "Produto"} — foto ${activeImageIndex + 1}`;
+      $("gallery-count").textContent = activeImages.length > 1 ? `${activeImageIndex + 1} / ${activeImages.length}` : "";
+      $("gallery-prev").hidden = activeImages.length <= 1;
+      $("gallery-next").hidden = activeImages.length <= 1;
+      document.querySelectorAll(".thumbnail").forEach((button, index) => button.classList.toggle("active", index === activeImageIndex));
+    }
+    function moveGallery(step) {
+      if (activeImages.length < 2) return;
+      activeImageIndex = (activeImageIndex + step + activeImages.length) % activeImages.length;
+      updateGallery();
+    }
 
-        window.openProductModal = (id) => {
-            const product = allProducts.find(p => p.id === id);
-            if (!product) return;
+    function openProductModal(id) {
+      const product = productById(id);
+      if (!product) return;
+      activeProduct = product;
+      activeImages = productImages(product);
+      if (!activeImages.length) activeImages = [PLACEHOLDER_IMAGE];
+      activeImageIndex = 0;
+      lastFocusedElement = document.activeElement;
+      $("modal-sku-value").textContent = product.sku || product.reference || "A confirmar";
+      $("modal-title").textContent = product.name || "Peça Luary";
+      $("modal-category").textContent = product.category || "Joias";
+      $("modal-price-wholesale").textContent = formatPrice(product.priceWholesale);
+      $("modal-price-retail").textContent = formatPrice(product.priceRetail);
+      $("modal-description").textContent = product.description || product.details || "Produto selecionado para você. Consulte a equipe Luary para confirmar acabamento, disponibilidade e condições de atacado.";
+      $("modal-quantity").value = "1";
+      $("modal-status").textContent = "";
+      $("modal-thumbnails").innerHTML = activeImages.map((image, index) => `<button type="button" class="thumbnail${index === 0 ? " active" : ""}" data-image-index="${index}" aria-label="Mostrar foto ${index + 1}" aria-pressed="${index === 0}"><img src="${escapeHtml(image)}" alt="" loading="lazy"></button>`).join("");
+      updateGallery();
+      updateProductWhatsappLink();
+      $("product-modal").hidden = false;
+      document.body.style.overflow = "hidden";
+      $("modal-quantity").focus({ preventScroll:true });
+    }
+    window.openProductModal = openProductModal;
 
-            document.getElementById('modal-sku').querySelector('span').textContent = product.sku;
-            document.getElementById('modal-title').textContent = product.name;
-            document.getElementById('modal-category').textContent = product.category || 'Joias';
-            document.getElementById('modal-price-wholesale').textContent = `R$ ${Number(product.priceWholesale || 0).toFixed(2)}`;
-            document.getElementById('modal-price-retail').textContent = `R$ ${Number(product.priceRetail || 0).toFixed(2)}`;
-            
-            const whatsappMsg = encodeURIComponent(`Olá, tenho interesse no atacado da referência *${product.sku} - ${product.name}* (R$ ${Number(product.priceWholesale || 0).toFixed(2)}). Poderia me passar mais detalhes?`);
-            document.getElementById('modal-whatsapp-btn').href = `https://wa.me/5519999999999?text=${whatsappMsg}`;
+    function closeProductModal() {
+      $("product-modal").hidden = true;
+      activeProduct = null;
+      if ($("cart-modal").hidden) document.body.style.overflow = "";
+      if (lastFocusedElement?.focus) lastFocusedElement.focus({ preventScroll:true });
+    }
+    window.closeModal = closeProductModal;
 
-            const images = product.images && product.images.length > 0 ? product.images : ['https://via.placeholder.com/400?text=Sem+Foto'];
-            
-            const mainImgEl = document.getElementById('modal-main-img');
-            mainImgEl.src = images[0];
+    function updateProductWhatsappLink() {
+      if (!activeProduct) return;
+      const quantity = clampQuantity($("modal-quantity").value);
+      const sku = activeProduct.sku || activeProduct.reference || "A confirmar";
+      const price = productPrice(activeProduct.priceWholesale);
+      const priceText = price === null ? "valor a confirmar" : currency(price);
+      const message = `Olá! Tenho interesse no atacado Luary: ${sku} - ${activeProduct.name || "Peça"}. Quantidade: ${quantity}. Valor unitário informado: ${priceText}. Poderiam confirmar disponibilidade e condições?`;
+      $("modal-whatsapp-btn").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    }
 
-            const thumbContainer = document.getElementById('modal-thumbnails');
-            thumbContainer.innerHTML = images.map((imgUrl, index) => `
-                <img src="${imgUrl}" onclick="document.getElementById('modal-main-img').src='${imgUrl}'" class="w-16 h-16 object-cover border border-gray-200 cursor-pointer hover:border-gray-900 transition flex-shrink-0" alt="Miniatura ${index + 1}">
-            `).join('');
+    function addActiveProductToCart() {
+      if (!activeProduct) return;
+      const quantity = clampQuantity($("modal-quantity").value);
+      const id = String(activeProduct.id);
+      cart[id] = Math.min(999, (Number(cart[id]) || 0) + quantity);
+      saveCart();
+      $("modal-status").textContent = `${quantity} ${quantity === 1 ? "unidade adicionada" : "unidades adicionadas"} ao seu pedido.`;
+      $("modal-quantity").value = "1";
+      updateProductWhatsappLink();
+    }
 
-            document.getElementById('product-modal').classList.remove('hidden');
-        };
+    function renderCart() {
+      const entries = Object.entries(cart).filter(([id, quantity]) => productById(id) && Number(quantity) > 0);
+      if (!entries.length) {
+        $("cart-items").innerHTML = '<div class="cart-empty"><i class="fa-solid fa-bag-shopping text-2xl mb-3"></i><br>Seu pedido está vazio.<br><span class="text-[10px]">Abra uma peça do catálogo para escolher a quantidade.</span></div>';
+        $("cart-total-value").textContent = "—";
+        $("cart-whatsapp-btn").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Olá! Gostaria de informações sobre o catálogo de atacado da Luary.")}`;
+        return;
+      }
+      let knownTotal = 0;
+      let hasUnknownPrice = false;
+      const messageLines = ["Olá! Gostaria de consultar este pedido de atacado Luary:"];
+      $("cart-items").innerHTML = entries.map(([id, quantity]) => {
+        const product = productById(id);
+        const images = productImages(product);
+        const price = productPrice(product.priceWholesale);
+        if (price === null) hasUnknownPrice = true; else knownTotal += price * Number(quantity);
+        messageLines.push(`• ${product.sku || product.reference || "Ref. a confirmar"} — ${product.name || "Peça"} — quantidade: ${quantity}${price === null ? " — valor a confirmar" : ` — ${currency(price)} cada`}`);
+        return `<article class="cart-item">
+          <img src="${escapeHtml(images[0] || PLACEHOLDER_IMAGE)}" alt="" loading="lazy">
+          <div><div class="cart-item-name">${escapeHtml(product.name || "Peça Luary")}</div><div class="cart-item-ref">REF. ${escapeHtml(product.sku || product.reference || "A confirmar")} · ${escapeHtml(formatPrice(price))} cada</div></div>
+          <div class="cart-item-controls" aria-label="Quantidade de ${escapeHtml(product.name || "produto")}">
+            <button type="button" data-cart-action="minus" data-product-id="${escapeHtml(id)}" aria-label="Diminuir">−</button>
+            <input type="number" min="1" max="999" value="${clampQuantity(quantity)}" data-cart-quantity="${escapeHtml(id)}" aria-label="Quantidade">
+            <button type="button" data-cart-action="plus" data-product-id="${escapeHtml(id)}" aria-label="Aumentar">+</button>
+            <button type="button" data-cart-action="remove" data-product-id="${escapeHtml(id)}" aria-label="Remover item"><i class="fa-solid fa-trash-can"></i></button>
+          </div>
+        </article>`;
+      }).join("");
+      $("cart-total-value").textContent = `${currency(knownTotal)}${hasUnknownPrice ? " + itens sob consulta" : ""}`;
+      messageLines.push("", "Por favor, confirmem disponibilidade, valor final e condições. Ainda não realizei pagamento.");
+      $("cart-whatsapp-btn").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(messageLines.join("\n"))}`;
+    }
 
-        window.closeModal = () => {
-            document.getElementById('product-modal').classList.add('hidden');
-        };
+    function openCart() {
+      lastFocusedElement = document.activeElement;
+      renderCart();
+      $("cart-modal").hidden = false;
+      document.body.style.overflow = "hidden";
+      $("cart-modal").querySelector("[data-close-cart]").focus({ preventScroll:true });
+    }
+    function closeCart() {
+      $("cart-modal").hidden = true;
+      if ($("product-modal").hidden) document.body.style.overflow = "";
+      if (lastFocusedElement?.focus) lastFocusedElement.focus({ preventScroll:true });
+    }
 
-        // Fechar modal ao clicar fora
-        document.getElementById('product-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'product-modal') closeModal();
-        });
+    $("products-grid").addEventListener("click", (event) => {
+      const card = event.target.closest("[data-open-product]");
+      if (card) openProductModal(card.dataset.openProduct);
+    });
+    $("category-filters").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-category]");
+      if (button) setCategory(button.dataset.category);
+    });
+    $("modal-thumbnails").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-image-index]");
+      if (!button) return;
+      activeImageIndex = Number(button.dataset.imageIndex) || 0;
+      updateGallery();
+    });
+    $("gallery-prev").addEventListener("click", () => moveGallery(-1));
+    $("gallery-next").addEventListener("click", () => moveGallery(1));
+    $("modal-quantity-minus").addEventListener("click", () => { $("modal-quantity").value = String(Math.max(1, clampQuantity($("modal-quantity").value) - 1)); updateProductWhatsappLink(); });
+    $("modal-quantity-plus").addEventListener("click", () => { $("modal-quantity").value = String(Math.min(999, clampQuantity($("modal-quantity").value) + 1)); updateProductWhatsappLink(); });
+    $("modal-quantity").addEventListener("input", () => { $("modal-quantity").value = String(clampQuantity($("modal-quantity").value)); updateProductWhatsappLink(); });
+    $("modal-quantity").addEventListener("change", () => { $("modal-quantity").value = String(clampQuantity($("modal-quantity").value)); updateProductWhatsappLink(); });
+    $("add-to-cart-btn").addEventListener("click", addActiveProductToCart);
+    $("open-cart-btn").addEventListener("click", openCart);
+    $("wholesale-open-cart").addEventListener("click", openCart);
+    const menuToggle = $("mobile-menu-toggle");
+    const mainNav = $("main-nav");
+    menuToggle.addEventListener("click", () => {
+      const open = mainNav.classList.toggle("is-open");
+      menuToggle.setAttribute("aria-expanded", String(open));
+      menuToggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+      menuToggle.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+    });
+    mainNav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
+      mainNav.classList.remove("is-open");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Abrir menu");
+      menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+    }));
+    document.querySelectorAll("[data-close-product]").forEach((button) => button.addEventListener("click", closeProductModal));
+    document.querySelectorAll("[data-close-cart]").forEach((button) => button.addEventListener("click", closeCart));
+    $("product-modal").addEventListener("click", (event) => { if (event.target === $("product-modal")) closeProductModal(); });
+    $("cart-modal").addEventListener("click", (event) => { if (event.target === $("cart-modal")) closeCart(); });
+    $("cart-items").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-cart-action]");
+      if (!button) return;
+      const id = button.dataset.productId;
+      if (button.dataset.cartAction === "remove") delete cart[id];
+      if (button.dataset.cartAction === "minus") {
+        const next = (Number(cart[id]) || 1) - 1;
+        if (next <= 0) delete cart[id]; else cart[id] = next;
+      }
+      if (button.dataset.cartAction === "plus") cart[id] = Math.min(999, (Number(cart[id]) || 0) + 1);
+      saveCart();
+    });
+    $("cart-items").addEventListener("change", (event) => {
+      const input = event.target.closest("[data-cart-quantity]");
+      if (!input) return;
+      const id = input.dataset.cartQuantity;
+      if (productById(id)) cart[id] = clampQuantity(input.value);
+      saveCart();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (!$("product-modal").hidden) {
+        if (event.key === "Escape") closeProductModal();
+        if (event.key === "ArrowLeft") moveGallery(-1);
+        if (event.key === "ArrowRight") moveGallery(1);
+      } else if (!$("cart-modal").hidden && event.key === "Escape") closeCart();
+    });
 
-        loadStorefront();
-    </script>
+    $("current-year").textContent = String(new Date().getFullYear());
+    renderCart();
+    updateCartCount();
+    loadStorefront();
+  
+  </script>
 </body>
 </html>
