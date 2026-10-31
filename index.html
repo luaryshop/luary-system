@@ -11,14 +11,12 @@
 </head>
 <body class="h-full flex flex-col justify-between bg-gray-50">
 
-    <!-- Cabeçalho da Vitrine -->
+    <!-- Cabeçalho -->
     <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <span class="text-2xl font-extrabold text-indigo-600 tracking-tight">
-                    <i class="fa-solid fa-gem mr-2"></i>LUARY ATACADO
-                </span>
-            </div>
+            <span class="text-2xl font-extrabold text-indigo-600 tracking-tight">
+                <i class="fa-solid fa-gem mr-2"></i>LUARY ATACADO
+            </span>
             <div class="flex items-center space-x-4">
                 <a href="admin.html" target="_blank" class="text-xs text-gray-500 hover:text-indigo-600 font-medium transition">
                     <i class="fa-solid fa-lock mr-1"></i>Área Restrita
@@ -30,16 +28,14 @@
         </div>
     </header>
 
-    <!-- Conteúdo Principal / Vitrine -->
+    <!-- Vitrine -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="mb-8 text-center sm:text-left">
             <h1 class="text-3xl font-bold text-gray-900">Catálogo de Atacado</h1>
             <p class="text-gray-500 mt-1">Selecione suas referências exclusivas direto da fábrica para revenda.</p>
         </div>
 
-        <!-- Grid de Produtos (Carregado Dinamicamente do Firestore) -->
         <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Estado de Carregamento Inicial -->
             <div class="col-span-full text-center py-12 text-gray-400">
                 <i class="fa-solid fa-spinner fa-spin text-3xl mb-3 text-indigo-600"></i>
                 <p>Carregando catálogo de produtos...</p>
@@ -52,28 +48,24 @@
         <p>&copy; 2026 Luary Atacado de Joias. Todos os direitos reservados.</p>
     </footer>
 
-    <!-- Firebase SDKs e Lógica de Listagem -->
+    <!-- Scripts Firebase e Listagem -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Configurações do Firebase (Mesmas utilizadas no admin.html)
         const firebaseConfig = {
-            apiKey: "SUA_API_KEY_AQUI",
-            authDomain: "seu-projeto.firebaseapp.com",
-            projectId: "seu-projeto",
-            storageBucket: "seu-projeto.appspot.com",
-            messagingSenderId: "SEU_SENDER_ID",
-            appId: "SEU_APP_ID"
+            apiKey: "AIzaSyCanlMwdfuD9gmVt62nJYYetj4K2-BfWEc",
+            authDomain: "luary-system.firebaseapp.com",
+            projectId: "luary-system",
+            storageBucket: "luary-system.firebasestorage.app",
+            messagingSenderId: "996287172742",
+            appId: "1:996287172742:web:4ff8c22a01cabe4015c107"
         };
 
-        // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
         const productsGrid = document.getElementById('products-grid');
 
-        // Função para carregar os produtos do Firestore
         async function loadStoreProducts() {
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
@@ -83,7 +75,6 @@
                         <div class="col-span-full text-center py-12 text-gray-500 bg-white rounded-xl border border-gray-200 shadow-sm">
                             <i class="fa-solid fa-box-open text-4xl text-gray-300 mb-3"></i>
                             <p class="font-medium text-gray-700">Nenhum produto cadastrado no momento.</p>
-                            <p class="text-sm text-gray-400 mt-1">Acesse o painel administrativo para cadastrar as primeiras referências.</p>
                         </div>
                     `;
                     return;
@@ -93,38 +84,27 @@
 
                 querySnapshot.forEach((docSnap) => {
                     const product = docSnap.data();
-                    
-                    // Define a imagem principal (primeira foto do array ou placeholder padrão se não houver)
-                    const mainImage = (product.images && product.images.length > 0) 
-                        ? product.images[0] 
-                        : 'https://via.placeholder.com/400x400?text=Sem+Imagem';
+                    const mainImage = (product.images && product.images.length > 0) ? product.images[0] : 'https://via.placeholder.com/400x400?text=Sem+Image';
 
-                    // Cria o card do produto
                     const card = document.createElement('div');
                     card.className = 'bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col justify-between hover:shadow-md transition duration-200';
                     
                     card.innerHTML = `
                         <div class="relative bg-gray-100 h-64 overflow-hidden group">
                             <img src="${mainImage}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                            <span class="absolute top-2 left-2 bg-indigo-600 text-white text-xs px-2 py-1 rounded font-semibold shadow">
-                                Ref: ${product.sku}
-                            </span>
-                            <span class="absolute top-2 right-2 bg-white text-gray-700 text-xs px-2 py-1 rounded font-medium shadow">
-                                ${product.category}
-                            </span>
+                            <span class="absolute top-2 left-2 bg-indigo-600 text-white text-xs px-2 py-1 rounded font-semibold shadow">Ref: ${product.sku}</span>
+                            <span class="absolute top-2 right-2 bg-white text-gray-700 text-xs px-2 py-1 rounded font-medium shadow">${product.category}</span>
                         </div>
                         <div class="p-5 flex flex-col flex-1 justify-between">
-                            <div>
-                                <h3 class="font-bold text-gray-800 text-base mb-1 line-clamp-1">${product.name}</h3>
-                            </div>
+                            <h3 class="font-bold text-gray-800 text-base mb-1 line-clamp-1">${product.name}</h3>
                             <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
                                 <div>
                                     <span class="text-xs text-gray-400 block">Atacado</span>
-                                    <span class="text-lg font-extrabold text-indigo-600">R$ ${product.priceWholesale.toFixed(2)}</span>
+                                    <span class="text-lg font-extrabold text-indigo-600">R$ ${Number(product.priceWholesale).toFixed(2)}</span>
                                 </div>
                                 <div class="text-right">
                                     <span class="text-xs text-gray-400 block">Varejo Sug.</span>
-                                    <span class="text-sm font-semibold text-gray-500">R$ ${product.priceRetail.toFixed(2)}</span>
+                                    <span class="text-sm font-semibold text-gray-500">R$ ${Number(product.priceRetail).toFixed(2)}</span>
                                 </div>
                             </div>
                             <a href="https://wa.me/?text=Olá! Gostaria de mais informações sobre a referência ${product.sku} - ${product.name}" target="_blank" class="mt-4 w-full bg-gray-900 hover:bg-indigo-600 text-white text-center py-2 rounded-lg text-sm font-medium transition duration-150 flex items-center justify-center">
@@ -132,10 +112,8 @@
                             </a>
                         </div>
                     `;
-
                     productsGrid.appendChild(card);
                 });
-
             } catch (error) {
                 console.error("Erro ao carregar vitrine:", error);
                 productsGrid.innerHTML = `
@@ -147,7 +125,6 @@
             }
         }
 
-        // Executa a leitura ao carregar a página
         loadStoreProducts();
     </script>
 </body>
