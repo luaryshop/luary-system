@@ -1,54 +1,121 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full bg-gray-50">
+<html lang="pt-BR" class="h-full bg-[#FAFAFA]">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luary - Atacado de Joias</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Luary Atacado de Joias - Catálogo Exclusivo</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome para Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Elegantes (Playfair Display e Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-serif-luxury { font-family: 'Playfair Display', serif; }
+    </style>
 </head>
-<body class="h-full flex flex-col justify-between bg-gray-50">
+<body class="min-h-full flex flex-col justify-between text-gray-900 bg-[#FAFAFA]">
 
-    <!-- Cabeçalho -->
-    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
-            <span class="text-2xl font-extrabold text-indigo-600 tracking-tight">
-                <i class="fa-solid fa-gem mr-2"></i>LUARY ATACADO
-            </span>
-            <div class="flex items-center space-x-4">
-                <a href="admin.html" target="_blank" class="text-xs text-gray-500 hover:text-indigo-600 font-medium transition">
-                    <i class="fa-solid fa-lock mr-1"></i>Área Restrita
-                </a>
-                <a href="https://wa.me/" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition flex items-center">
-                    <i class="fa-brands fa-whatsapp mr-2 text-lg"></i>Fale Conosco
+    <!-- CABEÇALHO LUXUOSO -->
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl font-serif-luxury font-bold tracking-wider text-gray-900 uppercase">Luary Atacado</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <a href="admin.html" class="text-xs tracking-widest text-gray-500 hover:text-gray-900 uppercase font-medium transition">Área Restrita</a>
+                <a href="https://wa.me/5519999999999?text=Olá,%20gostaria%20de%20atendimento%20no%20atacado%20Luary." target="_blank" class="bg-gray-900 hover:bg-gray-800 text-white text-xs uppercase tracking-widest px-5 py-3 rounded-none font-medium transition shadow-sm flex items-center">
+                    <i class="fa-brands fa-whatsapp mr-2 text-sm"></i>Fale Conosco
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- Vitrine -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div class="mb-8 text-center sm:text-left">
-            <h1 class="text-3xl font-bold text-gray-900">Catálogo de Atacado</h1>
-            <p class="text-gray-500 mt-1">Selecione suas referências exclusivas direto da fábrica para revenda.</p>
+    <!-- BANNER HERO (Estilo Alta Joalheria) -->
+    <section class="relative bg-[#1A1A1A] text-white overflow-hidden">
+        <div class="absolute inset-0 opacity-40 bg-cover bg-center" style="background-image: url('https://cdn.jsdelivr.net/gh/luaryshop/luary-cdn@main/settings/hero-bg.webp');"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 flex flex-col items-start justify-center">
+            <span class="text-xs uppercase tracking-[0.25em] text-amber-400 mb-3 font-medium">Direto da Fábrica em Limeira/SP</span>
+            <h1 class="text-4xl sm:text-6xl font-serif-luxury font-bold tracking-tight max-w-2xl leading-tight mb-6">
+                Pequenos detalhes. <br><span class="italic font-normal text-gray-300">Grandes significados.</span>
+            </h1>
+            <p class="text-sm sm:text-base text-gray-300 max-w-lg font-light mb-8 leading-relaxed">
+                Joias brutas e semi-joias de alto padrão desenvolvidas especialmente para lojistas, revendedoras e sacoleiras elevarem suas vendas.
+            </p>
+            <a href="#catalogo" class="border border-white text-white hover:bg-white hover:text-gray-900 text-xs uppercase tracking-widest px-8 py-4 transition duration-300 font-medium">
+                Explorar Catálogo
+            </a>
+        </div>
+    </section>
+
+    <!-- CONTEÚDO PRINCIPAL: CATÁLOGO -->
+    <main id="catalogo" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center max-w-xl mx-auto mb-12">
+            <h2 class="text-3xl font-serif-luxury font-bold text-gray-900 mb-3">Catálogo de Atacado</h2>
+            <p class="text-sm text-gray-500 font-light">Selecione suas referências exclusivas direto da fábrica para revenda com zero pedido mínimo.</p>
         </div>
 
-        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <div class="col-span-full text-center py-12 text-gray-400">
-                <i class="fa-solid fa-spinner fa-spin text-3xl mb-3 text-indigo-600"></i>
-                <p>Carregando catálogo de produtos...</p>
-            </div>
+        <!-- FILTROS DE CATEGORIA -->
+        <div id="category-filters" class="flex flex-wrap justify-center gap-2 mb-12">
+            <button onclick="filterCategory('TODOS')" class="category-btn active px-5 py-2 text-xs uppercase tracking-wider font-medium bg-gray-900 text-white rounded-none transition">Todos</button>
+            <!-- Inserido dinamicamente via JS -->
+        </div>
+
+        <!-- GRID DE PRODUTOS -->
+        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-full text-center py-12 text-gray-400">Carregando catálogo...</div>
         </div>
     </main>
 
-    <!-- Rodapé -->
-    <footer class="bg-white border-t border-gray-200 mt-12 py-6 text-center text-sm text-gray-500">
-        <p>&copy; 2026 Luary Atacado de Joias. Todos os direitos reservados.</p>
+    <!-- MODAL DE VISUALIZAÇÃO DE FOTOS (Carrossel Completo de até 10 fotos) -->
+    <div id="product-modal" class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-4xl rounded-none overflow-hidden shadow-2xl relative grid grid-cols-1 md:grid-cols-2">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-900 z-10 text-xl w-10 h-10 flex items-center justify-center bg-gray-100"><i class="fa-solid fa-xmark"></i></button>
+            
+            <!-- Galeria de Fotos Modal -->
+            <div class="bg-gray-50 p-6 flex flex-col justify-center items-center relative">
+                <div class="w-full h-80 sm:h-96 flex items-center justify-center overflow-hidden bg-white border border-gray-100">
+                    <img id="modal-main-img" src="" class="max-h-full max-w-full object-contain transition duration-300" alt="Produto">
+                </div>
+                <!-- Miniaturas (Thumbnails 01 a 10) -->
+                <div id="modal-thumbnails" class="flex space-x-2 mt-4 overflow-x-auto max-w-full py-2"></div>
+            </div>
+
+            <!-- Detalhes do Produto Modal -->
+            <div class="p-8 flex flex-col justify-between">
+                <div>
+                    <span id="modal-category" class="text-xs uppercase tracking-widest text-amber-600 font-medium bg-amber-50 px-2.5 py-1"></span>
+                    <span id="modal-sku" class="text-xs text-gray-400 block mt-2">Ref: <span></span></span>
+                    <h3 id="modal-title" class="text-2xl font-serif-luxury font-bold text-gray-900 mt-1 mb-4"></h3>
+                    <div class="space-y-2 border-t border-b border-gray-100 py-4 my-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs uppercase tracking-wider text-gray-500 font-medium">Preço Atacado:</span>
+                            <span id="modal-price-wholesale" class="text-xl font-bold text-gray-900"></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs uppercase tracking-wider text-gray-400">Preço Varejo Sugerido:</span>
+                            <span id="modal-price-retail" class="text-sm text-gray-500 line-through"></span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 font-light leading-relaxed">Produto com garantia de banho e acabamento impecável direto do polo joalheiro de Limeira/SP. Ideal para revenda.</p>
+                </div>
+                <div class="mt-8">
+                    <a id="modal-whatsapp-btn" href="#" target="_blank" class="w-full bg-gray-900 hover:bg-gray-800 text-white py-4 px-6 text-xs uppercase tracking-widest font-medium text-center transition block flex items-center justify-center">
+                        <i class="fa-brands fa-whatsapp mr-2 text-base"></i>Consultar Atacado no WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer class="bg-white border-t border-gray-100 py-12 text-center text-xs text-gray-400 font-light">
+        <p>&copy; 2026 Luary Atacado de Joias. Todos os direitos reservados. Limeira - SP.</p>
     </footer>
 
-    <!-- Scripts Firebase e Listagem -->
+    <!-- SCRIPTS FIREBASE E RENDERIZAÇÃO DA VITRINE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -64,68 +131,124 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const productsGrid = document.getElementById('products-grid');
 
-        async function loadStoreProducts() {
+        let allProducts = [];
+        let activeCategory = 'TODOS';
+
+        async function loadStorefront() {
+            const grid = document.getElementById('products-grid');
+            const categoryFilters = document.getElementById('category-filters');
+            
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
+                allProducts = [];
                 
-                if (querySnapshot.empty) {
-                    productsGrid.innerHTML = `
-                        <div class="col-span-full text-center py-12 text-gray-500 bg-white rounded-xl border border-gray-200 shadow-sm">
-                            <i class="fa-solid fa-box-open text-4xl text-gray-300 mb-3"></i>
-                            <p class="font-medium text-gray-700">Nenhum produto cadastrado no momento.</p>
-                        </div>
-                    `;
+                querySnapshot.forEach((docSnap) => {
+                    allProducts.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                if (allProducts.length === 0) {
+                    grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400 font-light">Nenhum produto cadastrado no momento.</div>`;
                     return;
                 }
 
-                productsGrid.innerHTML = '';
+                // Gerar categorias únicas
+                const categories = ['TODOS', ...new Set(allProducts.map(p => (p.category || 'Outros').toUpperCase()))];
+                categoryFilters.innerHTML = categories.map(cat => `
+                    <button onclick="window.filterCategory('${cat}')" class="category-btn px-5 py-2 text-xs uppercase tracking-wider font-medium transition ${cat === activeCategory ? 'bg-gray-900 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-900'}">${cat}</button>
+                `).join('');
 
-                querySnapshot.forEach((docSnap) => {
-                    const product = docSnap.data();
-                    const mainImage = (product.images && product.images.length > 0) ? product.images[0] : 'https://via.placeholder.com/400x400?text=Sem+Image';
-
-                    const card = document.createElement('div');
-                    card.className = 'bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col justify-between hover:shadow-md transition duration-200';
-                    
-                    card.innerHTML = `
-                        <div class="relative bg-gray-100 h-64 overflow-hidden group">
-                            <img src="${mainImage}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                            <span class="absolute top-2 left-2 bg-indigo-600 text-white text-xs px-2 py-1 rounded font-semibold shadow">Ref: ${product.sku}</span>
-                            <span class="absolute top-2 right-2 bg-white text-gray-700 text-xs px-2 py-1 rounded font-medium shadow">${product.category}</span>
-                        </div>
-                        <div class="p-5 flex flex-col flex-1 justify-between">
-                            <h3 class="font-bold text-gray-800 text-base mb-1 line-clamp-1">${product.name}</h3>
-                            <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-                                <div>
-                                    <span class="text-xs text-gray-400 block">Atacado</span>
-                                    <span class="text-lg font-extrabold text-indigo-600">R$ ${Number(product.priceWholesale).toFixed(2)}</span>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-xs text-gray-400 block">Varejo Sug.</span>
-                                    <span class="text-sm font-semibold text-gray-500">R$ ${Number(product.priceRetail).toFixed(2)}</span>
-                                </div>
-                            </div>
-                            <a href="https://wa.me/?text=Olá! Gostaria de mais informações sobre a referência ${product.sku} - ${product.name}" target="_blank" class="mt-4 w-full bg-gray-900 hover:bg-indigo-600 text-white text-center py-2 rounded-lg text-sm font-medium transition duration-150 flex items-center justify-center">
-                                <i class="fa-brands fa-whatsapp mr-2"></i>Consultar Atacado
-                            </a>
-                        </div>
-                    `;
-                    productsGrid.appendChild(card);
-                });
+                renderProducts(allProducts);
             } catch (error) {
                 console.error("Erro ao carregar vitrine:", error);
-                productsGrid.innerHTML = `
-                    <div class="col-span-full text-center py-12 text-red-500 bg-white rounded-xl border border-gray-200 shadow-sm">
-                        <i class="fa-solid fa-triangle-exclamation text-3xl mb-2"></i>
-                        <p class="font-medium">Erro ao carregar os produtos do banco de dados.</p>
-                    </div>
-                `;
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-red-400 font-light">Erro ao carregar o catálogo.</div>`;
             }
         }
 
-        loadStoreProducts();
+        window.filterCategory = (cat) => {
+            activeCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.textContent.trim().toUpperCase() === cat) {
+                    btn.className = "category-btn px-5 py-2 text-xs uppercase tracking-wider font-medium bg-gray-900 text-white transition";
+                } else {
+                    btn.className = "category-btn px-5 py-2 text-xs uppercase tracking-wider font-medium bg-white text-gray-600 border border-gray-200 hover:border-gray-900 transition";
+                }
+            });
+
+            if (cat === 'TODOS') {
+                renderProducts(allProducts);
+            } else {
+                renderProducts(allProducts.filter(p => (p.category || '').toUpperCase() === cat));
+            }
+        };
+
+        function renderProducts(products) {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = products.map(product => {
+                const mainImg = (product.images && product.images.length > 0) ? product.images[0] : 'https://via.placeholder.com/400?text=Sem+Foto';
+                const secondImg = (product.images && product.images.length > 1) ? product.images[1] : mainImg;
+
+                return `
+                    <div class="group bg-white border border-gray-100 overflow-hidden shadow-xs hover:shadow-xl transition duration-500 flex flex-col justify-between cursor-pointer" onclick="openProductModal('${product.id}')">
+                        <div class="relative w-full h-80 bg-gray-50 overflow-hidden">
+                            <span class="absolute top-3 left-3 z-10 bg-white/90 backdrop-blur-xs text-gray-900 text-[10px] tracking-widest uppercase px-2.5 py-1 font-medium shadow-xs">Ref: ${product.sku}</span>
+                            <img src="${mainImg}" class="absolute inset-0 w-full h-full object-cover object-center group-hover:opacity-0 transition duration-500">
+                            <img src="${secondImg}" class="absolute inset-0 w-full h-full object-cover object-center opacity-0 group-hover:opacity-100 transition duration-500">
+                        </div>
+                        <div class="p-6 flex flex-col justify-between flex-1">
+                            <div>
+                                <span class="text-[10px] uppercase tracking-widest text-gray-400 font-medium">${product.category || 'Joias'}</span>
+                                <h3 class="text-base font-serif-luxury font-bold text-gray-900 mt-1 mb-3 group-hover:text-amber-700 transition">${product.name}</h3>
+                            </div>
+                            <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-gray-400 block">Atacado</span>
+                                    <span class="text-lg font-bold text-gray-900">R$ ${Number(product.priceWholesale || 0).toFixed(2)}</span>
+                                </div>
+                                <span class="text-xs uppercase tracking-widest text-gray-900 underline font-medium">Ver Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.openProductModal = (id) => {
+            const product = allProducts.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('modal-sku').querySelector('span').textContent = product.sku;
+            document.getElementById('modal-title').textContent = product.name;
+            document.getElementById('modal-category').textContent = product.category || 'Joias';
+            document.getElementById('modal-price-wholesale').textContent = `R$ ${Number(product.priceWholesale || 0).toFixed(2)}`;
+            document.getElementById('modal-price-retail').textContent = `R$ ${Number(product.priceRetail || 0).toFixed(2)}`;
+            
+            const whatsappMsg = encodeURIComponent(`Olá, tenho interesse no atacado da referência *${product.sku} - ${product.name}* (R$ ${Number(product.priceWholesale || 0).toFixed(2)}). Poderia me passar mais detalhes?`);
+            document.getElementById('modal-whatsapp-btn').href = `https://wa.me/5519999999999?text=${whatsappMsg}`;
+
+            const images = product.images && product.images.length > 0 ? product.images : ['https://via.placeholder.com/400?text=Sem+Foto'];
+            
+            const mainImgEl = document.getElementById('modal-main-img');
+            mainImgEl.src = images[0];
+
+            const thumbContainer = document.getElementById('modal-thumbnails');
+            thumbContainer.innerHTML = images.map((imgUrl, index) => `
+                <img src="${imgUrl}" onclick="document.getElementById('modal-main-img').src='${imgUrl}'" class="w-16 h-16 object-cover border border-gray-200 cursor-pointer hover:border-gray-900 transition flex-shrink-0" alt="Miniatura ${index + 1}">
+            `).join('');
+
+            document.getElementById('product-modal').classList.remove('hidden');
+        };
+
+        window.closeModal = () => {
+            document.getElementById('product-modal').classList.add('hidden');
+        };
+
+        // Fechar modal ao clicar fora
+        document.getElementById('product-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'product-modal') closeModal();
+        });
+
+        loadStorefront();
     </script>
 </body>
 </html>
