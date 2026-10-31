@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-gray-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luary CDN Image Processor</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Biblioteca JSZip para gerar a pasta compactada -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- FileSaver.js para o download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body class="h-full flex flex-col justify-between bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <span class="text-xl font-bold text-indigo-600"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Luary CDN - Processador de Imagens</span>
+            <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-medium">Conversor WebP & SKU Automático</span>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-8 space-y-6">
+        
+        <!-- Bloco de Configuração e SKU -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-folder-tree mr-2 text-indigo-600"></i>1. Informe o SKU de Destino</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">SKU do Produto</label>
+                    <input type="text" id="input-sku" placeholder="Ex: LUA-1020" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 uppercase font-bold text-indigo-600">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Qualidade da Conversão WebP (0.1 a 1.0)</label>
+                    <input type="number" id="input-quality" value="0.85" step="0.05" min="0.1" max="1.0" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Bloco de Seleção de Imagens -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-images mr-2 text-indigo-600"></i>2. Selecione as Fotos (Até 10)</h2>
+            <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-indigo-500 transition cursor-pointer bg-gray-50">
+                <i class="fa-solid fa-cloud-arrow-up text-4xl text-indigo-500 mb-3"></i>
+                <p class="text-sm font-medium text-gray-700">Arraste as fotos para cá ou clique para selecionar</p>
+                <p class="text-xs text-gray-400 mt-1">Suporta JPG, PNG e WEBP. Serão ordenadas de 01 a 10 automaticamente.</p>
+                <input type="file" id="file-input" multiple accept="image/*" class="hidden">
+            </div>
+
+            <!-- Preview das Imagens Convertidas -->
+            <div id="preview-grid" class="mt-6 grid grid-cols-2 sm:grid-cols-5 gap-4 hidden"></div>
+        </div>
+
+        <!-- Botão de Ação -->
+        <div class="flex justify-end">
+            <button id="process-btn" disabled class="bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-300 text-white font-semibold px-6 py-3 rounded-xl shadow-md transition flex items-center">
+                <i class="fa-solid fa-file-zipper mr-2"></i>Gerar e Baixar Pasta ZIP para o GitHub
+            </button>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-400">
+        <p>&copy; 2026 Luary Atacado de Joias - Ferramenta Interna de CDN</p>
+    </footer>
+
+    <script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const previewGrid = document.getElementById('preview-grid');
+        const processBtn = document.getElementById('process-btn');
+        const inputSku = document.getElementById('input-sku');
+        const inputQuality = document.getElementById('input-quality');
+
+        let selectedFiles = [];
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-500', 'bg-indigo-50'); });
+        dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-indigo-500', 'bg-indigo-50'); });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-indigo-500', 'bg-indigo-50');
+            if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            selectedFiles = Array.from(files).slice(0, 10); // Máximo 10
+            previewGrid.innerHTML = '';
+            
+            if (selectedFiles.length > 0) {
+                previewGrid.classList.remove('hidden');
+                processBtn.removeAttribute('disabled');
+
+                selectedFiles.forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const div = document.createElement('div');
+                        div.className = 'relative border rounded-lg p-2 bg-white shadow-sm flex flex-col items-center';
+                        div.innerHTML = `
+                            <span class="absolute top-1 left-1 bg-indigo-600 text-white text-xs px-1.5 py-0.5 rounded font-bold">0${index + 1}.webp</span>
+                            <img src="${e.target.result}" class="h-24 w-24 object-cover rounded-md mt-2 mb-1">
+                            <span class="text-xs text-gray-500 truncate w-full text-center">${file.name}</span>
+                        `;
+                        previewGrid.appendChild(div);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                previewGrid.classList.add('hidden');
+                processBtn.setAttribute('disabled', 'true');
+            }
+        }
+
+        processBtn.addEventListener('click', async () => {
+            const sku = inputSku.value.trim().toUpperCase();
+            if (!sku) {
+                alert('Por favor, informe o SKU do produto antes de gerar.');
+                inputSku.focus();
+                return;
+            }
+
+            processBtn.disabled = true;
+            processBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Processando e convertendo para WebP...';
+
+            const zip = new JSZip();
+            const skuFolder = zip.folder(sku);
+            const quality = parseFloat(inputQuality.value) || 0.85;
+
+            try {
+                for (let i = 0; i < selectedFiles.length; i++) {
+                    const file = selectedFiles[i];
+                    const fileName = String(i + 1).padStart(2, '0') + '.webp';
+                    
+                    // Converter imagem para WebP usando canvas
+                    const webpBlob = await convertImageToWebP(file, quality);
+                    skuFolder.file(fileName, webpBlob);
+                }
+
+                // Gerar arquivo ZIP
+                const content = await zip.generateAsync({ type: "blob" });
+                saveAs(content, `${sku}.zip`);
+
+                alert(`Pasta ${sku} gerada com sucesso em formato ZIP!\n\nAgora basta extrair ou arrastar a pasta "${sku}" diretamente para dentro da pasta "products/" no seu repositório luary-cdn no GitHub.`);
+            } catch (error) {
+                console.error(error);
+                alert('Erro ao processar as imagens.');
+            } finally {
+                processBtn.disabled = false;
+                processBtn.innerHTML = '<i class="fa-solid fa-file-zipper mr-2"></i>Gerar e Baixar Pasta ZIP para o GitHub';
+            }
+        });
+
+        function convertImageToWebP(file, quality) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        canvas.toBlob((blob) => {
+                            if (blob) resolve(blob);
+                            else reject(new Error('Falha na conversão para WebP'));
+                        }, 'image/webp', quality);
+                    };
+                    img.onerror = reject;
+                    img.src = event.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+    </script>
+</body>
+</html>
