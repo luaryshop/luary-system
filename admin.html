@@ -63,19 +63,25 @@
                     <p class="text-3xl font-bold text-gray-900 mt-2">Atacado</p>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                    <h3 class="text-sm font-medium text-gray-500">Status da CDN (jsDelivr)</h3>
+                    <h3 class="text-sm font-medium text-gray-500">Status da CDN (luary-cdn)</h3>
                     <p class="text-3xl font-bold text-green-600 mt-2">Online</p>
                 </div>
             </div>
 
-            <!-- Cadastro de Produto -->
+            <!-- Formulário de Cadastro / Edição -->
             <div class="bg-white shadow-sm rounded-xl border border-gray-200 p-6">
-                <div class="border-b border-gray-200 pb-4 mb-6">
-                    <h2 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-box-open mr-2 text-indigo-600"></i>Novo Produto / Referência</h2>
-                    <p class="text-sm text-gray-500 mt-1">Preencha os dados. O sistema mapeará até 10 fotos na pasta individual do SKU via CDN (`luary-cdn`).</p>
+                <div class="border-b border-gray-200 pb-4 mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 id="form-title" class="text-xl font-bold text-gray-800"><i class="fa-solid fa-box-open mr-2 text-indigo-600"></i>Novo Produto / Referência</h2>
+                        <p class="text-sm text-gray-500 mt-1">Preencha os dados e mapeie as fotos na pasta individual do SKU (`luary-cdn`).</p>
+                    </div>
+                    <button type="button" id="cancel-edit-btn" class="text-sm text-gray-500 hover:text-red-600 hidden">
+                        <i class="fa-solid fa-xmark mr-1"></i>Cancelar Edição
+                    </button>
                 </div>
 
                 <form id="product-form" class="space-y-6">
+                    <input type="hidden" id="editing-doc-id">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">SKU / Referência</label>
@@ -115,6 +121,33 @@
                     </div>
                 </form>
             </div>
+
+            <!-- Seção de Listagem e Gerenciamento de Produtos Cadastrados -->
+            <div class="bg-white shadow-sm rounded-xl border border-gray-200 p-6">
+                <div class="border-b border-gray-200 pb-4 mb-6">
+                    <h2 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-list mr-2 text-indigo-600"></i>Produtos Cadastrados no Sistema</h2>
+                    <p class="text-sm text-gray-500 mt-1">Visualize, edite ou remova os produtos ativos em tempo real.</p>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SKU / Título</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Atacado / Varejo</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table-body" class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-400">Carregando produtos...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -122,7 +155,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCanlMwdfuD9gmVt62nJYYetj4K2-BfWEc",
@@ -133,7 +166,6 @@
             appId: "1:996287172742:web:4ff8c22a01cabe4015c107"
         };
 
-        // Configuração do Repositório CDN dedicado de Imagens
         const CDN_USER = "luaryshop";
         const CDN_REPO = "luary-cdn";
         const CDN_BRANCH = "main";
@@ -154,14 +186,55 @@
         const previewContainer = document.getElementById('image-preview-container');
         const submitBtn = document.getElementById('submit-btn');
         const metricProductsCount = document.getElementById('metric-products-count');
+        const productsTableBody = document.getElementById('products-table-body');
+        const editingDocIdInput = document.getElementById('editing-doc-id');
+        const formTitle = document.getElementById('form-title');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
 
-        async function updateDashboardMetrics() {
+        let productsCache = [];
+
+        async function loadAdminProducts() {
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
                 metricProductsCount.textContent = querySnapshot.size;
+                productsCache = [];
+                
+                if (querySnapshot.empty) {
+                    productsTableBody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Nenhum produto cadastrado.</td></tr>`;
+                    return;
+                }
+
+                productsTableBody.innerHTML = '';
+                querySnapshot.forEach((docSnap) => {
+                    const product = { id: docSnap.id, ...docSnap.data() };
+                    productsCache.push(product);
+
+                    const mainImage = (product.images && product.images.length > 0) ? product.images[0] : 'https://via.placeholder.com/150?text=Sem+Foto';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <img src="${mainImage}" class="h-12 w-12 object-cover rounded-lg border border-gray-200" alt="${product.sku}">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-bold text-gray-900">${product.sku}</div>
+                            <div class="text-sm text-gray-500 truncate max-w-xs">${product.name}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${product.category}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <span class="font-bold text-indigo-600">R$ ${Number(product.priceWholesale).toFixed(2)}</span><br>
+                            <span class="text-xs text-gray-400">Varejo: R$ ${Number(product.priceRetail).toFixed(2)}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                            <button onclick="window.editProduct('${product.id}')" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-pen-to-square mr-1"></i>Editar</button>
+                            <button onclick="window.deleteProduct('${product.id}')" class="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-trash mr-1"></i>Excluir</button>
+                        </td>
+                    `;
+                    productsTableBody.appendChild(tr);
+                });
             } catch (error) {
-                console.error("Erro ao buscar métricas:", error);
-                metricProductsCount.textContent = "0";
+                console.error("Erro ao carregar produtos:", error);
+                productsTableBody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-sm text-red-500">Erro ao carregar os dados.</td></tr>`;
             }
         }
 
@@ -170,7 +243,7 @@
                 loginScreen.classList.add('hidden');
                 adminPanel.classList.remove('hidden');
                 userEmailDisplay.textContent = user.email;
-                updateDashboardMetrics();
+                loadAdminProducts();
             } else {
                 adminPanel.classList.add('hidden');
                 loginScreen.classList.remove('hidden');
@@ -191,6 +264,45 @@
         logoutBtn.addEventListener('click', async () => {
             try { await signOut(auth); } catch (error) { console.error(error); }
         });
+
+        // Função global para editar produto
+        window.editProduct = (id) => {
+            const product = productsCache.find(p => p.id === id);
+            if (!product) return;
+
+            editingDocIdInput.value = product.id;
+            document.getElementById('prod-sku').value = product.sku;
+            document.getElementById('prod-name').value = product.name;
+            document.getElementById('prod-category').value = product.category;
+            document.getElementById('prod-price-wholesale').value = product.priceWholesale;
+            document.getElementById('prod-price-retail').value = product.priceRetail;
+
+            formTitle.innerHTML = `<i class="fa-solid fa-pen-to-square mr-2 text-indigo-600"></i>Editar Produto: ${product.sku}`;
+            submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-2"></i>Atualizar Produto';
+            cancelEditBtn.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        cancelEditBtn.addEventListener('click', () => {
+            productForm.reset();
+            editingDocIdInput.value = '';
+            formTitle.innerHTML = `<i class="fa-solid fa-box-open mr-2 text-indigo-600"></i>Novo Produto / Referência`;
+            submitBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-2"></i>Salvar Produto no Firestore';
+            cancelEditBtn.classList.add('hidden');
+        });
+
+        // Função global para excluir produto
+        window.deleteProduct = async (id) => {
+            if (!confirm("Tem certeza que deseja excluir este produto do sistema?")) return;
+            try {
+                await deleteDoc(doc(db, "products", id));
+                alert("Produto excluído com sucesso!");
+                loadAdminProducts();
+            } catch (error) {
+                console.error("Erro ao excluir:", error);
+                alert("Erro ao excluir o produto.");
+            }
+        };
 
         imagesInput.addEventListener('change', (e) => {
             const files = Array.from(e.target.files);
@@ -220,6 +332,7 @@
 
         productForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const docId = editingDocIdInput.value;
             const sku = document.getElementById('prod-sku').value.trim().toUpperCase();
             const name = document.getElementById('prod-name').value;
             const category = document.getElementById('prod-category').value;
@@ -233,24 +346,46 @@
             submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Salvando...';
 
             try {
-                // Estrutura de pasta individual por SKU: products/SKU/01.webp, 02.webp...
                 const cdnBaseFolder = `https://cdn.jsdelivr.net/gh/${CDN_USER}/${CDN_REPO}@${CDN_BRANCH}/products/${sku}/`;
-                const imageUrls = Array.from(files).map((_, i) => cdnBaseFolder + String(i + 1).padStart(2, '0') + '.webp');
+                
+                // Se novas imagens foram selecionadas, atualiza os links. Se não, mantém os anteriores caso seja edição.
+                let imageUrls = [];
+                if (files.length > 0) {
+                    imageUrls = Array.from(files).map((_, i) => cdnBaseFolder + String(i + 1).padStart(2, '0') + '.webp');
+                } else if (docId) {
+                    const existingProduct = productsCache.find(p => p.id === docId);
+                    imageUrls = existingProduct ? existingProduct.images : [];
+                } else {
+                    imageUrls = [cdnBaseFolder + '01.webp'];
+                }
 
-                await addDoc(collection(db, "products"), {
-                    sku, name, category, priceWholesale, priceRetail, images: imageUrls, createdAt: new Date().toISOString()
-                });
+                if (docId) {
+                    // Atualizar produto existente
+                    await updateDoc(doc(db, "products", docId), {
+                        sku, name, category, priceWholesale, priceRetail, images: imageUrls
+                    });
+                    alert(`Produto ${sku} atualizado com sucesso!`);
+                } else {
+                    // Criar novo produto
+                    await addDoc(collection(db, "products"), {
+                        sku, name, category, priceWholesale, priceRetail, images: imageUrls, createdAt: new Date().toISOString()
+                    });
+                    alert(`Produto ${sku} cadastrado com sucesso!`);
+                }
 
-                alert(`Produto ${sku} cadastrado com sucesso! Lembre-se de subir as fotos para a pasta "products/${sku}/" no repositório luary-cdn.`);
                 productForm.reset();
+                editingDocIdInput.value = '';
+                formTitle.innerHTML = `<i class="fa-solid fa-box-open mr-2 text-indigo-600"></i>Novo Produto / Referência`;
+                submitBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-2"></i>Salvar Produto no Firestore';
+                cancelEditBtn.classList.add('hidden');
                 previewContainer.classList.add('hidden');
-                updateDashboardMetrics();
+                loadAdminProducts();
             } catch (error) {
                 console.error(error);
                 alert("Erro ao salvar produto.");
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-2"></i>Salvar Produto no Firestore';
+                submitBtn.innerHTML = docId ? '<i class="fa-solid fa-floppy-disk mr-2"></i>Atualizar Produto' : '<i class="fa-solid fa-cloud-arrow-up mr-2"></i>Salvar Produto no Firestore';
             }
         });
     </script>
