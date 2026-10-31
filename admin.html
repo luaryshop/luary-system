@@ -11,7 +11,7 @@
 </head>
 <body class="h-full flex flex-col justify-between">
 
-    <!-- TELA DE LOGIN (Exibida quando não autenticado) -->
+    <!-- TELA DE LOGIN -->
     <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75 hidden">
         <div class="max-w-md w-full bg-white rounded-xl shadow-2xl p-8 m-4">
             <div class="text-center mb-8">
@@ -35,9 +35,8 @@
         </div>
     </div>
 
-    <!-- PAINEL ADMINISTRATIVO (Exibido após autenticação) -->
+    <!-- PAINEL ADMINISTRATIVO -->
     <div id="admin-panel" class="min-h-full flex flex-col hidden">
-        <!-- Barra Superior -->
         <header class="bg-white shadow-sm border-b border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
@@ -52,7 +51,6 @@
             </div>
         </header>
 
-        <!-- Conteúdo Principal -->
         <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
             <!-- Cards de Métricas -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -61,7 +59,7 @@
                     <p class="text-3xl font-bold text-gray-900 mt-2" id="metric-products-count">--</p>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                    <h3 class="text-sm font-medium text-gray-500">Categorias Ativas</h3>
+                    <h3 class="text-sm font-medium text-gray-500">Canal de Vendas</h3>
                     <p class="text-3xl font-bold text-gray-900 mt-2">Atacado</p>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
@@ -70,11 +68,11 @@
                 </div>
             </div>
 
-            <!-- Seção de Cadastro de Produto com 10 Fotos -->
-            <div id="product-modal" class="bg-white shadow-sm rounded-xl border border-gray-200 p-6">
+            <!-- Cadastro de Produto -->
+            <div class="bg-white shadow-sm rounded-xl border border-gray-200 p-6">
                 <div class="border-b border-gray-200 pb-4 mb-6">
                     <h2 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-box-open mr-2 text-indigo-600"></i>Novo Produto / Referência</h2>
-                    <p class="text-sm text-gray-500 mt-1">Preencha os dados e faça o upload de até 10 imagens para a CDN do jsDelivr[cite: 1].</p>
+                    <p class="text-sm text-gray-500 mt-1">Preencha os dados e faça o upload de até 10 imagens para a CDN do jsDelivr.</p>
                 </div>
 
                 <form id="product-form" class="space-y-6">
@@ -104,20 +102,9 @@
                         </div>
                     </div>
 
-                    <!-- Seção de Upload das 10 Fotos -->
                     <div class="border-t border-gray-200 pt-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Imagens do Produto (Até 10 fotos)</label>
-                        <p class="text-xs text-gray-500 mb-4">Selecione até 10 arquivos. O sistema organizará sequencialmente de `01.webp` a `10.webp`.</p>
-                        
-                        <input type="file" id="prod-images" multiple accept="image/*" class="block w-full text-sm text-gray-500
-                            file:mr-4 file:py-2 file:px-4
-                            file:rounded-lg file:border-0
-                            file:text-sm file:font-semibold
-                            file:bg-indigo-50 file:text-indigo-700
-                            hover:file:bg-indigo-100 cursor-pointer
-                        ">
-                        
-                        <!-- Pré-visualização dos Links Gerados -->
+                        <input type="file" id="prod-images" multiple accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
                         <div id="image-preview-container" class="mt-4 grid grid-cols-2 sm:grid-cols-5 gap-4 hidden"></div>
                     </div>
 
@@ -131,33 +118,29 @@
         </main>
     </div>
 
-    <!-- Firebase SDKs e Lógica do Sistema -->
+    <!-- Scripts Firebase e Lógica -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Configurações do Firebase (Substitua pelas suas chaves reais)
         const firebaseConfig = {
-            apiKey: "SUA_API_KEY_AQUI",
-            authDomain: "seu-projeto.firebaseapp.com",
-            projectId: "seu-projeto",
-            storageBucket: "seu-projeto.appspot.com",
-            messagingSenderId: "SEU_SENDER_ID",
-            appId: "SEU_APP_ID"
+            apiKey: "AIzaSyCanlMwdfuD9gmVt62nJYYetj4K2-BfWEc",
+            authDomain: "luary-system.firebaseapp.com",
+            projectId: "luary-system",
+            storageBucket: "luary-system.firebasestorage.app",
+            messagingSenderId: "996287172742",
+            appId: "1:996287172742:web:4ff8c22a01cabe4015c107"
         };
 
-        // Configuração do repositório para a CDN jsDelivr[cite: 1]
-        const GITHUB_USER = "seu-usuario-github";
+        const GITHUB_USER = "luaryshop";
         const GITHUB_REPO = "luary-system";
         const GITHUB_BRANCH = "main";
 
-        // Inicializar Firebase e Firestore
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Elementos da DOM
         const loginScreen = document.getElementById('login-screen');
         const adminPanel = document.getElementById('admin-panel');
         const loginForm = document.getElementById('login-form');
@@ -171,7 +154,6 @@
         const submitBtn = document.getElementById('submit-btn');
         const metricProductsCount = document.getElementById('metric-products-count');
 
-        // Função para atualizar contador de produtos no dashboard
         async function updateDashboardMetrics() {
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
@@ -182,7 +164,6 @@
             }
         }
 
-        // Observador de Autenticação (Auth Guard)[cite: 1]
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 loginScreen.classList.add('hidden');
@@ -195,55 +176,38 @@
             }
         });
 
-        // Ação de Login
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             loginError.classList.add('hidden');
-            
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-
             try {
-                await signInWithEmailAndPassword(auth, email, password);
+                await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-password').value);
             } catch (error) {
                 loginError.textContent = "Erro ao entrar: Verifique suas credenciais.";
                 loginError.classList.remove('hidden');
             }
         });
 
-        // Ação de Logout
         logoutBtn.addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-            } catch (error) {
-                console.error("Erro ao sair:", error);
-            }
+            try { await signOut(auth); } catch (error) { console.error(error); }
         });
 
-        // Preview e validação de até 10 imagens
         imagesInput.addEventListener('change', (e) => {
             const files = Array.from(e.target.files);
             previewContainer.innerHTML = '';
-            
             if (files.length > 10) {
-                alert('Você pode selecionar no máximo 10 imagens por produto.');
+                alert('Máximo de 10 imagens permitidas.');
                 imagesInput.value = '';
                 previewContainer.classList.add('hidden');
                 return;
             }
-
             if (files.length > 0) {
                 previewContainer.classList.remove('hidden');
                 files.forEach((file, index) => {
                     const reader = new FileReader();
-                    reader.onload = (uploadEvent) => {
+                    reader.onload = (evt) => {
                         const div = document.createElement('div');
                         div.className = 'relative border rounded-lg p-2 bg-gray-50 flex flex-col items-center';
-                        div.innerHTML = `
-                            <span class="absolute top-1 left-1 bg-indigo-600 text-white text-xs px-1.5 py-0.5 rounded">#${index + 1}</span>
-                            <img src="${uploadEvent.target.result}" class="h-20 w-20 object-cover rounded-md mb-1">
-                            <span class="text-xs text-gray-500 truncate w-full text-center">0${index + 1}.webp</span>
-                        `;
+                        div.innerHTML = `<span class="absolute top-1 left-1 bg-indigo-600 text-white text-xs px-1.5 py-0.5 rounded">#${index + 1}</span><img src="${evt.target.result}" class="h-20 w-20 object-cover rounded-md mb-1"><span class="text-xs text-gray-500">0${index + 1}.webp</span>`;
                         previewContainer.appendChild(div);
                     };
                     reader.readAsDataURL(file);
@@ -253,10 +217,8 @@
             }
         });
 
-        // Submissão do Produto e Gravação Real no Firestore
         productForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-
             const sku = document.getElementById('prod-sku').value.trim().toUpperCase();
             const name = document.getElementById('prod-name').value;
             const category = document.getElementById('prod-category').value;
@@ -264,45 +226,26 @@
             const priceRetail = parseFloat(document.getElementById('prod-price-retail').value);
             const files = imagesInput.files;
 
-            if (!sku) {
-                alert('Por favor, informe o SKU do produto.');
-                return;
-            }
+            if (!sku) return alert('Informe o SKU.');
 
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Salvando no Firestore...';
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Salvando...';
 
             try {
-                // Geração automática dos links via jsDelivr[cite: 1]
                 const cdnBaseUrl = `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/assets/products/${sku}/`;
-                const imageUrls = [];
+                const imageUrls = Array.from(files).map((_, i) => cdnBaseUrl + String(i + 1).padStart(2, '0') + '.webp');
 
-                for (let i = 0; i < files.length; i++) {
-                    const fileName = String(i + 1).padStart(2, '0') + '.webp';
-                    imageUrls.push(cdnBaseUrl + fileName);
-                }
+                await addDoc(collection(db, "products"), {
+                    sku, name, category, priceWholesale, priceRetail, images: imageUrls, createdAt: new Date().toISOString()
+                });
 
-                const productData = {
-                    sku,
-                    name,
-                    category,
-                    priceWholesale,
-                    priceRetail,
-                    images: imageUrls,
-                    createdAt: new Date().toISOString()
-                };
-
-                // Gravação real na coleção "products" do Firestore
-                await addDoc(collection(db, "products"), productData);
-
-                alert(`Sucesso! O produto ${sku} foi cadastrado e salvo no banco de dados.`);
+                alert(`Produto ${sku} cadastrado com sucesso!`);
                 productForm.reset();
                 previewContainer.classList.add('hidden');
-                previewContainer.innerHTML = '';
                 updateDashboardMetrics();
             } catch (error) {
-                console.error("Erro ao salvar produto no Firestore:", error);
-                alert("Erro ao salvar o produto. Verifique o console para mais detalhes.");
+                console.error(error);
+                alert("Erro ao salvar produto.");
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-2"></i>Salvar Produto no Firestore';
