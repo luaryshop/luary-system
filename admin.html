@@ -72,7 +72,7 @@
             <div class="bg-white shadow-sm rounded-xl border border-gray-200 p-6">
                 <div class="border-b border-gray-200 pb-4 mb-6">
                     <h2 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-box-open mr-2 text-indigo-600"></i>Novo Produto / Referência</h2>
-                    <p class="text-sm text-gray-500 mt-1">Preencha os dados e faça o upload de até 10 imagens para a CDN do jsDelivr.</p>
+                    <p class="text-sm text-gray-500 mt-1">Preencha os dados. O sistema mapeará até 10 fotos na pasta individual do SKU via CDN (`luary-cdn`).</p>
                 </div>
 
                 <form id="product-form" class="space-y-6">
@@ -133,9 +133,10 @@
             appId: "1:996287172742:web:4ff8c22a01cabe4015c107"
         };
 
-        const GITHUB_USER = "luaryshop";
-        const GITHUB_REPO = "luary-system";
-        const GITHUB_BRANCH = "main";
+        // Configuração do Repositório CDN dedicado de Imagens
+        const CDN_USER = "luaryshop";
+        const CDN_REPO = "luary-cdn";
+        const CDN_BRANCH = "main";
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -232,14 +233,15 @@
             submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Salvando...';
 
             try {
-                const cdnBaseUrl = `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/assets/products/${sku}/`;
-                const imageUrls = Array.from(files).map((_, i) => cdnBaseUrl + String(i + 1).padStart(2, '0') + '.webp');
+                // Estrutura de pasta individual por SKU: products/SKU/01.webp, 02.webp...
+                const cdnBaseFolder = `https://cdn.jsdelivr.net/gh/${CDN_USER}/${CDN_REPO}@${CDN_BRANCH}/products/${sku}/`;
+                const imageUrls = Array.from(files).map((_, i) => cdnBaseFolder + String(i + 1).padStart(2, '0') + '.webp');
 
                 await addDoc(collection(db, "products"), {
                     sku, name, category, priceWholesale, priceRetail, images: imageUrls, createdAt: new Date().toISOString()
                 });
 
-                alert(`Produto ${sku} cadastrado com sucesso!`);
+                alert(`Produto ${sku} cadastrado com sucesso! Lembre-se de subir as fotos para a pasta "products/${sku}/" no repositório luary-cdn.`);
                 productForm.reset();
                 previewContainer.classList.add('hidden');
                 updateDashboardMetrics();
