@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Imagens da CDN | Luary Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>.field{display:block;width:100%;margin-top:.35rem;border:1px solid #cbd5e1;border-radius:.6rem;padding:.65rem;background:#fff}.btn{border-radius:.6rem;padding:.65rem 1rem;font-weight:600;font-size:.875rem}.btn-dark{background:#0f172a;color:#fff}.btn-dark:disabled{background:#cbd5e1;cursor:not-allowed}.btn-line{border:1px solid #cbd5e1;background:#fff}.tile{position:relative;border:1px solid #e2e8f0;border-radius:.8rem;background:#fff;padding:.5rem}.tile img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:.5rem;background:#f1f5f9}.tile .mini{display:grid;place-items:center;width:1.9rem;height:1.9rem;border-radius:.45rem;background:#f1f5f9;color:#334155}.tile .mini:hover{background:#e2e8f0}.tile .mini:disabled{opacity:.35;cursor:not-allowed}.pill{position:absolute;top:.75rem;left:.75rem;border-radius:.4rem;padding:.1rem .45rem;font-size:.7rem;font-weight:700;color:#fff;background:#0f172a}</style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+<header class="bg-slate-900 text-white"><div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
+<div><div class="text-xl font-bold">Luary <span class="text-amber-300">CDN</span></div><div class="text-xs text-slate-300">Gerenciador de imagens · GitHub + jsDelivr</div></div>
+<div class="flex gap-2"><a href="admin.html" class="rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20"><i class="fa-solid fa-box mr-1"></i> Produtos</a><a href="content-admin.html" class="rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20"><i class="fa-solid fa-sliders mr-1"></i> Conteúdo</a><button id="logout" class="rounded-lg bg-rose-600 px-3 py-2 text-sm">Sair</button></div></div></header>
+<main class="max-w-7xl mx-auto p-4 md:p-8 space-y-6">
+<div id="login" class="hidden max-w-md mx-auto bg-white rounded-2xl shadow p-6 mt-8"><h1 class="text-xl font-bold mb-4">Acesso administrativo</h1><form id="login-form" class="space-y-3"><input id="email" type="email" required placeholder="E-mail" class="field"><input id="password" type="password" required placeholder="Senha" class="field"><button class="btn btn-dark w-full">Entrar</button><p id="login-error" class="text-rose-600 text-sm"></p></form></div>
+
+<div id="app" class="hidden space-y-6">
+<section class="bg-white rounded-2xl border p-5">
+<div class="flex flex-wrap items-start justify-between gap-4">
+<div class="max-w-2xl"><h2 class="font-bold text-lg"><i class="fa-brands fa-github mr-2"></i>1. Conexão com o GitHub</h2>
+<p class="text-sm text-slate-600 mt-1">Para publicar, cole um <b>token fine-grained</b> restrito ao repositório <code>luaryshop/luary-cdn</code> com permissão <b>Contents: Read and write</b> e validade curta. O token fica <b>apenas na memória desta aba</b>: nunca é salvo, e é descartado ao fechar ou recarregar a página. Para só consultar, não precisa de token.</p></div>
+<div id="token-status" class="rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-600">Desconectado</div></div>
+<div class="mt-3 flex flex-wrap gap-2"><input id="token" type="password" autocomplete="off" placeholder="github_pat_…" class="field !mt-0 flex-1 min-w-[240px]"><button id="connect" class="btn btn-dark">Conectar</button><button id="disconnect" class="btn btn-line hidden">Desconectar</button></div>
+<p id="token-msg" class="text-sm mt-2"></p></section>
+
+<section class="bg-white rounded-2xl border p-5">
+<h2 class="font-bold text-lg mb-3"><i class="fa-solid fa-folder-open mr-2"></i>2. Pasta</h2>
+<div class="grid md:grid-cols-4 gap-3 items-end">
+<label class="text-sm">Tipo de imagem<select id="folder" class="field"></select></label>
+<label id="sku-wrap" class="text-sm">SKU do produto<input id="sku" class="field uppercase" placeholder="CH-0002" maxlength="40"></label>
+<div><button id="load" class="btn btn-dark w-full">Carregar pasta</button></div>
+<div id="folder-info" class="text-sm text-slate-500"></div></div>
+<p id="product-link" class="text-sm mt-3 hidden"></p></section>
+
+<section id="workspace" class="bg-white rounded-2xl border p-5 hidden">
+<div class="flex flex-wrap items-center justify-between gap-3 mb-4"><h2 class="font-bold text-lg"><i class="fa-solid fa-images mr-2"></i>3. Imagens <span id="count" class="text-sm font-normal text-slate-500"></span></h2>
+<div class="flex flex-wrap items-center gap-3 text-sm"><label>Qualidade WebP <input id="quality" type="number" min="0.5" max="1" step="0.05" value="0.85" class="w-20 border rounded-lg p-1.5"></label><label>Lado máx. (px) <input id="maxside" type="number" min="400" max="4000" step="100" value="1600" class="w-24 border rounded-lg p-1.5"></label></div></div>
+<div id="drop" class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center bg-slate-50 cursor-pointer hover:border-indigo-500"><i class="fa-solid fa-cloud-arrow-up text-3xl text-indigo-500"></i><p class="text-sm font-medium mt-2">Arraste as fotos ou clique para selecionar</p><p class="text-xs text-slate-500 mt-1">JPG, PNG ou WebP · convertidas para WebP automaticamente</p><input id="files" type="file" accept="image/*" multiple class="hidden"></div>
+<p id="hint" class="text-xs text-slate-500 mt-2"></p>
+<div id="grid" class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3"></div>
+<div class="mt-5 flex flex-wrap items-center gap-3 border-t pt-4"><button id="publish" class="btn btn-dark" disabled><i class="fa-solid fa-rocket mr-2"></i>Publicar na CDN</button><button id="discard" class="btn btn-line" disabled>Descartar alterações</button><span id="dirty" class="text-sm text-amber-700"></span></div>
+<p id="result" class="text-sm mt-3"></p></section>
+</div></main>
+
+<script type="module">
+import {initializeApp,getApps} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import {getFirestore,collection,getDocs,updateDoc,doc,query,where,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import {CDN,FOLDERS,MAX_PRODUCT_IMAGES,GitHubCDN,cdnUrl,normalizeSku,isValidSku,numberedName,slugFileName,toWebP} from "./cdn-lib.js";
+
+const firebaseConfig={apiKey:"AIzaSyCanlMwdfuD9gmVt62nJYYetj4K2-BfWEc",authDomain:"luary-system.firebaseapp.com",projectId:"luary-system",storageBucket:"luary-system.firebasestorage.app",messagingSenderId:"996287172742",appId:"1:996287172742:web:4ff8c22a01cabe4015c107"};
+const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const $=id=>document.getElementById(id),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const gh=new GitHubCDN();
+let connected=false,current=null,items=[],uid=0,dirty=false;
+
+$("folder").innerHTML=Object.entries(FOLDERS).map(([k,v])=>`<option value="${k}">${esc(v.label)}</option>`).join("");
+const isProducts=()=>$("folder").value==="products";
+const syncFolderUi=()=>{$("sku-wrap").classList.toggle("hidden",!isProducts())};
+$("folder").addEventListener("change",syncFolderUi);syncFolderUi();
+
+// ---- Conexão
+$("connect").addEventListener("click",async()=>{
+  const token=$("token").value.trim();if(!token)return;gh.setToken(token);$("token-msg").textContent="Verificando…";
+  try{await gh.verify();connected=true;$("token").value="";$("token").classList.add("hidden");$("connect").classList.add("hidden");$("disconnect").classList.remove("hidden");$("token-status").textContent="Conectado · escrita liberada";$("token-status").className="rounded-lg bg-emerald-100 px-3 py-2 text-sm text-emerald-800";$("token-msg").textContent="";refreshButtons()}
+  catch(e){gh.setToken("");connected=false;$("token-msg").textContent=e.message;$("token-msg").className="text-sm mt-2 text-rose-600"}});
+$("disconnect").addEventListener("click",()=>{gh.setToken("");connected=false;$("token").classList.remove("hidden");$("connect").classList.remove("hidden");$("disconnect").classList.add("hidden");$("token-status").textContent="Desconectado";$("token-status").className="rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-600";refreshButtons()});
+
+// ---- Carregar pasta
+async function load(){
+  let folder=FOLDERS[$("folder").value].path,sku="";
+  if(isProducts()){sku=normalizeSku($("sku").value);if(!isValidSku(sku)){alert("Informe um SKU válido (letras, números, hífen).");return}$("sku").value=sku;folder+="/"+sku}
+  if(dirty&&!confirm("Há alterações não publicadas. Descartar e carregar outra pasta?"))return;
+  $("folder-info").textContent="Carregando…";
+  try{
+    const {files,head}=await gh.listFolder(folder);
+    current={folder,sku,head};
+    items=files.map(f=>({id:++uid,name:f.name,sha:f.sha,preview:cdnUrl(f.path,head.commitSha),isNew:false}));
+    dirty=false;$("workspace").classList.remove("hidden");$("folder-info").textContent=files.length?"":"Pasta vazia ou ainda inexistente.";
+    $("hint").textContent=isProducts()?`A ordem define os nomes 01.webp, 02.webp… A foto 01 é a principal. Máximo de ${MAX_PRODUCT_IMAGES} fotos.`:"Cada arquivo mantém seu nome. Enviar um arquivo com o mesmo nome substitui o anterior.";
+    $("result").textContent="";render();await showProductLink();
+  }catch(e){$("folder-info").textContent=e.message;$("folder-info").className="text-sm text-rose-600"}}
+$("load").addEventListener("click",load);
+
+async function findProducts(sku){const s=await getDocs(query(collection(db,"products"),where("sku","==",sku)));return s.docs}
+async function showProductLink(){
+  const box=$("product-link");if(!current?.sku){box.classList.add("hidden");return}
+  try{const docs=await findProducts(current.sku);box.classList.remove("hidden");
+    box.innerHTML=docs.length?`<span class="text-emerald-700"><i class="fa-solid fa-link mr-1"></i>Vinculado ao produto: <b>${esc(docs[0].data().name||current.sku)}</b>. Ao publicar, a vitrine é atualizada automaticamente.</span>`:`<span class="text-amber-700"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Nenhum produto com este SKU está cadastrado. As imagens serão publicadas na CDN; cadastre o produto em <a class="underline" href="admin.html">Produtos</a> e volte aqui para vinculá-las.</span>`}
+  catch{box.classList.add("hidden")}}
+
+// ---- Estado e renderização
+function markDirty(){dirty=true;render()}
+function finalName(item,index){return isProducts()?numberedName(index):item.name}
+function render(){
+  const grid=$("grid");$("count").textContent=`(${items.length}${isProducts()?` de ${MAX_PRODUCT_IMAGES}`:""})`;
+  grid.innerHTML=items.length?items.map((it,i)=>{const n=finalName(it,i);const numbered=isProducts();
+    return `<div class="tile" data-id="${it.id}"><span class="pill" style="${it.isNew?"background:#d97706":""}">${esc(numbered?(i===0?"★ "+n:n):(it.isNew?"novo":"CDN"))}</span><img alt="${esc(n)}" loading="lazy" data-src="${it.id}"><div class="mt-2 text-xs truncate text-slate-500" title="${esc(n)}">${esc(n)}</div>
+    <div class="mt-2 flex flex-wrap gap-1">${numbered?`<button class="mini" data-act="left" title="Mover para antes" ${i===0?"disabled":""}><i class="fa-solid fa-arrow-left"></i></button><button class="mini" data-act="right" title="Mover para depois" ${i===items.length-1?"disabled":""}><i class="fa-solid fa-arrow-right"></i></button><button class="mini" data-act="main" title="Definir como principal" ${i===0?"disabled":""}><i class="fa-solid fa-star"></i></button>`:""}
+    <button class="mini" data-act="copy" title="Copiar URL" ${it.isNew?"disabled":""}><i class="fa-solid fa-link"></i></button><button class="mini !text-rose-600" data-act="remove" title="Remover"><i class="fa-solid fa-trash"></i></button></div></div>`}).join(""):'<p class="text-sm text-slate-400 col-span-full">Nenhuma imagem nesta pasta.</p>';
+  grid.querySelectorAll("img[data-src]").forEach(img=>{const it=items.find(x=>x.id==img.dataset.src);img.src=it.preview});
+  refreshButtons();
+}
+function refreshButtons(){$("publish").disabled=!(connected&&dirty&&current);$("discard").disabled=!dirty;$("dirty").textContent=dirty?(connected?"Alterações não publicadas.":"Alterações não publicadas — conecte o GitHub para publicar."):""}
+$("grid").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-act]");if(!b)return;const id=Number(b.closest(".tile").dataset.id),i=items.findIndex(x=>x.id===id);if(i<0)return;
+  const act=b.dataset.act;
+  if(act==="remove"){if(!confirm("Remover esta imagem da pasta? A remoção só vale após publicar."))return;items.splice(i,1);markDirty()}
+  else if(act==="left"&&i>0){[items[i-1],items[i]]=[items[i],items[i-1]];markDirty()}
+  else if(act==="right"&&i<items.length-1){[items[i+1],items[i]]=[items[i],items[i+1]];markDirty()}
+  else if(act==="main"&&i>0){items.unshift(items.splice(i,1)[0]);markDirty()}
+  else if(act==="copy"){const url=items[i].preview;try{await navigator.clipboard.writeText(url);b.innerHTML='<i class="fa-solid fa-check"></i>';setTimeout(()=>render(),900)}catch{prompt("Copie a URL:",url)}}});
+$("discard").addEventListener("click",()=>{if(confirm("Descartar alterações não publicadas?")){dirty=false;load()}});
+window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
+
+// ---- Upload (conversão local para WebP)
+async function addFiles(fileList){
+  if(!current){alert("Carregue uma pasta primeiro.");return}
+  const q=Math.min(1,Math.max(.5,Number($("quality").value)||.85)),maxSide=Math.min(4000,Math.max(400,Number($("maxside").value)||1600));
+  const files=[...fileList].filter(f=>f.type.startsWith("image/"));const errors=[];
+  $("result").className="text-sm mt-3 text-slate-600";
+  for(const file of files){
+    if(isProducts()&&items.length>=MAX_PRODUCT_IMAGES){errors.push(`Limite de ${MAX_PRODUCT_IMAGES} fotos: "${file.name}" ignorada.`);continue}
+    $("result").textContent=`Convertendo ${file.name}…`;
+    try{const blob=await toWebP(file,{quality:q,maxSide});const preview=URL.createObjectURL(blob);
+      if(isProducts())items.push({id:++uid,name:"",blob,preview,isNew:true});
+      else{const name=slugFileName(file.name),at=items.findIndex(x=>x.name===name);const item={id:++uid,name,blob,preview,isNew:true};if(at>=0)items[at]=item;else items.push(item)}}
+    catch(err){errors.push(err.message)}}
+  $("result").textContent=errors.join(" ");if(errors.length)$("result").className="text-sm mt-3 text-rose-600";
+  if(files.length)markDirty();
+}
+$("drop").addEventListener("click",()=>$("files").click());
+$("drop").addEventListener("dragover",e=>{e.preventDefault()});
+$("drop").addEventListener("drop",e=>{e.preventDefault();addFiles(e.dataTransfer.files)});
+$("files").addEventListener("change",e=>{addFiles(e.target.files);e.target.value=""});
+
+// ---- Publicação (um único commit) + vínculo com o produto
+$("publish").addEventListener("click",async()=>{
+  if(!connected||!current)return;
+  if(!confirm(`Publicar ${items.length} imagem(ns) em ${current.folder}? Arquivos removidos da lista serão apagados do repositório.`))return;
+  const btn=$("publish");btn.disabled=true;$("result").className="text-sm mt-3 text-slate-600";$("result").textContent="Publicando…";
+  try{
+    const entries=items.map((it,i)=>({name:finalName(it,i),sha:it.sha,blob:it.blob}));
+    const sha=await gh.commitFolder(current.folder,entries,`admin: atualiza imagens de ${current.folder}`);
+    let msg="Publicado com sucesso.";
+    if(current.sku){
+      const urls=entries.map(e=>cdnUrl(`${current.folder}/${e.name}`,sha));
+      const docs=await findProducts(current.sku);
+      for(const d of docs)await updateDoc(doc(db,"products",d.id),{images:urls,imagesUpdatedAt:serverTimestamp()});
+      msg+=docs.length?` ${docs.length} produto(s) atualizado(s) na vitrine.`:" Nenhum produto cadastrado com este SKU para vincular.";
+    }
+    $("result").className="text-sm mt-3 text-emerald-700";$("result").textContent=msg;
+    dirty=false;await load();$("result").className="text-sm mt-3 text-emerald-700";$("result").textContent=msg;
+  }catch(e){console.error(e);$("result").className="text-sm mt-3 text-rose-600";$("result").textContent="Falha ao publicar: "+e.message;btn.disabled=false}
+});
+
+// ---- Login
+$("login-form").addEventListener("submit",async e=>{e.preventDefault();$("login-error").textContent="";try{await signInWithEmailAndPassword(auth,$("email").value,$("password").value)}catch{$("login-error").textContent="Não foi possível entrar. Confira e-mail e senha."}});
+$("logout").addEventListener("click",()=>{gh.setToken("");signOut(auth)});
+onAuthStateChanged(auth,user=>{$("login").classList.toggle("hidden",!!user);$("app").classList.toggle("hidden",!user);
+  if(user){const q=new URLSearchParams(location.search).get("sku");if(q){$("folder").value="products";syncFolderUi();$("sku").value=q;load()}}});
+</script></body></html>

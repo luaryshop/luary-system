@@ -110,9 +110,11 @@
                     </div>
 
                     <div class="border-t border-gray-200 pt-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Imagens do Produto (Até 10 fotos)</label>
-                        <input type="file" id="prod-images" multiple accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
-                        <div id="image-preview-container" class="mt-4 grid grid-cols-2 sm:grid-cols-5 gap-4 hidden"></div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Imagens do Produto (até 10 fotos)</label>
+                        <div class="flex flex-wrap items-center gap-3 rounded-lg bg-indigo-50 p-4 text-sm text-indigo-900">
+                            <span id="images-info" class="flex-1 min-w-[220px]">Salve o produto e depois envie as fotos no gerenciador da CDN. Elas são convertidas para WebP, publicadas no GitHub e vinculadas ao produto automaticamente.</span>
+                            <button type="button" id="manage-images-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium"><i class="fa-solid fa-images mr-2"></i>Gerenciar imagens na CDN</button>
+                        </div>
                     </div>
 
                     <div class="flex justify-end space-x-4 border-t border-gray-200 pt-6">
@@ -167,9 +169,8 @@
             appId: "1:996287172742:web:4ff8c22a01cabe4015c107"
         };
 
-        const CDN_USER = "luaryshop";
-        const CDN_REPO = "luary-cdn";
-        const CDN_BRANCH = "main";
+        import { publicProductImages, normalizeSku, isValidSku } from "./cdn-lib.js";
+        const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -183,8 +184,6 @@
         const userEmailDisplay = document.getElementById('user-email-display');
         
         const productForm = document.getElementById('product-form');
-        const imagesInput = document.getElementById('prod-images');
-        const previewContainer = document.getElementById('image-preview-container');
         const submitBtn = document.getElementById('submit-btn');
         const metricProductsCount = document.getElementById('metric-products-count');
         const productsTableBody = document.getElementById('products-table-body');
@@ -210,23 +209,24 @@
                     const product = { id: docSnap.id, ...docSnap.data() };
                     productsCache.push(product);
 
-                    const mainImage = (product.images && product.images.length > 0) ? product.images[0] : 'https://via.placeholder.com/150?text=Sem+Foto';
+                    const mainImage = (product.images && product.images.length > 0) ? product.images[0] : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect width="48" height="48" fill="%23e5e7eb"/></svg>';
 
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <img src="${mainImage}" class="h-12 w-12 object-cover rounded-lg border border-gray-200" alt="${product.sku}">
+                            <img src="${esc(mainImage)}" class="h-12 w-12 object-cover rounded-lg border border-gray-200" alt="${esc(product.sku)}">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-bold text-gray-900">${product.sku}</div>
-                            <div class="text-sm text-gray-500 truncate max-w-xs">${product.name}</div>
+                            <div class="text-sm font-bold text-gray-900">${esc(product.sku)}</div><div class="text-xs text-gray-400">${(product.images||[]).length} foto(s)</div>
+                            <div class="text-sm text-gray-500 truncate max-w-xs">${esc(product.name)}</div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${product.category}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${esc(product.category)}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             <span class="font-bold text-indigo-600">R$ ${Number(product.priceWholesale).toFixed(2)}</span><br>
                             <span class="text-xs text-gray-400">Varejo: R$ ${Number(product.priceRetail).toFixed(2)}</span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                            <button onclick="window.open('cdn.html?sku=' + encodeURIComponent('${esc(product.sku)}'), '_blank')" class="text-emerald-700 hover:text-emerald-900 bg-emerald-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-images mr-1"></i>Imagens</button>
                             <button onclick="window.editProduct('${product.id}')" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-pen-to-square mr-1"></i>Editar</button>
                             <button onclick="window.deleteProduct('${product.id}')" class="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-trash mr-1"></i>Excluir</button>
                         </td>
@@ -305,30 +305,9 @@
             }
         };
 
-        imagesInput.addEventListener('change', (e) => {
-            const files = Array.from(e.target.files);
-            previewContainer.innerHTML = '';
-            if (files.length > 10) {
-                alert('Máximo de 10 imagens permitidas.');
-                imagesInput.value = '';
-                previewContainer.classList.add('hidden');
-                return;
-            }
-            if (files.length > 0) {
-                previewContainer.classList.remove('hidden');
-                files.forEach((file, index) => {
-                    const reader = new FileReader();
-                    reader.onload = (evt) => {
-                        const div = document.createElement('div');
-                        div.className = 'relative border rounded-lg p-2 bg-gray-50 flex flex-col items-center';
-                        div.innerHTML = `<span class="absolute top-1 left-1 bg-indigo-600 text-white text-xs px-1.5 py-0.5 rounded">#${index + 1}</span><img src="${evt.target.result}" class="h-20 w-20 object-cover rounded-md mb-1"><span class="text-xs text-gray-500">0${index + 1}.webp</span>`;
-                        previewContainer.appendChild(div);
-                    };
-                    reader.readAsDataURL(file);
-                });
-            } else {
-                previewContainer.classList.add('hidden');
-            }
+        document.getElementById('manage-images-btn').addEventListener('click', () => {
+            const sku = normalizeSku(document.getElementById('prod-sku').value);
+            window.open(isValidSku(sku) ? 'cdn.html?sku=' + encodeURIComponent(sku) : 'cdn.html', '_blank');
         });
 
         productForm.addEventListener('submit', async (e) => {
@@ -339,25 +318,20 @@
             const category = document.getElementById('prod-category').value;
             const priceWholesale = parseFloat(document.getElementById('prod-price-wholesale').value);
             const priceRetail = parseFloat(document.getElementById('prod-price-retail').value);
-            const files = imagesInput.files;
-
-            if (!sku) return alert('Informe o SKU.');
+            if (!isValidSku(sku)) return alert('Informe um SKU válido (letras, números e hífen).');
 
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Salvando...';
 
             try {
-                const cdnBaseFolder = `https://cdn.jsdelivr.net/gh/${CDN_USER}/${CDN_REPO}@${CDN_BRANCH}/products/${sku}/`;
-                
-                // Se novas imagens foram selecionadas, atualiza os links. Se não, mantém os anteriores caso seja edição.
+                // Fotos são gerenciadas em cdn.html. Na edição, preserva as atuais; em produto novo,
+                // aproveita fotos já publicadas na pasta do SKU (se houver).
                 let imageUrls = [];
-                if (files.length > 0) {
-                    imageUrls = Array.from(files).map((_, i) => cdnBaseFolder + String(i + 1).padStart(2, '0') + '.webp');
-                } else if (docId) {
+                if (docId) {
                     const existingProduct = productsCache.find(p => p.id === docId);
-                    imageUrls = existingProduct ? existingProduct.images : [];
+                    imageUrls = existingProduct && Array.isArray(existingProduct.images) ? existingProduct.images : [];
                 } else {
-                    imageUrls = [cdnBaseFolder + '01.webp'];
+                    try { imageUrls = await publicProductImages(sku); } catch (e) { imageUrls = []; }
                 }
 
                 if (docId) {
@@ -379,7 +353,6 @@
                 formTitle.innerHTML = `<i class="fa-solid fa-box-open mr-2 text-indigo-600"></i>Novo Produto / Referência`;
                 submitBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-2"></i>Salvar Produto no Firestore';
                 cancelEditBtn.classList.add('hidden');
-                previewContainer.classList.add('hidden');
                 loadAdminProducts();
             } catch (error) {
                 console.error(error);
