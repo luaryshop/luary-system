@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Conteúdo do Site | Luary Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+<header class="bg-slate-900 text-white"><div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
+<div><div class="text-xl font-bold">Luary <span class="text-amber-300">Studio</span></div><div class="text-xs text-slate-300">Configurações, vitrines e campanhas</div></div>
+<div class="flex gap-2"><a href="admin.html" class="rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20"><i class="fa-solid fa-box mr-1"></i> Produtos</a><button id="logout" class="rounded-lg bg-rose-600 px-3 py-2 text-sm">Sair</button></div>
+</div></header>
+<main class="max-w-7xl mx-auto p-4 md:p-8">
+<div id="login" class="hidden max-w-md mx-auto bg-white rounded-2xl shadow p-6 mt-12"><h1 class="text-xl font-bold mb-4">Acesso administrativo</h1><form id="login-form" class="space-y-3"><input id="email" type="email" required placeholder="E-mail" class="w-full border rounded-lg p-3"><input id="password" type="password" required placeholder="Senha" class="w-full border rounded-lg p-3"><button class="w-full bg-slate-900 text-white rounded-lg p-3">Entrar</button><p id="login-error" class="text-rose-600 text-sm"></p></form></div>
+<div id="app" class="hidden">
+<div class="mb-6"><h1 class="text-2xl font-bold">Central de conteúdo</h1><p class="text-slate-500">Edite os dados públicos e as campanhas sem alterar o código da vitrine.</p></div>
+<nav class="flex flex-wrap gap-2 mb-6" id="tabs">
+<button data-tab="company" class="tab rounded-lg px-4 py-2 bg-slate-900 text-white">Empresa e identidade</button>
+<button data-tab="banners" class="tab rounded-lg px-4 py-2 bg-white border">Banners</button>
+<button data-tab="marketplaces" class="tab rounded-lg px-4 py-2 bg-white border">Grids / marketplaces</button>
+<button data-tab="taxonomy" class="tab rounded-lg px-4 py-2 bg-white border">Categorias</button>
+<button data-tab="promotions" class="tab rounded-lg px-4 py-2 bg-white border">Descontos e promoções</button>
+<button data-tab="export" class="tab rounded-lg px-4 py-2 bg-white border">Publicação CDN</button>
+</nav>
+<section id="panel-company" class="panel bg-white rounded-2xl shadow-sm border p-5">
+<h2 class="font-bold text-lg mb-4">Dados da empresa e identidade visual</h2>
+<form id="company-form" class="grid md:grid-cols-2 gap-4">
+<label class="text-sm">Nome da empresa<input name="companyName" class="field" required></label>
+<label class="text-sm">Slogan<input name="slogan" class="field"></label>
+<label class="text-sm">WhatsApp (somente números com DDI)<input name="whatsapp" class="field" placeholder="5511999999999"></label>
+<label class="text-sm">Instagram / URL<input name="instagram" class="field"></label>
+<label class="text-sm">E-mail de contato<input name="email" type="email" class="field"></label>
+<label class="text-sm">URL do site<input name="siteUrl" class="field"></label>
+<label class="text-sm">URL da logo (CDN)<input name="logoUrl" class="field"></label>
+<label class="text-sm">Favicon (CDN)<input name="faviconUrl" class="field"></label>
+<label class="text-sm md:col-span-2">Texto institucional<textarea name="aboutText" rows="3" class="field"></textarea></label>
+<div class="md:col-span-2"><button class="save-btn">Salvar dados</button></div>
+</form></section>
+<section id="panel-banners" class="panel hidden bg-white rounded-2xl shadow-sm border p-5">
+<h2 class="font-bold text-lg mb-1">Banners e imagens da home</h2><p class="text-sm text-slate-500 mb-4">Cadastre imagem, destino, texto alternativo, posição e status. As imagens devem estar publicadas na CDN.</p>
+<form id="banner-form" class="grid md:grid-cols-2 gap-3 mb-6"><input type="hidden" name="id"><input name="title" placeholder="Título interno" class="field" required><input name="imageUrl" placeholder="URL da imagem na CDN" class="field" required><input name="linkUrl" placeholder="Link de destino (opcional)" class="field"><input name="alt" placeholder="Texto alternativo" class="field"><input name="position" type="number" min="0" value="0" placeholder="Ordem" class="field"><label class="flex items-center gap-2 text-sm"><input name="active" type="checkbox" checked> Ativo</label><div class="md:col-span-2 flex gap-2"><button class="save-btn">Salvar banner</button><button type="button" class="cancel-btn" data-cancel="banner-form">Limpar</button></div></form><div id="banner-list" class="space-y-2"></div></section>
+<section id="panel-marketplaces" class="panel hidden bg-white rounded-2xl shadow-sm border p-5">
+<h2 class="font-bold text-lg mb-1">Grids de marketplaces / vitrines</h2><p class="text-sm text-slate-500 mb-4">Crie blocos promocionais para marketplaces, coleções, canais ou vitrines especiais.</p>
+<form id="market-form" class="grid md:grid-cols-2 gap-3 mb-6"><input type="hidden" name="id"><input name="title" placeholder="Nome do grid" class="field" required><input name="slug" placeholder="Identificador (ex.: shopee)" class="field" required><input name="imageUrl" placeholder="Imagem de capa (CDN)" class="field"><input name="linkUrl" placeholder="URL de destino" class="field"><input name="description" placeholder="Descrição" class="field"><input name="position" type="number" min="0" value="0" class="field"><label class="flex items-center gap-2 text-sm"><input name="active" type="checkbox" checked> Ativo</label><div class="md:col-span-2 flex gap-2"><button class="save-btn">Salvar grid</button><button type="button" class="cancel-btn" data-cancel="market-form">Limpar</button></div></form><div id="market-list" class="space-y-2"></div></section>
+<section id="panel-taxonomy" class="panel hidden bg-white rounded-2xl shadow-sm border p-5">
+<h2 class="font-bold text-lg mb-4">Categorias e subcategorias</h2><div class="grid md:grid-cols-2 gap-6">
+<form id="category-form" class="space-y-3"><h3 class="font-semibold">Categoria</h3><input type="hidden" name="id"><input name="name" placeholder="Nome da categoria" class="field" required><input name="slug" placeholder="slug-da-categoria" class="field" required><input name="imageUrl" placeholder="Imagem CDN" class="field"><input name="position" type="number" value="0" class="field"><label class="flex gap-2 text-sm"><input name="active" type="checkbox" checked> Ativa</label><button class="save-btn">Salvar categoria</button><div id="category-list" class="space-y-2"></div></form>
+<form id="subcategory-form" class="space-y-3"><h3 class="font-semibold">Subcategoria</h3><input type="hidden" name="id"><input name="name" placeholder="Nome da subcategoria" class="field" required><input name="slug" placeholder="slug-da-subcategoria" class="field" required><select name="categoryId" id="category-select" class="field" required><option value="">Selecione a categoria</option></select><input name="imageUrl" placeholder="Imagem CDN" class="field"><input name="position" type="number" value="0" class="field"><label class="flex gap-2 text-sm"><input name="active" type="checkbox" checked> Ativa</label><button class="save-btn">Salvar subcategoria</button><div id="subcategory-list" class="space-y-2"></div></form></div></section>
+<section id="panel-promotions" class="panel hidden bg-white rounded-2xl shadow-sm border p-5">
+<h2 class="font-bold text-lg mb-1">Descontos e promoções</h2><p class="text-sm text-slate-500 mb-4">Suporta desconto percentual ou valor fixo, cupom, período, pedido mínimo, público e prioridade. Promoções inativas ou fora da validade não devem ser aplicadas na loja.</p>
+<form id="promotion-form" class="grid md:grid-cols-3 gap-3 mb-6"><input type="hidden" name="id"><input name="name" placeholder="Nome da campanha" class="field" required><select name="type" class="field"><option value="percent">Percentual (%)</option><option value="fixed">Valor fixo (R$)</option></select><input name="value" type="number" min="0.01" step="0.01" placeholder="Valor do desconto" class="field" required><input name="coupon" placeholder="Cupom (opcional)" class="field"><input name="minOrder" type="number" min="0" step="0.01" placeholder="Pedido mínimo (R$)" class="field"><select name="audience" class="field"><option value="all">Todos</option><option value="wholesale">Atacado</option><option value="retail">Varejo</option></select><label class="text-sm">Início<input name="startsAt" type="datetime-local" class="field"></label><label class="text-sm">Término<input name="endsAt" type="datetime-local" class="field"></label><input name="priority" type="number" value="0" placeholder="Prioridade" class="field"><label class="flex items-center gap-2 text-sm"><input name="active" type="checkbox" checked> Ativa</label><div class="md:col-span-3 flex gap-2"><button class="save-btn">Salvar promoção</button><button type="button" class="cancel-btn" data-cancel="promotion-form">Limpar</button></div></form><div id="promotion-list" class="space-y-2"></div>
+<div class="mt-6 rounded-xl bg-amber-50 p-4 text-sm text-amber-900"><b>Regra de segurança comercial:</b> esta área cadastra as regras. Antes de ativar descontos no checkout, valide os cálculos no servidor ou em Cloud Functions e nunca confie apenas no preço enviado pelo navegador.</div></section>
+<section id="panel-export" class="panel hidden bg-white rounded-2xl shadow-sm border p-5">
+<h2 class="font-bold text-lg mb-2">Publicação de imagens na CDN</h2><p class="text-sm text-slate-600 mb-4">O navegador não deve guardar um token pessoal do GitHub. Por segurança, as imagens são preparadas em ZIP para publicação no repositório <code>luaryshop/luary-cdn</code>.</p>
+<div class="grid md:grid-cols-2 gap-4"><div class="rounded-xl border p-4"><h3 class="font-semibold mb-2">Estrutura esperada</h3><pre class="text-xs bg-slate-100 rounded-lg p-3 overflow-auto">luary-cdn/
+├── categories/
+├── home/
+├── products/{SKU}/01.webp ... 10.webp
+├── settings/
+└── subcategorias/</pre></div><div class="rounded-xl border p-4"><h3 class="font-semibold mb-2">Como publicar</h3><ol class="list-decimal pl-5 text-sm space-y-2"><li>Use o Processador de Imagens para gerar o ZIP.</li><li>Extraia o conteúdo mantendo os caminhos das pastas.</li><li>Envie para o repositório GitHub <b>luaryshop/luary-cdn</b>.</li><li>Aguarde a atualização do jsDelivr ou solicite purge do arquivo substituído.</li></ol><a href="editor.html" class="inline-block mt-3 text-indigo-700 underline">Abrir processador de imagens</a></div></div>
+<p class="mt-4 text-sm text-slate-500">As URLs públicas seguem: <code>https://cdn.jsdelivr.net/gh/luaryshop/luary-cdn@main/{pasta}/{arquivo}</code>.</p></section>
+</div></main>
+<style>
+.field{display:block;width:100%;margin-top:.35rem;border:1px solid #cbd5e1;border-radius:.6rem;padding:.7rem;background:white}.save-btn{background:#0f172a;color:white;padding:.7rem 1rem;border-radius:.6rem;font-weight:600}.cancel-btn{border:1px solid #cbd5e1;padding:.7rem 1rem;border-radius:.6rem}.item{display:flex;align-items:center;justify-content:space-between;gap:1rem;border:1px solid #e2e8f0;border-radius:.7rem;padding:.8rem}.item small{display:block;color:#64748b}
+</style>
+<script type="module">
+import {initializeApp,getApps} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import {getFirestore,doc,getDoc,setDoc,collection,addDoc,getDocs,updateDoc,deleteDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyCanlMwdfuD9gmVt62nJYYetj4K2-BfWEc",authDomain:"luary-system.firebaseapp.com",projectId:"luary-system",storageBucket:"luary-system.firebasestorage.app",messagingSenderId:"996287172742",appId:"1:996287172742:web:4ff8c22a01cabe4015c107"};
+const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const $=id=>document.getElementById(id), esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const collections={banners:"banners",marketplaces:"marketplaceGrids",categories:"categories",subcategories:"subcategories",promotions:"promotions"};
+const forms={banners:"banner-form",marketplaces:"market-form",categories:"category-form",subcategories:"subcategory-form",promotions:"promotion-form"};
+let cache={categories:[]};
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".panel").forEach(p=>p.classList.add("hidden"));$("panel-"+b.dataset.tab).classList.remove("hidden");document.querySelectorAll(".tab").forEach(x=>x.className="tab rounded-lg px-4 py-2 bg-white border");b.className="tab rounded-lg px-4 py-2 bg-slate-900 text-white"}));
+function formData(form){const fd=new FormData(form),o={};for(const [k,v] of fd.entries())o[k]=v;form.querySelectorAll('input[type="checkbox"]').forEach(x=>o[x.name]=x.checked);form.querySelectorAll('input[type="number"]').forEach(x=>{if(x.value!=="")o[x.name]=Number(x.value)});return o}
+function fillForm(form,obj){for(const el of form.elements){if(!el.name)continue;if(el.type==="checkbox")el.checked=!!obj[el.name];else el.value=obj[el.name]??""}}
+function clearForm(id){$(id).reset();const h=$(id).querySelector('[name="id"]');if(h)h.value="";if($(id).elements.active)$(id).elements.active.checked=true}
+async function saveRecord(kind,formId){const f=$(formId),data=formData(f),id=data.id;delete data.id;data.updatedAt=serverTimestamp();if(id)await updateDoc(doc(db,collections[kind],id),data);else{data.createdAt=serverTimestamp();await addDoc(collection(db,collections[kind]),data)}clearForm(formId);await loadAll()}
+async function removeRecord(kind,id){if(!confirm("Excluir este registro? Esta ação não pode ser desfeita."))return;await deleteDoc(doc(db,collections[kind],id));await loadAll()}
+function renderList(kind,records){const target=$(kind==="banners"?"banner-list":kind==="marketplaces"?"market-list":kind==="categories"?"category-list":kind==="subcategories"?"subcategory-list":"promotion-list");if(!records.length){target.innerHTML='<p class="text-sm text-slate-400">Nenhum registro cadastrado.</p>';return}target.innerHTML=records.map(r=>`<div class="item"><div><b>${esc(r.title||r.name||r.slug||"Registro")}</b><small>${esc(r.imageUrl||r.coupon||r.slug||"")}${r.active===false?" • Inativo":""}</small></div><div class="flex gap-2"><button class="text-indigo-700" data-edit="${esc(r.id)}" data-kind="${kind}">Editar</button><button class="text-rose-600" data-delete="${esc(r.id)}" data-kind="${kind}">Excluir</button></div></div>`).join("")}
+async function loadCollection(kind){const snap=await getDocs(collection(db,collections[kind]));const rows=snap.docs.map(d=>({id:d.id,...d.data()}));renderList(kind,rows);if(kind==="categories"){cache.categories=rows;$("category-select").innerHTML='<option value="">Selecione a categoria</option>'+rows.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join("")}return rows}
+async function loadAll(){for(const kind of Object.keys(collections))await loadCollection(kind)}
+$("tabs").addEventListener("click",async e=>{const edit=e.target.closest("[data-edit]"),del=e.target.closest("[data-delete]");if(del){await removeRecord(del.dataset.kind,del.dataset.delete);return}if(edit){const kind=edit.dataset.kind,snap=await getDoc(doc(db,collections[kind],edit.dataset.edit));if(snap.exists())fillForm($(forms[kind]),{id:snap.id,...snap.data()});}});
+Object.entries(forms).forEach(([kind,id])=>$(id).addEventListener("submit",async e=>{e.preventDefault();try{await saveRecord(kind,id);alert("Registro salvo.");}catch(err){console.error(err);alert("Não foi possível salvar. Verifique as permissões do Firestore.");}}));
+document.querySelectorAll("[data-cancel]").forEach(b=>b.addEventListener("click",()=>clearForm(b.dataset.cancel)));
+$("company-form").addEventListener("submit",async e=>{e.preventDefault();try{const data=formData(e.currentTarget);await setDoc(doc(db,"siteSettings","public"),{...data,updatedAt:serverTimestamp()},{merge:true});alert("Dados da empresa salvos.");}catch(err){console.error(err);alert("Erro ao salvar configurações.");}});
+async function loadCompany(){const s=await getDoc(doc(db,"siteSettings","public"));if(s.exists())fillForm($("company-form"),s.data())}
+$("login-form").addEventListener("submit",async e=>{e.preventDefault();$("login-error").textContent="";try{await signInWithEmailAndPassword(auth,$("email").value,$("password").value)}catch(err){$("login-error").textContent="Não foi possível entrar. Confira e-mail e senha."}});
+$("logout").addEventListener("click",()=>signOut(auth));
+onAuthStateChanged(auth,async user=>{ $("login").classList.toggle("hidden",!!user);$("app").classList.toggle("hidden",!user);if(user){try{await loadCompany();await loadAll()}catch(e){console.error(e);alert("Falha ao carregar os dados. Confira as regras do Firestore.")}}});
+</script></body></html>
