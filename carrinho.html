@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#23384a">
+<title>Meu pedido | Luary Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="store.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+<a class="brand" href="index.html" aria-label="Luary Shop — início"><span class="brand-emblem" id="brand-emblem">L</span><span class="brand-name">luary</span></a>
+<nav class="top-actions"><a href="index.html#colecao">← Continuar escolhendo</a><span>Pedido <span class="pill-count" id="cart-count">0</span></span></nav>
+</div></header>
+
+<main class="wrap">
+<div class="steps"><b>1 · PEDIDO</b><i></i><span>2 · DADOS E ENVIO</span></div>
+<h1 class="page-title">Meu <em>pedido.</em></h1>
+<div id="loading" class="empty">Carregando seu pedido…</div>
+<div id="error" class="alert err" hidden></div>
+
+<div id="empty" class="card empty" hidden><p>Seu pedido está vazio.</p><a class="btn btn-primary" href="index.html#colecao">Ver coleção</a></div>
+
+<div id="content" class="layout" hidden>
+  <section class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h2 style="border:0;margin:0;padding:0">Peças escolhidas</h2><button class="link-btn" id="clear-cart" type="button">Esvaziar pedido</button></div>
+    <div id="notice" class="alert" hidden></div>
+    <div id="items"></div>
+  </section>
+
+  <aside class="card sticky">
+    <h2>Resumo</h2>
+    <div id="coupon-area">
+      <form id="coupon-form" class="coupon" novalidate><input class="input" id="coupon-input" placeholder="Cupom de desconto" maxlength="30" autocomplete="off"><button class="btn btn-line" type="submit" id="coupon-btn">Aplicar</button></form>
+      <div id="coupon-applied" class="tag" hidden><span>Cupom <strong id="coupon-code"></strong> aplicado</span><button class="link-btn" id="coupon-remove" type="button">Remover</button></div>
+      <p class="msg" id="coupon-msg" role="status"></p>
+    </div>
+    <div id="min-alert" class="alert" hidden></div>
+    <div id="totals"></div>
+    <button class="btn btn-primary btn-block" id="go-checkout" type="button" style="margin-top:18px">Continuar para dados e envio →</button>
+    <p style="margin:12px 0 0;color:#93958f;font-size:11px;line-height:1.6;text-align:center">Sem pagamento no site. O pedido é enviado pelo WhatsApp e a equipe Luary confirma valores, disponibilidade e frete.</p>
+  </aside>
+</div>
+</main>
+<footer class="mini">© Luary Shop</footer>
+
+<script type="module">
+import { $, esc, brl, safeHttps, PLACEHOLDER, readCart, saveCart, cartCount, getCouponCode, setCouponCode, clearCart, loadStore, resolveCart, resolveCoupon } from "./store-core.js";
+import { computeTotals } from "./order-calc.js";
+
+let store = null, cart = readCart(), state = { lines: [], coupon: null };
+
+async function recompute() {
+  const { lines, couponLines, missing } = resolveCart(cart, store.products, store.promotions);
+  if (missing.length) { missing.forEach((id) => delete cart[id]); saveCart(cart); }
+  state.lines = lines;
+  for (const l of lines) if (cart[l.productId] !== l.qty) cart[l.productId] = l.qty; // respeita o mínimo por SKU
+  saveCart(cart);
+  const code = getCouponCode();
+  const res = await resolveCoupon(code, couponLines);
+  state.coupon = res.coupon;
+  if (code && !res.coupon) { setCouponCode(""); $("coupon-msg").className = "msg err"; $("coupon-msg").textContent = res.message + " O cupom foi removido."; }
+  return missing.length;
+}
+
+function render(missingCount = 0) {
+  const count = cartCount(cart);
+  $("cart-count").textContent = String(count);
+  $("loading").hidden = true;
+  const empty = state.lines.length === 0;
+  $("empty").hidden = !empty; $("content").hidden = empty;
+  if (empty) return;
+
+  $("notice").hidden = !(missingCount || state.lines.some((l) => !l.priced));
+  $("notice").textContent = missingCount ? `${missingCount} item(ns) não estão mais disponíveis no catálogo e foram removidos do pedido.` : "Peças “sob consulta” entram sem valor: a equipe confirma o preço no atendimento.";
+
+  $("items").innerHTML = state.lines.map((l) => {
+    const img = safeHttps(l.image) || PLACEHOLDER;
+    const promo = l.promoName && l.unitOriginal > l.unitPrice;
+    return `<article class="cart-row" data-id="${esc(l.productId)}"><img src="${esc(img)}" alt="" loading="lazy"><div><div class="item-name">${esc(l.name)}</div><div class="item-ref">REF. ${esc(l.sku || "a confirmar")}</div>${promo ? `<span class="item-promo">${esc(l.promoName)}</span>` : ""}
+      ${l.minQty > 1 ? `<div class="item-ref" style="color:#9e7739">Pedido mínimo deste item: ${l.minQty} un.</div>` : ""}<div class="qty"><button type="button" data-act="minus" aria-label="Diminuir" ${l.qty <= l.minQty ? "disabled" : ""}>−</button><input type="number" min="${l.minQty}" max="999" value="${l.qty}" data-act="set" aria-label="Quantidade de ${esc(l.name)}"><button type="button" data-act="plus" aria-label="Aumentar">+</button></div> <button class="link-btn" data-act="remove" type="button" style="margin-left:10px">Remover</button></div>
+      <div class="price-col"><strong>${l.priced ? brl(l.subtotal) : "Sob consulta"}</strong>${l.priced ? `<small>${promo ? `<s>${brl(l.unitOriginal)}</s> ` : ""}${brl(l.unitPrice)} /un.</small>` : ""}</div></article>`;
+  }).join("");
+
+  const t = computeTotals({ lines: state.lines, coupon: state.coupon, payment: "A combinar", settings: store.rawSettings });
+  const rows = [`<div class="row"><span>Peças</span><span>${t.pieces}</span></div>`];
+  if (t.promoDiscount > 0) rows.push(`<div class="row"><span>Valor de tabela</span><span>${brl(t.subtotalOriginal)}</span></div><div class="row ok"><span>Promoções</span><span>− ${brl(t.promoDiscount)}</span></div>`);
+  rows.push(`<div class="row"><span>Subtotal</span><span>${brl(t.subtotal)}</span></div>`);
+  if (t.couponDiscount > 0) rows.push(`<div class="row ok"><span>Cupom ${esc(t.couponCode)}</span><span>− ${brl(t.couponDiscount)}</span></div>`);
+  rows.push(`<div class="row"><span>Frete</span><span>${t.shippingMode === "tbd" ? "a combinar" : t.shipping === 0 ? "Grátis" : brl(t.shipping)}</span></div>`);
+  if (store.settings.pixDiscount > 0) rows.push(`<div class="row ok"><span>Pagando no PIX</span><span>${store.settings.pixDiscount}% off</span></div>`);
+  rows.push(`<div class="row total"><span>TOTAL</span><span>${brl(t.total)}</span></div>`);
+  $("totals").innerHTML = rows.join("");
+
+  $("coupon-form").hidden = !!state.coupon; $("coupon-applied").hidden = !state.coupon;
+  if (state.coupon) { $("coupon-code").textContent = state.coupon.code; $("coupon-msg").textContent = ""; }
+
+  const below = t.belowMin;
+  $("min-alert").hidden = !below;
+  if (below) $("min-alert").textContent = `Pedido mínimo: ${brl(t.minOrder)}. Faltam ${brl(t.minOrder - t.subtotal)} para finalizar.`;
+  $("go-checkout").disabled = below;
+}
+
+async function refresh(missing = 0) { const m = await recompute(); render(missing || m); }
+
+$("items").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-act]"); if (!b || b.tagName === "INPUT") return;
+  const id = b.closest("[data-id]").dataset.id, act = b.dataset.act;
+  if (act === "remove") delete cart[id];
+  if (act === "minus") { const n = (Number(cart[id]) || 1) - 1; if (n < 1) delete cart[id]; else cart[id] = n; }
+  if (act === "plus") cart[id] = Math.min(999, (Number(cart[id]) || 0) + 1);
+  saveCart(cart); refresh();
+});
+$("items").addEventListener("change", (e) => {
+  const i = e.target.closest('input[data-act="set"]'); if (!i) return;
+  const id = i.closest("[data-id]").dataset.id; cart[id] = Math.max(1, Math.min(999, parseInt(i.value, 10) || 1)); saveCart(cart); refresh();
+});
+$("clear-cart").addEventListener("click", () => { if (confirm("Esvaziar o pedido?")) { clearCart(); cart = {}; refresh(); } });
+$("coupon-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const code = $("coupon-input").value.trim(); if (!code) { $("coupon-msg").className = "msg err"; $("coupon-msg").textContent = "Digite o código do cupom."; return; }
+  $("coupon-btn").disabled = true; $("coupon-msg").textContent = "";
+  const { couponLines } = resolveCart(cart, store.products, store.promotions);
+  const res = await resolveCoupon(code, couponLines);
+  $("coupon-btn").disabled = false;
+  if (!res.coupon) { $("coupon-msg").className = "msg err"; $("coupon-msg").textContent = res.message; return; }
+  setCouponCode(code); $("coupon-input").value = ""; $("coupon-msg").className = "msg ok"; await refresh();
+});
+$("coupon-remove").addEventListener("click", () => { setCouponCode(""); refresh(); });
+$("go-checkout").addEventListener("click", () => { location.href = "checkout.html"; });
+
+(async () => {
+  try {
+    store = await loadStore();
+    const logo = safeHttps(store.rawSettings.logoUrl);
+    if (logo) $("brand-emblem").innerHTML = `<img src="${esc(logo)}" alt="">`;
+    await refresh();
+  } catch (err) {
+    console.error(err); $("loading").hidden = true; $("error").hidden = false;
+    $("error").textContent = "Não foi possível carregar seu pedido agora. Atualize a página e tente novamente.";
+  }
+})();
+</script>
+</body>
+</html>

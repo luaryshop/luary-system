@@ -1,0 +1,18 @@
+const BASE=process.env.BASE||'http://localhost:8765';
+const {chromium}=require('playwright');const stubs=require('./stubs.js');
+(async()=>{const b=await chromium.launch();let ok=true;const t=(n,c)=>{console.log((c?'PASS':'FAIL')+' '+n);if(!c)ok=false};
+ const p=await b.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));p.on('dialog',d=>d.accept());
+ await p.route('**/*',r=>{const u=new URL(r.request().url());if(u.host==='www.gstatic.com')return r.fulfill({contentType:'text/javascript',body:stubs[u.pathname.split('/').pop()]});if(u.hostname==='localhost')return r.continue();return r.abort()});
+ await p.addInitScript(`window.__DB={products:{p1:{sku:'CH-0002',name:'<b>x</b>',category:'Chaveiros',priceWholesale:10,priceRetail:20,images:['https://a/1.webp','https://a/2.webp']}}}`);
+ await p.goto(BASE+'/admin.html');await p.waitForTimeout(600);
+ t('tabela com 2 fotos e botão Imagens',(await p.locator('#products-table-body').textContent()).includes('2 foto(s)')&&await p.locator('#products-table-body button:has-text("Imagens")').count()===1);
+ t('nome escapado (sem <b> real)',await p.locator('#products-table-body b').count()===0);
+ await p.fill('#prod-sku','nv-1');await p.fill('#prod-name','Novo');await p.fill('#prod-category','Anéis');await p.fill('#prod-price-wholesale','5');await p.fill('#prod-price-retail','9');
+ await p.click('#submit-btn');await p.waitForTimeout(600);
+ const d=await p.evaluate(()=>Object.values(window.__DB.products).find(x=>x.sku==='NV-1'));
+ t('produto novo salvo sem URLs fabricadas',d&&Array.isArray(d.images)&&d.images.length===0);
+ await p.click('button:has-text("Editar")');await p.fill('#prod-name','CH editado');await p.click('#submit-btn');await p.waitForTimeout(500);
+ const e=await p.evaluate(()=>window.__DB.products.p1);
+ t('edição preserva imagens',e.images.length===2&&e.name==='CH editado');
+ t('sem erros JS',errs.length===0);console.log(errs);
+ await b.close();process.exit(ok?0:1)})();

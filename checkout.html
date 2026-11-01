@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#23384a">
+<title>Finalizar pedido | Luary Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="store.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+<a class="brand" href="index.html" aria-label="Luary Shop — início"><span class="brand-emblem" id="brand-emblem">L</span><span class="brand-name">luary</span></a>
+<nav class="top-actions"><a href="carrinho.html">← Voltar ao pedido</a></nav>
+</div></header>
+
+<main class="wrap" id="main">
+<div class="steps"><span>1 · PEDIDO</span><i></i><b>2 · DADOS E ENVIO</b></div>
+<h1 class="page-title">Finalizar <em>pedido.</em></h1>
+<div id="loading" class="empty">Carregando…</div>
+<div id="error" class="alert err" hidden></div>
+<div id="empty" class="card empty" hidden><p>Não há peças no seu pedido.</p><a class="btn btn-primary" href="index.html#colecao">Ver coleção</a></div>
+
+<form id="form" class="layout" hidden novalidate autocomplete="on">
+  <div>
+    <section class="card">
+      <h2>Seus dados</h2>
+      <div class="grid2">
+        <div class="field full"><label for="name">Nome completo *</label><input class="input" id="name" name="name" autocomplete="name" maxlength="120"><div class="err" data-err="name"></div></div>
+        <div class="field"><label for="whatsapp">WhatsApp com DDD *</label><input class="input" id="whatsapp" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(19) 99999-9999" maxlength="20"><div class="err" data-err="whatsapp"></div></div>
+        <div class="field"><label for="city">Sua cidade / UF *</label><input class="input" id="city" name="city" autocomplete="address-level2" placeholder="Limeira - SP" maxlength="80"><div class="err" data-err="city"></div></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Entrega</h2>
+      <label class="check"><input type="checkbox" id="later"> <span>Prefiro combinar a entrega pelo WhatsApp</span></label>
+      <div id="delivery" class="grid2">
+        <div class="field full"><label for="recipient">Nome do destinatário / local</label><input class="input" id="recipient" name="recipient" maxlength="120" placeholder="Ex.: Loja Centro"></div>
+        <div class="field"><label for="street">Rua *</label><input class="input" id="street" name="street" autocomplete="address-line1" maxlength="120"><div class="err" data-err="street"></div></div>
+        <div class="field"><label for="number">Número *</label><input class="input" id="number" name="number" maxlength="20" placeholder="150 ou S/N"><div class="err" data-err="number"></div></div>
+        <div class="field"><label for="complement">Complemento</label><input class="input" id="complement" name="complement" maxlength="80"></div>
+        <div class="field"><label for="district">Bairro *</label><input class="input" id="district" name="district" maxlength="80"><div class="err" data-err="district"></div></div>
+        <div class="field"><label for="deliveryCity">Cidade *</label><input class="input" id="deliveryCity" name="deliveryCity" autocomplete="address-level2" maxlength="80"><div class="err" data-err="deliveryCity"></div></div>
+        <div class="field"><label for="state">UF</label><input class="input" id="state" name="state" maxlength="2" style="text-transform:uppercase" autocomplete="address-level1"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Pagamento e observações</h2>
+      <p style="margin:0 0 12px;color:#747a7a;font-size:12px">Nada é cobrado agora. Escolha a forma que prefere e combinamos os detalhes no atendimento.</p>
+      <div class="pay" id="pay"></div>
+      <div class="field" style="margin-top:16px"><label for="notes">Observações</label><textarea class="input" id="notes" name="notes" maxlength="500" placeholder="Prazo desejado, cores, dúvidas…"></textarea></div>
+      <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0">
+    </section>
+  </div>
+
+  <aside class="card sticky">
+    <h2>Resumo do pedido</h2>
+    <div class="mini-list" id="mini"></div>
+    <div id="totals"></div>
+    <div id="submit-alert" class="alert err" hidden style="margin-top:14px"></div>
+    <button class="btn btn-wa btn-block" id="submit" type="submit" style="margin-top:16px">Enviar pedido pelo WhatsApp</button>
+    <p style="margin:12px 0 0;color:#93958f;font-size:11px;line-height:1.6;text-align:center">Seu pedido será registrado e abriremos o WhatsApp da Luary com o resumo pronto para enviar.</p>
+  </aside>
+</form>
+
+<section id="done" class="done" hidden></section>
+</main>
+<footer class="mini">© Luary Shop</footer>
+
+<script type="module">
+import { $, esc, brl, safeHttps, PLACEHOLDER, db, readCart, clearCart, getCouponCode, setCouponCode, loadStore, resolveCart, resolveCoupon } from "./store-core.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { computeTotals, validateCustomer, newOrderNumber, buildOrder, buildWhatsappMessage, whatsappUrl, PAYMENT_METHODS } from "./order-calc.js";
+
+const CUSTOMER_KEY = "luary-customer-v1";
+let store, view = { lines: [], coupon: null, totals: null, shown: null };
+const F = (id) => $(id);
+const payment = () => document.querySelector('input[name="payment"]:checked')?.value || "A combinar";
+const formValues = () => Object.fromEntries(["name", "whatsapp", "city", "recipient", "street", "number", "complement", "district", "deliveryCity", "state", "notes"].map((k) => [k, F(k).value]).concat([["payment", payment()]]));
+
+async function compute(freshStore = store) {
+  const { lines, couponLines } = resolveCart(readCart(), freshStore.products, freshStore.promotions);
+  const { coupon, message } = await resolveCoupon(getCouponCode(), couponLines);
+  if (getCouponCode() && !coupon) setCouponCode("");
+  return { lines, coupon, couponMessage: message, totals: computeTotals({ lines, coupon, payment: payment(), settings: freshStore.rawSettings }) };
+}
+
+function renderSummary() {
+  const { lines, totals: t } = view;
+  $("mini").innerHTML = lines.map((l) => `<div class="mini-line"><img src="${esc(safeHttps(l.image) || PLACEHOLDER)}" alt="" loading="lazy"><div class="n"><b>${esc(l.name)}</b><span>${l.qty} × ${l.priced ? brl(l.unitPrice) : "sob consulta"} · REF. ${esc(l.sku || "—")}</span></div><strong style="font-size:12px">${l.priced ? brl(l.subtotal) : "—"}</strong></div>`).join("");
+  const r = [`<div class="row"><span>Peças</span><span>${t.pieces}</span></div>`];
+  if (t.promoDiscount > 0) r.push(`<div class="row ok"><span>Promoções</span><span>− ${brl(t.promoDiscount)}</span></div>`);
+  r.push(`<div class="row"><span>Subtotal</span><span>${brl(t.subtotal)}</span></div>`);
+  if (t.couponDiscount > 0) r.push(`<div class="row ok"><span>Cupom ${esc(t.couponCode)}</span><span>− ${brl(t.couponDiscount)}</span></div>`);
+  if (t.pixDiscount > 0) r.push(`<div class="row ok"><span>Desconto PIX (${t.pixPercent}%)</span><span>− ${brl(t.pixDiscount)}</span></div>`);
+  r.push(`<div class="row"><span>Frete</span><span>${t.shippingMode === "tbd" ? "a combinar" : t.shipping === 0 ? "Grátis" : brl(t.shipping)}</span></div>`);
+  r.push(`<div class="row total"><span>TOTAL</span><span>${brl(t.total)}</span></div>`);
+  $("totals").innerHTML = r.join("");
+  view.shown = t.total;
+  const blocked = t.belowMin;
+  $("submit-alert").hidden = !blocked;
+  if (blocked) $("submit-alert").textContent = `Pedido mínimo de ${brl(t.minOrder)}. Volte ao pedido e adicione mais peças.`;
+  $("submit").disabled = blocked;
+}
+
+function renderPayments() {
+  const pix = store.settings.pixDiscount;
+  const opts = { "PIX": pix > 0 ? `${pix}% de desconto` : "Pagamento à vista", "Cartão": "Condições no atendimento", "A combinar": "Definimos juntos" };
+  const current = document.querySelector('input[name="payment"]:checked')?.value || "PIX";
+  $("pay").innerHTML = PAYMENT_METHODS.map((m, i) => `<label><input type="radio" name="payment" value="${esc(m)}" ${current === m ? "checked" : ""}><b>${esc(m)}</b><small>${esc(opts[m])}</small></label>`).join("");
+}
+
+function toggleDelivery() {
+  const later = F("later").checked;
+  $("delivery").style.opacity = later ? ".45" : "1";
+  $("delivery").querySelectorAll("input").forEach((i) => { i.disabled = later; });
+}
+
+function showErrors(errors) {
+  document.querySelectorAll("[data-err]").forEach((el) => { el.textContent = errors[el.dataset.err] || ""; });
+  document.querySelectorAll(".input").forEach((i) => i.classList.toggle("invalid", !!errors[i.id]));
+  const first = Object.keys(errors)[0];
+  if (first) { const el = F(first); el?.scrollIntoView({ behavior: "smooth", block: "center" }); el?.focus({ preventScroll: true }); }
+}
+
+function remember(values) { try { localStorage.setItem(CUSTOMER_KEY, JSON.stringify(Object.fromEntries(["name", "whatsapp", "city", "recipient", "street", "number", "complement", "district", "deliveryCity", "state"].map((k) => [k, values[k] || ""])))); } catch {} }
+function restore() { try { const c = JSON.parse(localStorage.getItem(CUSTOMER_KEY) || "{}"); for (const [k, v] of Object.entries(c)) if (F(k) && v) F(k).value = v; } catch {} }
+
+function showDone({ order, saved, phone }) {
+  const msg = buildWhatsappMessage(order, { storeName: store.settings.storeName, saved });
+  const url = phone ? whatsappUrl(phone, msg) : "";
+  $("form").hidden = true; $("done").hidden = false; document.querySelector(".steps").hidden = true; document.querySelector(".page-title").hidden = true;
+  $("done").innerHTML = `<div class="mark">✓</div><h1>${saved ? "Pedido registrado!" : "Quase lá!"}</h1>
+    <div class="num">${esc(order.number)}</div>
+    ${saved ? `<p>Recebemos o seu pedido. ${url ? "Abrimos o WhatsApp com o resumo — <strong>toque em enviar</strong> para que a equipe Luary confirme valores, disponibilidade e frete." : "A equipe Luary entrará em contato pelo WhatsApp informado."}</p>`
+            : `<div class="alert err" style="text-align:left">Não conseguimos registrar o pedido no sistema agora. Você ainda pode enviá-lo pelo WhatsApp com o resumo completo; seu pedido continua guardado neste aparelho para tentar novamente.</div>`}
+    ${url ? `<a class="btn btn-wa btn-block" id="wa-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Abrir WhatsApp e enviar</a>` : ""}
+    <p style="margin-top:18px"><a class="btn btn-line" href="index.html">Voltar à loja</a>${saved ? "" : ` <a class="btn btn-line" href="checkout.html">Tentar novamente</a>`}</p>`;
+  window.scrollTo({ top: 0 });
+  return url;
+}
+
+$("form").addEventListener("input", (e) => { if (e.target.name === "payment") { view.totals = computeTotals({ lines: view.lines, coupon: view.coupon, payment: payment(), settings: store.rawSettings }); renderSummary(); } else if (e.target.classList.contains("invalid")) e.target.classList.remove("invalid"); });
+F("later").addEventListener("change", toggleDelivery);
+
+$("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (F("website").value) { showDone({ order: { number: "LUA-0", items: [], totals: { pieces: 0 }, customer: {}, delivery: {}, payment: {} }, saved: true, phone: "" }); return; } // honeypot
+  const later = F("later").checked, values = formValues();
+  const errors = validateCustomer(values, { deliveryOptional: later });
+  showErrors(errors);
+  if (Object.keys(errors).length) return;
+
+  const btn = $("submit"); btn.disabled = true; btn.textContent = "Registrando pedido…";
+  try {
+    // Rele o catálogo agora: preços/promoções podem ter mudado desde que a página abriu.
+    const fresh = await loadStore();
+    const now = await compute(fresh);
+    if (!now.lines.length) { location.href = "carrinho.html"; return; }
+    if (now.totals.belowMin) { view = { ...view, ...now }; store = fresh; renderSummary(); btn.textContent = "Enviar pedido pelo WhatsApp"; return; }
+    if (Math.abs(now.totals.total - view.shown) > 0.009) {
+      store = fresh; view = { ...view, ...now }; renderSummary();
+      $("submit-alert").hidden = false; $("submit-alert").textContent = "Os valores foram atualizados desde que você abriu esta página. Confira o resumo e envie novamente.";
+      btn.disabled = false; btn.textContent = "Enviar pedido pelo WhatsApp"; return;
+    }
+    const number = newOrderNumber();
+    const order = buildOrder({ number, form: values, lines: now.lines, totals: now.totals, deliveryOptional: later });
+    remember(values);
+    let saved = true;
+    try { await setDoc(doc(db, "orders", number), { ...order, createdAt: serverTimestamp() }); }
+    catch (err) { console.error("Falha ao registrar pedido:", err); saved = false; }
+    if (saved) clearCart();
+    const url = showDone({ order, saved, phone: fresh.settings.whatsapp });
+    if (saved && url) setTimeout(() => { location.href = url; }, 900);
+  } catch (err) {
+    console.error(err);
+    $("submit-alert").hidden = false; $("submit-alert").textContent = "Não foi possível processar agora. Verifique a conexão e tente novamente.";
+    btn.disabled = false; btn.textContent = "Enviar pedido pelo WhatsApp";
+  }
+});
+
+(async () => {
+  try {
+    store = await loadStore();
+    const logo = safeHttps(store.rawSettings.logoUrl); if (logo) $("brand-emblem").innerHTML = `<img src="${esc(logo)}" alt="">`;
+    renderPayments(); restore(); toggleDelivery();
+    view = { ...view, ...(await compute()) };
+    $("loading").hidden = true;
+    if (!view.lines.length) { $("empty").hidden = false; return; }
+    $("form").hidden = false; renderSummary();
+  } catch (err) {
+    console.error(err); $("loading").hidden = true; $("error").hidden = false; $("error").textContent = "Não foi possível carregar o checkout agora. Atualize a página e tente novamente.";
+  }
+})();
+</script>
+</body>
+</html>

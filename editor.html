@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="h-full bg-gray-50">
 <head>
+<meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luary CDN Image Processor</title>
@@ -104,7 +105,7 @@
                         div.innerHTML = `
                             <span class="absolute top-1 left-1 bg-indigo-600 text-white text-xs px-1.5 py-0.5 rounded font-bold">0${index + 1}.webp</span>
                             <img src="${e.target.result}" class="h-24 w-24 object-cover rounded-md mt-2 mb-1">
-                            <span class="text-xs text-gray-500 truncate w-full text-center">${file.name}</span>
+                            <span class="text-xs text-gray-500 truncate w-full text-center">${String(file.name).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}</span>
                         `;
                         previewGrid.appendChild(div);
                     };

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Pedidos | Luary Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>.field{box-sizing:border-box;display:block;width:100%;margin-top:.25rem;border:1px solid #cbd5e1;border-radius:.55rem;padding:.55rem .65rem;background:#fff;font-size:.875rem}.lbl{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#64748b}.btn{border-radius:.55rem;padding:.5rem .85rem;font-size:.8rem;font-weight:600}.chip{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:.35rem .8rem;font-size:.8rem;font-weight:600}.chip.on{background:#0f172a;color:#fff;border-color:#0f172a}.modal{position:fixed;inset:0;z-index:50;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;background:rgba(15,23,42,.6);padding:1rem}.modal.open{display:flex}.sheet{width:min(100%,980px);margin:1rem 0;background:#fff;border-radius:1rem;padding:1.25rem;box-shadow:0 20px 60px rgba(0,0,0,.3)}</style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+<header class="bg-slate-900 text-white"><div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
+<div><div class="text-xl font-bold">Luary <span class="text-amber-300">Pedidos</span></div><div class="text-xs text-slate-300">Pedidos recebidos, status e romaneios</div></div>
+<div class="flex gap-2"><a href="admin.html" class="rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20"><i class="fa-solid fa-box mr-1"></i> Produtos</a><a href="content-admin.html" class="rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20"><i class="fa-solid fa-sliders mr-1"></i> Conteúdo</a><a href="cdn.html" class="rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20"><i class="fa-solid fa-images mr-1"></i> Imagens</a><button id="logout" class="rounded-lg bg-rose-600 px-3 py-2 text-sm">Sair</button></div></div></header>
+
+<main class="max-w-7xl mx-auto p-4 md:p-8">
+<div id="login" class="hidden max-w-md mx-auto bg-white rounded-2xl shadow p-6 mt-8"><h1 class="text-xl font-bold mb-4">Acesso administrativo</h1><form id="login-form" class="space-y-3"><input id="email" type="email" required placeholder="E-mail" class="field"><input id="password" type="password" required placeholder="Senha" class="field"><button class="btn bg-slate-900 text-white w-full">Entrar</button><p id="login-error" class="text-rose-600 text-sm"></p></form></div>
+
+<div id="app" class="hidden">
+<div class="flex flex-wrap items-end justify-between gap-3 mb-4">
+<div><h1 class="text-2xl font-bold">Pedidos</h1><p class="text-slate-500 text-sm">Novos pedidos aparecem aqui automaticamente.</p></div>
+<button id="new-order" class="btn bg-amber-500 hover:bg-amber-600 text-white"><i class="fa-solid fa-plus mr-1"></i> Criar pedido avulso</button></div>
+<div class="flex flex-wrap items-center gap-2 mb-3" id="filters"></div>
+<div class="flex flex-wrap gap-2 mb-4"><input id="search" class="field !mt-0 md:max-w-sm" placeholder="Buscar por nome, número, WhatsApp, cidade ou SKU"><div id="summary" class="text-sm text-slate-500 self-center"></div></div>
+<div id="load-error" class="hidden rounded-lg bg-rose-50 border border-rose-200 text-rose-700 p-3 text-sm mb-3"></div>
+<div id="list" class="space-y-3"></div>
+</div></main>
+<div id="toast" class="fixed bottom-4 right-4 z-[60] hidden rounded-xl bg-slate-900 text-white px-4 py-3 text-sm shadow-xl"></div>
+
+<!-- Modal: editar / criar -->
+<div id="modal" class="modal"><div class="sheet">
+<div class="flex items-center justify-between border-b pb-3 mb-4"><h2 id="m-title" class="font-bold text-lg"></h2><button id="m-close" class="text-2xl leading-none text-slate-400 hover:text-slate-700" aria-label="Fechar">&times;</button></div>
+<div class="grid md:grid-cols-2 gap-4">
+<section class="rounded-xl border p-3 space-y-3"><h3 class="font-semibold text-sm">Cliente</h3>
+<label class="block"><span class="lbl">Nome *</span><input id="f-name" class="field" maxlength="120"></label>
+<label class="block"><span class="lbl">WhatsApp *</span><input id="f-whatsapp" class="field" maxlength="20"></label>
+<label class="block"><span class="lbl">Cidade / UF</span><input id="f-city" class="field" maxlength="80"></label>
+<label class="block"><span class="lbl">Pagamento</span><select id="f-payment" class="field"></select></label>
+<label class="block"><span class="lbl">Observações</span><textarea id="f-notes" rows="2" class="field" maxlength="500"></textarea></label></section>
+<section class="rounded-xl border p-3 space-y-3"><h3 class="font-semibold text-sm">Entrega</h3>
+<label class="flex items-center gap-2 text-sm"><input type="checkbox" id="f-later"> Entrega a combinar</label>
+<label class="block"><span class="lbl">Destinatário / local</span><input id="f-recipient" class="field" maxlength="120"></label>
+<div class="grid grid-cols-3 gap-2"><label class="col-span-2 block"><span class="lbl">Rua</span><input id="f-street" class="field" maxlength="120"></label><label class="block"><span class="lbl">Nº</span><input id="f-number" class="field" maxlength="20"></label></div>
+<div class="grid grid-cols-2 gap-2"><label class="block"><span class="lbl">Bairro</span><input id="f-district" class="field" maxlength="80"></label><label class="block"><span class="lbl">Complemento</span><input id="f-complement" class="field" maxlength="80"></label></div>
+<div class="grid grid-cols-3 gap-2"><label class="col-span-2 block"><span class="lbl">Cidade</span><input id="f-dcity" class="field" maxlength="80"></label><label class="block"><span class="lbl">UF</span><input id="f-state" class="field uppercase" maxlength="2"></label></div></section></div>
+
+<section class="mt-4 rounded-xl border p-3"><div class="flex items-center justify-between mb-2"><h3 class="font-semibold text-sm">Itens <span id="m-count" class="font-normal text-slate-500"></span></h3><button id="add-toggle" type="button" class="btn bg-slate-100 hover:bg-slate-200">+ Adicionar item</button></div>
+<div id="add-box" class="hidden rounded-lg bg-slate-50 border p-3 mb-3 space-y-2">
+<label class="block relative"><span class="lbl">Buscar no catálogo (nome ou SKU)</span><input id="catalog-search" class="field" autocomplete="off"><div id="catalog-results" class="hidden absolute z-10 left-0 right-0 mt-1 bg-white border rounded-lg shadow-lg max-h-56 overflow-auto"></div></label>
+<p class="text-xs text-slate-500">Ou informe manualmente:</p>
+<div class="grid grid-cols-2 md:grid-cols-5 gap-2"><input id="n-name" class="field !mt-0 col-span-2" placeholder="Nome"><input id="n-sku" class="field !mt-0" placeholder="SKU"><input id="n-price" type="number" step="0.01" min="0" class="field !mt-0" placeholder="Preço un."><input id="n-qty" type="number" min="1" value="1" class="field !mt-0" placeholder="Qtd"></div>
+<div class="text-right"><button id="n-add" type="button" class="btn bg-slate-900 text-white">Adicionar à lista</button></div></div>
+<div class="overflow-x-auto"><table class="min-w-full text-sm"><thead class="text-left text-xs text-slate-500"><tr><th class="py-1 pr-2">SKU</th><th class="pr-2">Item</th><th class="pr-2 w-20">Qtd</th><th class="pr-2 w-28">Preço un.</th><th class="pr-2 text-right">Subtotal</th><th></th></tr></thead><tbody id="m-items"></tbody></table></div></section>
+
+<section class="mt-4 rounded-xl border p-3"><h3 class="font-semibold text-sm mb-2">Valores</h3>
+<div class="grid md:grid-cols-3 gap-3 items-end">
+<label class="block"><span class="lbl">Desconto extra (R$)</span><input id="f-extra" type="number" min="0" step="0.01" class="field" value="0"></label>
+<label class="block"><span class="lbl">Frete (R$) — vazio = a combinar</span><input id="f-ship" type="number" min="0" step="0.01" class="field"></label>
+<div id="m-totals" class="text-sm space-y-1"></div></div></section>
+
+<div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t pt-4"><p id="m-error" class="text-sm text-rose-600"></p><div class="flex gap-2"><button id="m-cancel" class="btn border">Cancelar</button><button id="m-save" class="btn bg-slate-900 text-white">Salvar</button></div></div>
+</div></div>
+
+<!-- Modal: romaneio -->
+<div id="rom-modal" class="modal"><div class="sheet" style="max-width:520px">
+<div class="flex items-center justify-between border-b pb-3 mb-4"><h2 class="font-bold text-lg">Romaneio <span id="rom-num" class="text-slate-500 text-sm font-normal"></span></h2><button id="rom-close" class="text-2xl leading-none text-slate-400">&times;</button></div>
+<div class="grid grid-cols-2 gap-3"><label class="block"><span class="lbl">Layout</span><select id="rom-layout" class="field"><option value="lista">Lista</option><option value="grade">Grade</option></select></label>
+<label class="block"><span class="lbl">Conteúdo</span><select id="rom-tipo" class="field"><option value="conferencia">Conferência (sem valores)</option><option value="financeiro">Financeiro</option><option value="foto">Com fotos</option></select></label></div>
+<p class="text-xs text-slate-500 mt-3">Abre em nova aba, pronto para imprimir, salvar em PDF ou compartilhar.</p>
+<div class="mt-4 text-right"><button id="rom-open" class="btn bg-slate-900 text-white"><i class="fa-solid fa-print mr-1"></i> Abrir romaneio</button></div>
+</div></div>
+
+<script type="module">
+import {initializeApp,getApps} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import {getFirestore,collection,doc,getDocs,setDoc,updateDoc,deleteDoc,onSnapshot,query,orderBy,limit,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import {ORDER_STATUSES,PAYMENT_METHODS,recalcOrder,newOrderNumber,normalizePhone,lineFromProduct} from "./order-calc.js";
+
+const firebaseConfig={apiKey:"AIzaSyCanlMwdfuD9gmVt62nJYYetj4K2-BfWEc",authDomain:"luary-system.firebaseapp.com",projectId:"luary-system",storageBucket:"luary-system.firebasestorage.app",messagingSenderId:"996287172742",appId:"1:996287172742:web:4ff8c22a01cabe4015c107"};
+const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const $=id=>document.getElementById(id),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const brl=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const STATUS_STYLE={Novo:"bg-amber-100 text-amber-800",Aprovado:"bg-emerald-100 text-emerald-800",Entregue:"bg-sky-100 text-sky-800",Cancelado:"bg-rose-100 text-rose-800"};
+let orders=[],filter="Todos",unsub=null,first=true,products=null,draft=null,editingId=null;
+
+const ts=o=>{const t=o.createdAt;if(t&&typeof t.toMillis==="function")return t.toMillis();const p=Date.parse(o.createdAtIso||"");return Number.isFinite(p)?p:0};
+const fmtDate=o=>{const t=ts(o);return t?new Date(t).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"}):"—"};
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.remove("hidden");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.add("hidden"),5000)}
+
+// ---------- lista
+function render(){
+  const q=$("search").value.trim().toLowerCase(),qd=q.replace(/\D/g,"");
+  const counts=Object.fromEntries(["Todos",...ORDER_STATUSES].map(s=>[s,0]));orders.forEach(o=>{counts.Todos++;counts[o.status]=(counts[o.status]||0)+1});
+  $("filters").innerHTML=["Todos",...ORDER_STATUSES].map(s=>`<button class="chip ${filter===s?"on":""}" data-filter="${s}">${s} <span class="opacity-70">${counts[s]||0}</span></button>`).join("");
+  const rows=orders.filter(o=>(filter==="Todos"||o.status===filter)&&(!q||[o.number,o.customer?.name,o.customer?.city,...(o.items||[]).map(i=>i.sku+" "+i.name)].join(" ").toLowerCase().includes(q)||(qd&&String(o.customer?.whatsapp||"").includes(qd))));
+  const sum=rows.filter(o=>o.status!=="Cancelado").reduce((a,o)=>a+Number(o.totals?.total||0),0);
+  $("summary").textContent=`${rows.length} pedido(s) · ${brl(sum)} (sem cancelados)`;
+  document.title=(counts.Novo?`(${counts.Novo}) `:"")+"Pedidos | Luary Admin";
+  $("list").innerHTML=rows.length?rows.map(o=>{const c=o.customer||{},t=o.totals||{},st=o.status||"Novo";
+    return `<article class="bg-white border rounded-2xl p-4 flex flex-col lg:flex-row lg:items-center gap-3" data-id="${esc(o.id)}">
+    <div class="flex-1 min-w-0"><div class="flex flex-wrap items-center gap-2"><b class="uppercase truncate max-w-[260px]">${esc(c.name||"Cliente")}</b><span class="rounded-full px-2 py-0.5 text-xs font-bold ${STATUS_STYLE[st]||STATUS_STYLE.Novo}">${esc(st)}</span><span class="text-xs font-mono text-amber-700 font-bold">${esc(o.number||o.id)}</span>${o.source==="painel"?'<span class="text-xs rounded bg-slate-100 px-1.5 py-0.5">avulso</span>':""}</div>
+    <p class="text-xs text-slate-500 mt-1">${esc(fmtDate(o))} · ${esc(c.whatsapp||"sem contato")} · ${esc(c.city||"—")} · ${esc(o.payment?.method||"—")}</p>
+    <p class="text-sm font-semibold mt-1">${Number(t.pieces||0)} peça(s) · ${brl(t.total)}${t.couponCode?` · cupom ${esc(t.couponCode)}`:""}</p></div>
+    <div class="flex flex-wrap items-center gap-2"><select data-act="status" class="field !mt-0 !w-auto">${ORDER_STATUSES.map(s=>`<option ${s===st?"selected":""}>${s}</option>`).join("")}</select>
+    <a data-act="wa" class="btn bg-emerald-600 text-white" target="_blank" rel="noopener noreferrer" href="https://wa.me/${esc(normalizePhone(c.whatsapp))}?text=${encodeURIComponent(`Olá ${c.name||""}! Aqui é da Luary Shop, sobre o pedido ${o.number||""}.`)}"><i class="fa-brands fa-whatsapp"></i></a>
+    <button data-act="edit" class="btn border">Editar</button><button data-act="rom" class="btn border"><i class="fa-solid fa-print mr-1"></i>Romaneio</button><button data-act="del" class="btn border border-rose-200 text-rose-600">Excluir</button></div></article>`}).join(""):'<p class="text-center text-slate-400 py-12 text-sm">Nenhum pedido encontrado.</p>';
+}
+$("filters").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(b){filter=b.dataset.filter;render()}});
+$("search").addEventListener("input",render);
+$("list").addEventListener("change",async e=>{const s=e.target.closest('[data-act="status"]');if(!s)return;const id=s.closest("[data-id]").dataset.id;
+  try{await updateDoc(doc(db,"orders",id),{status:s.value,statusUpdatedAt:serverTimestamp()})}catch(err){console.error(err);alert("Não foi possível atualizar o status. Verifique as permissões do Firestore.")}});
+$("list").addEventListener("click",async e=>{const b=e.target.closest("[data-act]");if(!b||b.tagName==="SELECT"||b.dataset.act==="wa")return;const id=b.closest("[data-id]").dataset.id,o=orders.find(x=>x.id===id);if(!o)return;
+  if(b.dataset.act==="edit")openModal(o);
+  if(b.dataset.act==="rom"){$("rom-modal").dataset.id=id;$("rom-num").textContent=o.number||id;$("rom-modal").classList.add("open")}
+  if(b.dataset.act==="del"&&confirm(`Excluir o pedido ${o.number||id}? Esta ação não pode ser desfeita.`)){try{await deleteDoc(doc(db,"orders",id))}catch(err){console.error(err);alert("Não foi possível excluir.")}}});
+
+function listen(){
+  if(unsub)unsub();first=true;
+  unsub=onSnapshot(query(collection(db,"orders"),orderBy("createdAt","desc"),limit(500)),snap=>{
+    $("load-error").classList.add("hidden");
+    orders=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>ts(b)-ts(a));
+    if(!first)snap.docChanges().filter(c=>c.type==="added").forEach(c=>toast(`Novo pedido ${c.doc.data().number||c.doc.id} — ${c.doc.data().customer?.name||""}`));
+    first=false;render();
+  },err=>{console.error(err);$("load-error").textContent="Não foi possível carregar os pedidos. Confira as regras do Firestore (leitura de pedidos só para administradores).";$("load-error").classList.remove("hidden")});
+}
+
+// ---------- romaneio
+$("rom-close").addEventListener("click",()=>$("rom-modal").classList.remove("open"));
+$("rom-open").addEventListener("click",()=>{const id=$("rom-modal").dataset.id;window.open(`romaneio.html?id=${encodeURIComponent(id)}&layout=${$("rom-layout").value}&tipo=${$("rom-tipo").value}`,"_blank","noopener");$("rom-modal").classList.remove("open")});
+
+// ---------- modal editar/criar
+const blank=()=>({number:newOrderNumber(),status:"Novo",source:"painel",createdAtIso:new Date().toISOString(),customer:{name:"",whatsapp:"",city:""},delivery:{arrangeLater:true,recipient:"",street:"",number:"",complement:"",district:"",city:"",state:""},payment:{method:"A combinar"},notes:"",items:[],totals:{couponCode:"",couponDiscount:0,pixPercent:0,extraDiscount:0,shipping:null}});
+$("f-payment").innerHTML=PAYMENT_METHODS.map(m=>`<option>${m}</option>`).join("");
+function openModal(o){
+  editingId=o?o.id:null;draft=structuredClone(o||blank());draft.items=draft.items||[];
+  $("m-title").textContent=o?`Editar pedido ${draft.number||o.id}`:"Novo pedido avulso";
+  const c=draft.customer||{},d=draft.delivery||{};
+  $("f-name").value=c.name||"";$("f-whatsapp").value=c.whatsapp||"";$("f-city").value=c.city||"";$("f-payment").value=draft.payment?.method||"A combinar";$("f-notes").value=draft.notes||"";
+  $("f-later").checked=!!d.arrangeLater;$("f-recipient").value=d.recipient||"";$("f-street").value=d.street||"";$("f-number").value=d.number||"";$("f-district").value=d.district||"";$("f-complement").value=d.complement||"";$("f-dcity").value=d.city||"";$("f-state").value=d.state||"";
+  $("f-extra").value=draft.totals?.extraDiscount||0;$("f-ship").value=draft.totals?.shipping??"";
+  $("m-error").textContent="";$("add-box").classList.add("hidden");renderItems();$("modal").classList.add("open");
+}
+const closeModal=()=>{$("modal").classList.remove("open");draft=null};
+$("m-close").addEventListener("click",closeModal);$("m-cancel").addEventListener("click",closeModal);
+$("new-order").addEventListener("click",()=>openModal(null));
+function current(){
+  const shipVal=$("f-ship").value;
+  return recalcOrder(draft,{extraDiscount:Number($("f-extra").value)||0,shipping:shipVal===""?null:Number(shipVal)});
+}
+function renderItems(){
+  const r=current();$("m-count").textContent=`(${r.items.length})`;
+  $("m-items").innerHTML=r.items.length?draft.items.map((i,idx)=>`<tr class="border-t" data-i="${idx}"><td class="py-1 pr-2 font-mono text-xs">${esc(i.sku||"—")}</td><td class="pr-2">${esc(i.name)}${i.promoName?`<span class="ml-1 text-xs text-rose-600">${esc(i.promoName)}</span>`:""}</td><td class="pr-2"><input data-k="qty" type="number" min="1" value="${Number(i.qty)||1}" class="field !mt-0"></td><td class="pr-2"><input data-k="unitPrice" type="number" min="0" step="0.01" value="${Number(i.unitPrice)||0}" class="field !mt-0"></td><td class="pr-2 text-right font-semibold">${brl(r.items[idx].subtotal)}</td><td><button data-rm class="text-rose-600 px-2" aria-label="Remover">✕</button></td></tr>`).join(""):'<tr><td colspan="6" class="py-4 text-center text-slate-400">Nenhum item.</td></tr>';
+  renderItemsTotals();
+}
+$("m-items").addEventListener("input",e=>{const k=e.target.dataset.k;if(!k)return;const i=Number(e.target.closest("tr").dataset.i);draft.items[i][k]=Number(e.target.value)||0;
+  const r=current();e.target.closest("tr").children[4].textContent=brl(r.items[i].subtotal);renderItemsTotals()});
+function renderItemsTotals(){const t=current().totals,L=[["Subtotal",brl(t.subtotal)]];if(t.couponDiscount>0)L.push([`Cupom ${esc(t.couponCode)}`,"− "+brl(t.couponDiscount)]);if(t.pixDiscount>0)L.push([`PIX (${t.pixPercent}%)`,"− "+brl(t.pixDiscount)]);if(t.extraDiscount>0)L.push(["Desconto extra","− "+brl(t.extraDiscount)]);L.push(["Frete",t.shipping===null?"a combinar":brl(t.shipping)]);$("m-totals").innerHTML=L.map(([a,b])=>`<div class="flex justify-between"><span class="text-slate-500">${a}</span><span>${b}</span></div>`).join("")+`<div class="flex justify-between border-t pt-1 font-bold text-base"><span>Total</span><span>${brl(t.total)}</span></div>`}
+$("m-items").addEventListener("click",e=>{if(e.target.closest("[data-rm]")){draft.items.splice(Number(e.target.closest("tr").dataset.i),1);renderItems()}});
+["f-extra","f-ship"].forEach(id=>$(id).addEventListener("input",renderItemsTotals));
+$("add-toggle").addEventListener("click",async()=>{$("add-box").classList.toggle("hidden");if(products===null){try{products=(await getDocs(collection(db,"products"))).docs.map(d=>({id:d.id,...d.data()}))}catch{products=[]}}});
+$("catalog-search").addEventListener("input",()=>{const q=$("catalog-search").value.trim().toLowerCase(),box=$("catalog-results");if(!q||!products){box.classList.add("hidden");return}
+  const hit=products.filter(p=>`${p.sku} ${p.name}`.toLowerCase().includes(q)).slice(0,8);
+  box.innerHTML=hit.length?hit.map(p=>`<button type="button" data-pid="${esc(p.id)}" class="block w-full text-left px-3 py-2 hover:bg-slate-50 text-sm"><b>${esc(p.sku)}</b> — ${esc(p.name)} <span class="text-slate-500">${brl(p.priceWholesale)}</span></button>`).join(""):'<p class="p-3 text-sm text-slate-400">Nada encontrado.</p>';box.classList.remove("hidden")});
+$("catalog-results").addEventListener("click",e=>{const b=e.target.closest("[data-pid]");if(!b)return;const p=products.find(x=>x.id===b.dataset.pid);const l=lineFromProduct(p,1,[]);const mq=l.minQty||1;draft.items.push({productId:l.productId,sku:l.sku,name:l.name,image:/^https:/.test(l.image)?l.image:"",qty:mq,unitOriginal:l.unitOriginal,unitPrice:l.unitPrice,promoName:""});
+  $("catalog-search").value="";$("catalog-results").classList.add("hidden");renderItems()});
+$("n-add").addEventListener("click",()=>{const name=$("n-name").value.trim();if(!name){alert("Informe o nome do item.");return}const price=Math.max(0,Number($("n-price").value)||0);
+  draft.items.push({productId:"",sku:$("n-sku").value.trim().slice(0,40),name:name.slice(0,140),image:"",qty:Math.max(1,parseInt($("n-qty").value,10)||1),unitOriginal:price,unitPrice:price,promoName:""});
+  ["n-name","n-sku","n-price"].forEach(i=>$(i).value="");$("n-qty").value="1";renderItems()});
+$("m-save").addEventListener("click",async()=>{
+  const name=$("f-name").value.trim(),phone=$("f-whatsapp").value.replace(/\D/g,"");
+  if(name.length<2){$("m-error").textContent="Informe o nome do cliente.";return}
+  if(!draft.items.length){$("m-error").textContent="Adicione ao menos um item.";return}
+  const later=$("f-later").checked;
+  draft.customer={name:name.slice(0,120),whatsapp:phone.slice(0,15),city:$("f-city").value.trim().slice(0,80)};
+  draft.delivery={arrangeLater:later,recipient:$("f-recipient").value.trim().slice(0,120),street:$("f-street").value.trim().slice(0,120),number:$("f-number").value.trim().slice(0,20),complement:$("f-complement").value.trim().slice(0,80),district:$("f-district").value.trim().slice(0,80),city:$("f-dcity").value.trim().slice(0,80),state:$("f-state").value.trim().slice(0,2).toUpperCase()};
+  draft.payment={method:$("f-payment").value};draft.notes=$("f-notes").value.trim().slice(0,500);
+  const final=current(),btn=$("m-save");btn.disabled=true;
+  try{
+    const {id,createdAt,...data}=final;
+    if(editingId)await updateDoc(doc(db,"orders",editingId),{customer:data.customer,delivery:data.delivery,payment:data.payment,notes:data.notes,items:data.items,totals:data.totals,updatedAt:serverTimestamp()});
+    else await setDoc(doc(db,"orders",data.number),{...data,createdAt:serverTimestamp()});
+    closeModal();toast("Pedido salvo.");
+  }catch(err){console.error(err);$("m-error").textContent="Não foi possível salvar. Verifique as permissões do Firestore."}finally{btn.disabled=false}
+});
+
+// ---------- login
+$("login-form").addEventListener("submit",async e=>{e.preventDefault();$("login-error").textContent="";try{await signInWithEmailAndPassword(auth,$("email").value,$("password").value)}catch{$("login-error").textContent="Não foi possível entrar. Confira e-mail e senha."}});
+$("logout").addEventListener("click",()=>signOut(auth));
+onAuthStateChanged(auth,user=>{$("login").classList.toggle("hidden",!!user);$("app").classList.toggle("hidden",!user);if(user)listen();else if(unsub){unsub();unsub=null}});
+</script></body></html>

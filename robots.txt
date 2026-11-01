@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /carrinho.html
+Disallow: /checkout.html
+
+Sitemap: https://luaryshop.github.io/luary-system/sitemap.xml

@@ -1,0 +1,24 @@
+import * as S from '../seo.js';
+let ok=true;const t=(n,c)=>{console.log((c?'PASS ':'FAIL ')+n);if(!c)ok=false};
+t('siteUrl inválido → padrão',S.normalizeSiteUrl('http://x.com')===S.DEFAULT_SITE_URL&&S.normalizeSiteUrl('')===S.DEFAULT_SITE_URL&&S.normalizeSiteUrl('javascript:alert(1)')===S.DEFAULT_SITE_URL);
+t('siteUrl ganha / e perde query/hash',S.normalizeSiteUrl('https://a.com/loja?x=1#y')==='https://a.com/loja/'||S.normalizeSiteUrl('https://a.com/loja?x=1#y')==='https://a.com/');
+t('siteUrl com / final preservado',S.normalizeSiteUrl('https://a.com/loja/')==='https://a.com/loja/');
+t('skuSlug',S.skuSlug(' CH-0002 /Ouro ')==='ch-0002-ouro');
+t('parseHash produto/categoria/lixo',S.parseHash('#produto=CH-1').value==='CH-1'&&S.parseHash('#categoria=An%C3%A9is').value==='Anéis'&&S.parseHash('#x')===null&&S.parseHash('#produto=%E0%A4%A')===null);
+const st={siteUrl:'https://a.com/loja/',companyName:'Luary Shop',seoTitle:'T',twitterHandle:'luary'};
+const p={sku:'CH-1',name:'Cruz <b>x</b>',category:'Chaveiros',priceRetail:90,images:['https://cdn.x/1.webp','https://cdn.x/2.webp']};
+let m=S.buildMeta({kind:'home',settings:st});t('home: título custom, canonical base, twitter @',m.title==='T'&&m.canonical==='https://a.com/loja/'&&m.twitter==='@luary'&&m.image==='https://a.com/loja/public/images/og-luary.jpg');
+m=S.buildMeta({kind:'product',settings:st,product:p});t('produto: título com SKU, imagem do produto, hash',m.title.includes('(CH-1)')&&m.image==='https://cdn.x/1.webp'&&m.url==='https://a.com/loja/#produto=CH-1'&&m.type==='product');
+m=S.buildMeta({kind:'product',settings:{...st,sharePagesPublished:true},product:p});t('produto com páginas publicadas → p/ch-1.html',m.url==='https://a.com/loja/p/ch-1.html');
+m=S.buildMeta({kind:'product',settings:st,product:{...p,seoTitle:'Meu SEO',seoDescription:'Desc '.repeat(80)}});t('SEO próprio vence e descrição é cortada em 200',m.title==='Meu SEO'&&m.description.length<=200&&m.description.endsWith('…'));
+m=S.buildMeta({kind:'category',settings:st,category:{name:'Anéis',seoTitle:'Anéis lindos'}});t('categoria',m.title==='Anéis lindos'&&m.url.endsWith('#categoria=An%C3%A9is'));
+t('imagem http é ignorada',S.buildMeta({kind:'product',settings:st,product:{...p,images:['http://x/1.jpg']}}).image.endsWith('og-luary.jpg'));
+const ld=S.jsonLdProduct(p,st);t('JSON-LD produto: BRL, preço, sku',ld.offers.priceCurrency==='BRL'&&ld.offers.price==='90.00'&&ld.sku==='CH-1');
+t('JSON-LD sem preço não inventa oferta',!S.jsonLdProduct({sku:'A',name:'x'},st).offers);
+t('script JSON-LD não fecha tag',!S.jsonLdScript({a:'</script><script>alert(1)'}).includes('</script>'));
+t('ItemList',S.jsonLdItemList([p,p],st).itemListElement.length===2);
+const sm=S.buildSitemap(st,[p,{sku:'',name:'sem sku'},{sku:'A&B',name:'x'}]);t('sitemap: home + produtos válidos, escapado',sm.includes('<loc>https://a.com/loja/</loc>')&&sm.includes('p/ch-1.html')&&sm.includes('p/a-b.html')&&!sm.includes('A&B')&&(sm.match(/<url>/g)||[]).length===3);
+t('robots aponta sitemap',S.buildRobots(st).includes('Sitemap: https://a.com/loja/sitemap.xml'));
+const sp=S.buildSharePage(st,p);t('página de compartilhamento: OG, redirect, XSS escapado',sp.includes('property="og:image" content="https://cdn.x/1.webp"')&&sp.includes('http-equiv="refresh"')&&sp.includes('#produto=CH-1')&&!sp.includes('<b>x</b>')&&sp.includes('&lt;b&gt;x'));
+const evil=S.buildSharePage(st,{sku:'X',name:'"><script>alert(1)</script>',images:[]});t('nome malicioso não injeta script',!evil.includes('"><script>alert')&&(evil.match(/<script>/g)||[]).length===1);
+process.exit(ok?0:1)

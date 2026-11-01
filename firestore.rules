@@ -1,0 +1,66 @@
+// Regras do Firestore da Luary — REVISE e TESTE no "Simulador de regras" antes de publicar.
+// 1) Troque SEU_EMAIL_ADMIN@exemplo.com pelo(s) e-mail(s) dos administradores (mesmo e-mail do login do painel).
+// 2) Em Authentication → Configurações → "Ações do usuário", DESATIVE "Permitir criação (cadastro)" de contas,
+//    para que ninguém consiga criar usuários novos usando a chave pública do app.
+//
+// Resumo:
+//  - catálogo, banners, categorias, marketplaces e configurações: leitura pública, escrita só de admin;
+//  - promoções: a LISTAGEM pública só devolve promoções automáticas ativas; cupons (documentos cp_CODIGO)
+//    só são lidos pelo ID exato, então a lista de códigos não fica exposta;
+//  - pedidos: qualquer visitante pode CRIAR um pedido com o formato validado; só admin lê, edita ou exclui;
+//  - adminLogs (histórico de alterações): só admin lê e cria; ninguém edita nem apaga;
+//  - todo o resto: negado.
+//
+// Limites conhecidos: as regras não conferem se os preços do pedido batem com o catálogo — o painel de pedidos
+// mostra os valores gravados para conferência humana. Também não limitam a quantidade de pedidos por visitante;
+// para isso ative o Firebase App Check (reCAPTCHA) quando houver volume.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email in ['SEU_EMAIL_ADMIN@exemplo.com'];
+    }
+
+    function validOrder(d) {
+      return d.keys().hasOnly(['number','status','source','createdAtIso','createdAt','customer','delivery','payment','notes','items','totals'])
+        && d.keys().hasAll(['number','status','customer','delivery','payment','items','totals','createdAt'])
+        && d.number is string && d.number.size() >= 4 && d.number.size() <= 30
+        && d.status == 'Novo'
+        && d.createdAt == request.time
+        && d.customer is map && d.customer.name is string && d.customer.name.size() >= 2 && d.customer.name.size() <= 120
+        && d.customer.whatsapp is string && d.customer.whatsapp.size() >= 10 && d.customer.whatsapp.size() <= 15
+        && d.delivery is map && d.payment is map
+        && d.items is list && d.items.size() > 0 && d.items.size() <= 200
+        && d.items[0].qty is number && d.items[0].qty >= 1 && d.items[0].qty <= 999
+        && d.items[d.items.size() - 1].qty is number && d.items[d.items.size() - 1].qty >= 1 && d.items[d.items.size() - 1].qty <= 999
+        && d.customer.name.matches('.*[^\\s].*')
+        && d.totals is map && d.totals.total is number && d.totals.total >= 0 && d.totals.total <= 1000000
+        && (!('notes' in d) || (d.notes is string && d.notes.size() <= 500));
+    }
+
+    match /products/{id}         { allow read: if true; allow write: if isAdmin(); }
+    match /categories/{id}       { allow read: if true; allow write: if isAdmin(); }
+    match /subcategories/{id}    { allow read: if true; allow write: if isAdmin(); }
+    match /banners/{id}          { allow read: if true; allow write: if isAdmin(); }
+    match /marketplaceGrids/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /siteSettings/public   { allow read: if true; allow write: if isAdmin(); }
+
+    match /promotions/{id} {
+      allow get: if true;
+      allow list: if isAdmin() || (resource.data.kind == 'automatic' && resource.data.active == true);
+      allow write: if isAdmin();
+    }
+
+    match /orders/{id} {
+      allow create: if isAdmin() || (validOrder(request.resource.data) && id == request.resource.data.number);
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /adminLogs/{id} {
+      allow read, create: if isAdmin();
+      allow update, delete: if false;
+    }
+  }
+}

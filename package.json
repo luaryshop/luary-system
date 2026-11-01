@@ -1,0 +1,11 @@
+{
+  "name": "luary-system",
+  "private": true,
+  "scripts": {
+    "test": "node tests/run.mjs",
+    "audit": "node scripts/audit.mjs",
+    "check": "node scripts/check.mjs",
+    "verify": "node scripts/audit.mjs && node scripts/check.mjs && node tests/run.mjs"
+  },
+  "devDependencies": { "playwright": "^1.48.0" }
+}

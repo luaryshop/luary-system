@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="h-full bg-gray-50">
 <head>
+<meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Administrativo - Luary</title>
@@ -44,6 +45,7 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <span id="user-email-display" class="text-sm text-gray-600 font-medium"></span>
+                    <a href="pedidos.html" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg font-medium mr-2"><i class="fa-solid fa-clipboard-list mr-1"></i> Pedidos</a>
                     <a href="content-admin.html" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium mr-2"><i class="fa-solid fa-sliders mr-1"></i> Conteúdo do Site</a>
                 <button id="logout-btn" class="bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition duration-150">
                         <i class="fa-solid fa-right-from-bracket mr-2"></i>Sair
@@ -106,6 +108,23 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Preço Varejo (R$)</label>
                             <input type="number" step="0.01" id="prod-price-retail" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Quantidade mínima por pedido (un.)</label>
+                        <input type="number" min="1" max="999" step="1" id="prod-min-qty" placeholder="Padrão da empresa" class="mt-1 block w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        <p class="mt-1 text-xs text-gray-500">Na loja, o cliente não consegue pedir menos que isso deste SKU. Deixe em branco para usar o mínimo padrão definido em Empresa e Identidade.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Título SEO (opcional, até 70 caracteres)</label>
+                            <input type="text" id="prod-seo-title" maxlength="70" placeholder="Padrão: nome da peça + SKU" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Descrição SEO / compartilhamento (opcional, até 200)</label>
+                            <textarea id="prod-seo-desc" rows="2" maxlength="200" placeholder="Aparece no Google e na prévia do WhatsApp" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"></textarea>
                         </div>
                     </div>
 
@@ -226,9 +245,9 @@
                             <span class="text-xs text-gray-400">Varejo: R$ ${Number(product.priceRetail).toFixed(2)}</span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                            <button onclick="window.open('cdn.html?sku=' + encodeURIComponent('${esc(product.sku)}'), '_blank')" class="text-emerald-700 hover:text-emerald-900 bg-emerald-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-images mr-1"></i>Imagens</button>
-                            <button onclick="window.editProduct('${product.id}')" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-pen-to-square mr-1"></i>Editar</button>
-                            <button onclick="window.deleteProduct('${product.id}')" class="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-trash mr-1"></i>Excluir</button>
+                            <button type="button" data-act="images" data-sku="${esc(product.sku)}" class="text-emerald-700 hover:text-emerald-900 bg-emerald-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-images mr-1"></i>Imagens</button>
+                            <button type="button" data-act="edit" data-id="${esc(product.id)}" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-pen-to-square mr-1"></i>Editar</button>
+                            <button type="button" data-act="delete" data-id="${esc(product.id)}" class="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-trash mr-1"></i>Excluir</button>
                         </td>
                     `;
                     productsTableBody.appendChild(tr);
@@ -267,6 +286,14 @@
         });
 
         // Função global para editar produto
+        // Ações da tabela por delegação (nada de dados dentro de handlers inline)
+        productsTableBody.addEventListener('click', (e) => {
+            const b = e.target.closest('button[data-act]');
+            if (!b) return;
+            if (b.dataset.act === 'images') window.open('cdn.html?sku=' + encodeURIComponent(b.dataset.sku), '_blank', 'noopener');
+            if (b.dataset.act === 'edit') window.editProduct(b.dataset.id);
+            if (b.dataset.act === 'delete') window.deleteProduct(b.dataset.id);
+        });
         window.editProduct = (id) => {
             const product = productsCache.find(p => p.id === id);
             if (!product) return;
@@ -277,6 +304,9 @@
             document.getElementById('prod-category').value = product.category;
             document.getElementById('prod-price-wholesale').value = product.priceWholesale;
             document.getElementById('prod-price-retail').value = product.priceRetail;
+            document.getElementById('prod-min-qty').value = parseInt(product.minQty, 10) > 0 ? parseInt(product.minQty, 10) : '';
+            document.getElementById('prod-seo-title').value = product.seoTitle || '';
+            document.getElementById('prod-seo-desc').value = product.seoDescription || '';
 
             formTitle.innerHTML = `<i class="fa-solid fa-pen-to-square mr-2 text-indigo-600"></i>Editar Produto: ${product.sku}`;
             submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-2"></i>Atualizar Produto';
@@ -318,6 +348,10 @@
             const category = document.getElementById('prod-category').value;
             const priceWholesale = parseFloat(document.getElementById('prod-price-wholesale').value);
             const priceRetail = parseFloat(document.getElementById('prod-price-retail').value);
+            const minQtyRaw = parseInt(document.getElementById('prod-min-qty').value, 10);
+            const minQty = minQtyRaw > 0 ? Math.min(999, minQtyRaw) : 0;
+            const seoTitle = document.getElementById('prod-seo-title').value.trim().slice(0, 70);
+            const seoDescription = document.getElementById('prod-seo-desc').value.trim().slice(0, 200);
             if (!isValidSku(sku)) return alert('Informe um SKU válido (letras, números e hífen).');
 
             submitBtn.disabled = true;
@@ -337,13 +371,13 @@
                 if (docId) {
                     // Atualizar produto existente
                     await updateDoc(doc(db, "products", docId), {
-                        sku, name, category, priceWholesale, priceRetail, images: imageUrls
+                        sku, name, category, priceWholesale, priceRetail, minQty, seoTitle, seoDescription, images: imageUrls
                     });
                     alert(`Produto ${sku} atualizado com sucesso!`);
                 } else {
                     // Criar novo produto
                     await addDoc(collection(db, "products"), {
-                        sku, name, category, priceWholesale, priceRetail, images: imageUrls, createdAt: new Date().toISOString()
+                        sku, name, category, priceWholesale, priceRetail, minQty, seoTitle, seoDescription, images: imageUrls, createdAt: new Date().toISOString()
                     });
                     alert(`Produto ${sku} cadastrado com sucesso!`);
                 }

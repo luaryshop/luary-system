@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Romaneio | Luary</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{font-family:'Inter',sans-serif;background:#fff;color:#000}.serif{font-family:'Cormorant Garamond',serif}
+tr,.avoid{break-inside:avoid;page-break-inside:avoid}
+@media print{@page{size:A4;margin:10mm 8mm}body{padding:0}.no-print{display:none!important}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}
+</style>
+</head>
+<body class="p-4 md:p-6">
+<div class="no-print mb-6 flex flex-wrap justify-end gap-3">
+<a href="pedidos.html" class="mr-auto self-center text-xs text-zinc-500 underline">← Pedidos</a>
+<button id="b-print" class="bg-white text-black font-bold px-5 py-2 rounded-xl text-xs uppercase tracking-wider border border-zinc-300 hover:bg-zinc-100">🖨️ Imprimir</button>
+<button id="b-pdf" class="bg-amber-600 text-white font-bold px-5 py-2 rounded-xl text-xs uppercase tracking-wider hover:bg-amber-700">📄 Gerar PDF</button>
+<div id="pdf-actions" class="hidden gap-3"><button id="b-download" class="bg-white text-black font-bold px-5 py-2 rounded-xl text-xs uppercase tracking-wider border border-zinc-300 hover:bg-zinc-100">⬇️ Baixar</button><button id="b-share" class="hidden bg-black text-white font-bold px-5 py-2 rounded-xl text-xs uppercase tracking-wider">📤 Enviar para cliente</button></div>
+</div>
+
+<div id="loader" class="text-center py-12 text-xs uppercase tracking-widest text-zinc-500">⏳ Montando romaneio…</div>
+
+<div id="doc" class="hidden max-w-5xl mx-auto space-y-5">
+<div class="border-b-2 border-black pb-3 flex justify-between items-end">
+<div><h1 id="store" class="serif text-3xl font-bold tracking-widest uppercase">Luary Shop</h1><p class="text-[10px] uppercase tracking-wider text-zinc-600">Chaveiros folheados e presentes · Atacado</p><p id="store-wa" class="text-[10px] font-bold text-zinc-700 mt-0.5"></p></div>
+<div class="text-right text-xs"><p class="font-bold">PEDIDO: <span id="d-num"></span></p><p id="d-date" class="text-zinc-500 text-[10px]"></p></div></div>
+<div class="grid grid-cols-2 gap-4 bg-zinc-50 p-3 rounded-xl border border-zinc-200 text-[11px] leading-relaxed">
+<div class="border-r border-zinc-200 pr-2"><p class="text-[9px] uppercase text-zinc-400 font-bold tracking-wider mb-1">Dados do cliente</p><p class="font-bold uppercase">Nome: <span id="c-name" class="font-medium"></span></p><p class="font-bold">WhatsApp: <span id="c-wa" class="font-medium"></span></p><p class="font-bold uppercase">Cidade: <span id="c-city" class="font-medium"></span></p></div>
+<div class="pl-2"><p class="text-[9px] uppercase text-zinc-400 font-bold tracking-wider mb-1">Local de entrega</p><div id="delivery"></div></div></div>
+<div class="bg-zinc-100 px-3 py-1.5 rounded-lg border border-zinc-200 flex justify-between text-[10px] uppercase tracking-wider text-zinc-600"><div>Pagamento: <b id="pay" class="text-black"></b></div><div id="mode"></div></div>
+<div id="target"></div>
+<div id="bar" class="avoid border-t-2 border-black pt-3 grid grid-cols-3 text-center text-xs font-bold bg-zinc-50 p-3 rounded-xl border border-zinc-200"><div><p class="text-[9px] text-zinc-500 uppercase">Itens</p><p id="s-items" class="text-base mt-0.5">0</p></div><div><p class="text-[9px] text-zinc-500 uppercase">Peças</p><p id="s-pieces" class="text-base mt-0.5">0</p></div><div id="s-fin"><p class="text-[9px] text-zinc-500 uppercase">Valor do pedido</p><p id="s-total" class="text-base mt-0.5"></p></div></div>
+<p id="notes" class="hidden text-[11px] border border-dashed border-zinc-400 rounded-lg p-2"></p>
+</div>
+
+<script type="module">
+import {initializeApp,getApps} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import {getAuth,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import {getFirestore,doc,getDoc} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import {recalcOrder,normalizePhone} from "./order-calc.js";
+
+const firebaseConfig={apiKey:"AIzaSyCanlMwdfuD9gmVt62nJYYetj4K2-BfWEc",authDomain:"luary-system.firebaseapp.com",projectId:"luary-system",storageBucket:"luary-system.firebasestorage.app",messagingSenderId:"996287172742",appId:"1:996287172742:web:4ff8c22a01cabe4015c107"};
+const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const $=id=>document.getElementById(id),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const brl=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const safeImg=u=>{try{return new URL(u).protocol==="https:"?String(u):""}catch{return""}};
+const params=new URLSearchParams(location.search);
+const id=params.get("id"),layout=["lista","grade"].includes(params.get("layout"))?params.get("layout"):"lista",tipo=["conferencia","financeiro","foto"].includes(params.get("tipo"))?params.get("tipo"):"financeiro";
+const MODES={conferencia:"Conferência",financeiro:"Financeiro",foto:"Com fotos"};
+const THUMB="data:image/svg+xml;utf8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="80" height="80" fill="#f4f4f5"/></svg>');
+const fail=m=>{const l=$("loader");l.textContent=m;l.classList.add("text-red-600","font-bold")};
+const img=(i,cls,st="")=>`<img src="${esc(safeImg(i.image)||THUMB)}" class="${cls}" style="${st}" crossorigin="anonymous" alt="" onerror="this.src='${THUMB}'">`;
+
+function resumo(o){const t=o.totals,L=[["Subtotal de tabela",brl(t.subtotalOriginal),""]];
+  if(t.promoDiscount>0)L.push(["Promoções","− "+brl(t.promoDiscount),"text-red-600"]);
+  if(t.couponDiscount>0)L.push([`Cupom${t.couponCode?` (${esc(t.couponCode)})`:""}`,"− "+brl(t.couponDiscount),"text-red-600"]);
+  if(t.pixDiscount>0)L.push([`Desconto PIX (${t.pixPercent}%)`,"− "+brl(t.pixDiscount),"text-red-600"]);
+  if(t.extraDiscount>0)L.push(["Desconto adicional","− "+brl(t.extraDiscount),"text-red-600"]);
+  L.push(["Frete",t.shipping===null?"a combinar":t.shipping===0?"grátis":brl(t.shipping),""]);
+  return `<div class="avoid mt-4 border-t-2 border-black pt-3"><h3 class="font-bold text-[11px] uppercase tracking-wider mb-2">Resumo financeiro</h3><div class="grid grid-cols-2 gap-x-6 gap-y-1 text-[11px]">${L.map(([a,b,c])=>`<div class="text-zinc-500">${a}</div><div class="text-right font-mono ${c}">${b}</div>`).join("")}<div class="font-bold border-t border-black pt-1.5 text-xs">VALOR FINAL${t.shipping===null?" (sem frete)":""}</div><div class="font-black text-right border-t border-black pt-1.5 text-xs font-mono">${brl(t.total)}</div></div></div>`}
+const price=i=>i.unitPrice>0?brl(i.unitPrice):"—";
+const old=i=>i.unitOriginal>i.unitPrice+.001?` <span style="text-decoration:line-through;color:#a1a1aa">${brl(i.unitOriginal)}</span>`:"";
+
+const R={
+ lista_conferencia:(o)=>`<table class="w-full border-collapse text-[11px]"><thead><tr class="border-b border-black text-left"><th class="py-1.5">SKU</th><th>Descrição</th><th class="text-center w-16">Qtd</th><th class="w-12 text-center">Conf.</th></tr></thead><tbody class="divide-y divide-zinc-200">${o.items.map(i=>`<tr><td class="py-1.5 font-mono text-zinc-600">${esc(i.sku||"—")}</td><td class="uppercase">${esc(i.name)}</td><td class="text-center font-bold">${i.qty}</td><td class="text-center"><span style="display:inline-block;width:12px;height:12px;border:1px solid #333"></span></td></tr>`).join("")}</tbody></table>`,
+ lista_financeiro:(o)=>`<table class="w-full border-collapse text-[11px]"><thead><tr class="border-b border-black text-left"><th class="py-1.5">SKU</th><th>Produto</th><th class="text-center">Qtd</th><th class="text-right">Preço un.</th><th class="text-right">Subtotal</th></tr></thead><tbody class="divide-y divide-zinc-200">${o.items.map(i=>`<tr><td class="py-1.5 font-mono">${esc(i.sku||"—")}</td><td class="uppercase">${esc(i.name)}</td><td class="text-center font-bold">${i.qty}</td><td class="text-right font-mono">${price(i)}${old(i)}</td><td class="text-right font-bold font-mono">${brl(i.subtotal)}</td></tr>`).join("")}</tbody></table>${resumo(o)}`,
+ lista_foto:(o)=>`<table class="w-full border-collapse text-[11px]"><thead><tr class="border-b border-black text-left"><th class="py-1.5 w-14">Foto</th><th>SKU</th><th>Especificação</th><th class="text-center">Qtd</th><th class="text-right">Unit.</th><th class="text-right">Total</th></tr></thead><tbody class="divide-y divide-zinc-200">${o.items.map(i=>`<tr><td class="py-1">${img(i,"","width:42px;height:42px;object-fit:cover;border:1px solid #e4e4e7;border-radius:6px")}</td><td class="font-mono text-zinc-600">${esc(i.sku||"—")}</td><td class="uppercase font-medium">${esc(i.name)}</td><td class="text-center font-bold">${i.qty}</td><td class="text-right font-mono">${price(i)}${old(i)}</td><td class="text-right font-bold font-mono">${brl(i.subtotal)}</td></tr>`).join("")}</tbody></table>${resumo(o)}`,
+ grade_conferencia:(o)=>`<div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">${o.items.map(i=>`<div class="avoid border border-zinc-300 rounded-lg p-1.5 text-[10px] flex flex-col justify-between"><div class="flex justify-between items-start mb-1"><span class="font-mono text-[9px] text-zinc-400 font-bold">SKU</span><span class="bg-black text-white px-1 py-0.5 rounded text-[10px] font-black">${i.qty}x</span></div><div class="font-mono truncate mb-1">${esc(i.sku||"—")}</div><div class="font-bold uppercase leading-tight" style="min-height:24px">${esc(i.name)}</div></div>`).join("")}</div>`,
+ grade_financeiro:(o)=>`<div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">${o.items.map(i=>`<div class="avoid border border-zinc-300 rounded-lg p-2 text-[10px] flex flex-col justify-between"><div><div class="flex justify-between items-start mb-1"><span class="font-mono text-[8px] text-zinc-400 font-bold">SKU</span><span class="bg-zinc-900 text-white px-1 py-0.5 rounded text-[10px] font-black">${i.qty}x</span></div><div class="font-mono truncate mb-1">${esc(i.sku||"—")}</div><div class="font-bold uppercase leading-tight mb-2" style="min-height:24px">${esc(i.name)}</div></div><div class="border-t pt-1 text-[9px] font-mono space-y-0.5"><div class="flex justify-between text-zinc-500"><span>Unit:</span><span class="text-black">${price(i)}</span></div><div class="flex justify-between font-bold border-t border-dashed mt-1 pt-0.5"><span>Total:</span><span>${brl(i.subtotal)}</span></div></div></div>`).join("")}</div>${resumo(o)}`,
+ grade_foto:(o)=>`<div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">${o.items.map(i=>`<div class="avoid border border-zinc-300 rounded-lg overflow-hidden text-[10px] flex flex-col justify-between"><div class="relative bg-zinc-50 border-b" style="height:96px">${img(i,"w-full h-full","object-fit:cover")}<span class="absolute top-1 right-1 bg-black text-white px-1.5 py-0.5 rounded text-[10px] font-black">${i.qty}x</span></div><div class="p-1.5"><div class="font-mono text-[8px] text-zinc-400 font-bold uppercase">SKU ${esc(i.sku||"—")}</div><div class="font-black uppercase leading-tight mt-0.5 mb-1.5" style="min-height:24px">${esc(i.name)}</div><div class="border-t pt-1 text-[9px] font-mono"><div class="flex justify-between text-zinc-500"><span>Valor:</span><span>${price(i)}</span></div><div class="flex justify-between font-bold"><span>Total:</span><span>${brl(i.subtotal)}</span></div></div></div></div>`).join("")}</div>${resumo(o)}`,
+};
+
+async function load(){
+  try{
+    const snap=await getDoc(doc(db,"orders",id));
+    if(!snap.exists()){fail("❌ Pedido não encontrado.");return}
+    const raw=snap.data();
+    // recalcula a partir dos itens: nunca confia em totais gravados que possam ter sido editados à mão
+    const o=recalcOrder(raw,{extraDiscount:raw.totals?.extraDiscount||0,shipping:raw.totals?.shipping??null});
+    o.items=[...o.items].sort((a,b)=>String(a.sku).localeCompare(String(b.sku),"pt-BR",{numeric:true,sensitivity:"base"}));
+    const c=o.customer||{},d=o.delivery||{};
+    getDoc(doc(db,"siteSettings","public")).then(s=>{if(!s.exists())return;const x=s.data();if(x.companyName)$("store").textContent=String(x.companyName);if(x.whatsapp)$("store-wa").textContent="WhatsApp: "+x.whatsapp}).catch(()=>{});
+    $("d-num").textContent=raw.number||id;
+    const t=raw.createdAt?.toMillis?.()??Date.parse(raw.createdAtIso||"");$("d-date").textContent=Number.isFinite(t)?new Date(t).toLocaleString("pt-BR"):"";
+    $("c-name").textContent=c.name||"—";$("c-wa").textContent=c.whatsapp||"—";$("c-city").textContent=(c.city||"—").toUpperCase();
+    $("delivery").innerHTML=d.arrangeLater?'<p class="font-bold uppercase">A combinar no atendimento</p>':`<p class="font-bold uppercase">Destinatário: <span class="font-medium">${esc(d.recipient||c.name||"—")}</span></p><p class="font-bold uppercase">Endereço: <span class="font-medium">${esc([d.street,d.number].filter(Boolean).join(", ")||"—")}${d.complement?" — "+esc(d.complement):""}</span></p><p class="font-bold uppercase">Bairro: <span class="font-medium">${esc(d.district||"—")}</span></p><p class="font-bold uppercase">Cidade/UF: <span class="font-medium">${esc([d.city,d.state].filter(Boolean).join(" - ")||"—")}</span></p>`;
+    $("pay").textContent=(o.payment?.method||"—").toUpperCase();$("mode").textContent=`${layout} · ${MODES[tipo]}`;
+    $("s-items").textContent=o.items.length;$("s-pieces").textContent=o.totals.pieces;$("s-total").textContent=brl(o.totals.total)+(o.totals.shipping===null?" + frete":"");
+    if(tipo==="conferencia")$("s-fin").classList.add("invisible");
+    if(o.notes){$("notes").classList.remove("hidden");$("notes").textContent="Obs.: "+o.notes}
+    $("target").innerHTML=R[`${layout}_${tipo}`](o);
+    $("loader").classList.add("hidden");$("doc").classList.remove("hidden");
+    document.title=`Romaneio ${raw.number||id} | Luary`;
+  }catch(err){console.error(err);fail("❌ Não foi possível carregar o pedido (verifique seu acesso e as regras do Firestore).")}
+}
+
+// ---------- PDF / impressão / compartilhar
+let pdfBlob=null,pdfFile=null,pdfName="romaneio.pdf";
+const canShare=!!(navigator.canShare&&navigator.share&&navigator.canShare({files:[new File(["x"],"t.pdf",{type:"application/pdf"})]}));
+$("b-print").addEventListener("click",()=>window.print());
+$("b-pdf").addEventListener("click",async()=>{
+  const el=$("doc"),b=$("b-pdf");if(el.classList.contains("hidden"))return alert("O romaneio ainda está carregando.");
+  const label=b.textContent;b.disabled=true;b.textContent="⏳ Gerando PDF…";$("pdf-actions").classList.add("hidden");$("pdf-actions").classList.remove("flex");
+  pdfName=`Romaneio-${String($("d-num").textContent).replace(/[^A-Za-z0-9-]/g,"")}.pdf`;
+  try{
+    pdfBlob=await html2pdf().set({margin:[10,8,10,8],filename:pdfName,image:{type:"jpeg",quality:.98},html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff"},jsPDF:{unit:"mm",format:"a4",orientation:"portrait"},pagebreak:{mode:["css"]}}).from(el).outputPdf("blob");
+    pdfFile=new File([pdfBlob],pdfName,{type:"application/pdf"});
+    $("b-share").classList.toggle("hidden",!canShare);$("pdf-actions").classList.remove("hidden");$("pdf-actions").classList.add("flex");b.textContent="🔄 Gerar novamente";
+  }catch(err){console.error(err);alert('Não foi possível gerar o PDF. Use "Imprimir" e escolha "Salvar como PDF".');b.textContent=label}
+  finally{b.disabled=false}
+});
+$("b-download").addEventListener("click",()=>{if(!pdfBlob)return;const u=URL.createObjectURL(pdfBlob),a=document.createElement("a");a.href=u;a.download=pdfName;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)});
+$("b-share").addEventListener("click",async()=>{if(!pdfFile)return;try{await navigator.share({files:[pdfFile],title:"Romaneio Luary",text:`Pedido ${$("d-num").textContent}`})}catch(e){if(e.name!=="AbortError")alert("Não foi possível compartilhar. Use Baixar e envie manualmente.")}});
+
+if(!id)fail("❌ Pedido não informado na URL.");
+else onAuthStateChanged(auth,u=>{if(u)load();else fail("🔒 Faça login no painel (pedidos.html) e abra o romaneio novamente.")});
+</script>
+</body>
+</html>
