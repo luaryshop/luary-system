@@ -88,3 +88,29 @@ npm run verify      # auditoria + checagem de arquivos + todos os testes
 - As regras do Firestore não conseguem recalcular o preço do pedido; a conferência é humana.
 - Não há limite de pedidos por visitante sem o App Check.
 - As telas do painel usam o Tailwind por CDN (sem CSP rígida); as páginas públicas (loja, carrinho e checkout) têm CSP.
+
+---
+
+## 9. Fotos 1:1 e formas de pagamento
+- **Fotos:** em `cdn.html`, o campo **Enquadramento** vem em *Automático*: produtos, categorias e subcategorias saem quadrados (1:1) com a foto inteira sobre fundo branco (a cor pode ser trocada); home e identidade mantêm a proporção. Para fotos já publicadas, abra o SKU e clique em **Padronizar fotos atuais em 1:1** e depois em **Publicar na CDN**.
+- **Loja:** os cards, o modal, as miniaturas e o carrinho exibem a foto inteira em caixa quadrada, sem cortar, em desktop, tablet e celular.
+- **Pagamento:** em **Conteúdo → Empresa e Identidade → Formas de pagamento no checkout**, ligue/desligue PIX, Cartão e "A combinar", defina o máximo de parcelas e o texto do cartão. Clique em **Salvar dados**.
+
+## 10. Pagamento escolhido no carrinho (versão 2026.11.02-d)
+
+- No resumo do carrinho o cliente escolhe **PIX** ou **Cartão** e já vê o valor a pagar (PIX com desconto; cartão com o valor da parcela). A escolha segue para o checkout.
+- A opção "A combinar" foi removida do checkout. Pedidos antigos continuam exibindo o rótulo normalmente.
+- Parcelas do cartão: painel `content-admin.html` → **Empresa** → "Formas de pagamento no checkout" → campo **Parcelas no cartão** (0 a 24; 0 = sem parcelamento).
+- Para conferir que o novo arquivo foi publicado, abra o painel: ao lado de "Configurações, vitrines e campanhas" deve aparecer **versão 2026.11.02-d**. Se não aparecer, o GitHub ainda serve a versão antiga (envie todos os arquivos do zip e dê Ctrl+F5).
+
+## 11. Categorias únicas, Variações e Importação (versão 2026.11.03-e)
+
+**Republique as regras do Firestore** (arquivo `firestore.rules` deste zip): entrou a coleção `variationTypes` (grupos como Banho e Inicial, só o administrador acessa) e saiu `subcategories`. Firebase Console → Firestore Database → Regras → cole → Publicar. Sem isso, a aba **Variações** mostra "Sem permissão".
+
+1. **Categorias:** só existem categorias. O cadastro de produto usa a lista de *Conteúdo do Site → Categorias*. Se algum produto antigo tiver uma categoria que não está cadastrada, aparece um aviso amarelo com o botão **Cadastrar todas agora**.
+2. **Variações:** *Conteúdo do Site → Variações* → **Criar Banho e Inicial** (ou crie os seus: um item por linha, **Preencher A–Z** para iniciais). Depois, em *Produtos*, marque as opções que cada peça tem. Na loja o cliente escolhe uma opção de cada grupo antes de adicionar; cada combinação é uma linha própria do carrinho e do pedido.
+3. **Importar:** abra `importar.html` (botão **Importar** no topo da Central) → envie o `.xlsx`/`.csv` → confira as categorias, a prévia e os avisos → **Importar**. Funciona com o *modelo de importação da Luary* e com a *Planilha Universal de Marketplaces* (abas Mestre_Produtos + Mestre_Variacoes). Antes, baixe o **backup (JSON)** dos produtos atuais.
+   - O SKU é a chave: SKU existente é atualizado (só os campos preenchidos; preço, fotos e quantidade mínima que já existem não são apagados); SKU novo é criado.
+   - Coluna **Banho/Cor** com um valor (Ouro) vira atributo do produto; com vários (Ouro; Prata) vira variação escolhida pelo cliente.
+   - Produtos sem preço entram com preço zero; ajuste em *Preços em massa*.
+4. Novos campos do produto: visível na loja (ativo), descrição, atributos, diferenciais, estoque, custo, peso e dimensões. Produto desmarcado como visível some da loja e do carrinho, sem ser excluído.

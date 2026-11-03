@@ -8,7 +8,7 @@ const N=x=>x.replace(/ /g,' ');
  const base=()=>({products:{a:{sku:'CH-1',name:'Cruz',category:'Chaveiros',priceWholesale:50,images:['https://x.com/1.webp']},b:{sku:'AN-1',name:'Anel',category:'Anéis',priceWholesale:100}},
   promotions:{p1:{name:'Semana',kind:'automatic',type:'percent',value:10,active:true,scope:'categories',categories:['Chaveiros']},cp_LUARY10:{name:'Dez',kind:'coupon',coupon:'LUARY10',type:'percent',value:10,active:true,scope:'all'}},
   siteSettings:{public:{whatsapp:'(19) 98820-7658',companyName:'Luary Shop',minOrder:100,pixDiscount:5}}});
- const cartInit=`localStorage.setItem('luary-atacado-cart-v1',JSON.stringify({a:2,b:1,zzz:3}));`;
+ const cartInit=`localStorage.setItem('luary-atacado-cart-v1',JSON.stringify({a:2,b:1,zzz:3}));localStorage.setItem('luary-payment-v1','"Cartão"');`;
  // ===== CARRINHO
  let p=await mk(base(),'carrinho.html',cartInit);
  t('2 linhas, item removido do catálogo some',await p.locator('.cart-row').count()===2&&!(await p.evaluate(()=>localStorage.getItem('luary-atacado-cart-v1'))).includes('zzz'));
@@ -28,7 +28,7 @@ const N=x=>x.replace(/ /g,' ');
  // ===== CHECKOUT
  const fill=async p=>{await p.fill('#name','Maria Souza');await p.fill('#whatsapp','(11) 98888-7777');await p.fill('#city','São Paulo - SP');await p.fill('#street','Rua A');await p.fill('#number','10');await p.fill('#district','Centro');await p.fill('#deliveryCity','São Paulo');await p.fill('#notes','Cuidado <b>x</b>')};
  p=await mk(base(),'checkout.html',cartInit+`localStorage.setItem('luary-cart-coupon-v1','"LUARY10"');`);
- t('resumo com cupom e PIX padrão',N(await p.locator('#totals').textContent()).includes('Desconto PIX (5%)')&&N(await p.locator('#totals').textContent()).includes('R$ 19,00'));
+ t('resumo com cupom e pagamento herdado do carrinho (Cartão, sem desconto PIX)',!N(await p.locator('#totals').textContent()).includes('Desconto PIX')&&N(await p.locator('#totals').textContent()).includes('R$ 19,00'));
  await p.check('input[value="Cartão"]',{force:true});await p.waitForTimeout(150);
  t('trocar para cartão remove PIX',!N(await p.locator('#totals').textContent()).includes('Desconto PIX'));
  await p.check('input[value="PIX"]',{force:true});

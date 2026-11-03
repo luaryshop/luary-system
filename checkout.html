@@ -2,10 +2,11 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://www.gstatic.com https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#23384a">
 <title>Finalizar pedido | Luary Shop</title>
+<link rel="icon" type="image/webp" href="public/images/luary-logo-instagram.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="store.css">
@@ -72,14 +73,15 @@
 <footer class="mini">© Luary Shop</footer>
 
 <script type="module">
-import { $, esc, brl, safeHttps, PLACEHOLDER, db, readCart, clearCart, getCouponCode, setCouponCode, loadStore, resolveCart, resolveCoupon } from "./store-core.js";
+import { $, esc, brl, safeHttps, PLACEHOLDER, db, readCart, clearCart, getCouponCode, setCouponCode, getPayment, setPayment, loadStore, resolveCart, resolveCoupon } from "./store-core.js";
 import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { computeTotals, validateCustomer, newOrderNumber, buildOrder, buildWhatsappMessage, whatsappUrl, PAYMENT_METHODS } from "./order-calc.js";
+import { computeTotals, validateCustomer, newOrderNumber, buildOrder, buildWhatsappMessage, whatsappUrl, paymentQuotes, PAYMENT_METHODS } from "./order-calc.js";
 
 const CUSTOMER_KEY = "luary-customer-v1";
 let store, view = { lines: [], coupon: null, totals: null, shown: null };
 const F = (id) => $(id);
-const payment = () => document.querySelector('input[name="payment"]:checked')?.value || "A combinar";
+const payment = () => document.querySelector('input[name="payment"]:checked')?.value || getPayment() || "PIX";
+const quoteFor = (lines, coupon, settings, method) => paymentQuotes({ lines, coupon, settings }).find((x) => x.method === method);
 const formValues = () => Object.fromEntries(["name", "whatsapp", "city", "recipient", "street", "number", "complement", "district", "deliveryCity", "state", "notes"].map((k) => [k, F(k).value]).concat([["payment", payment()]]));
 
 async function compute(freshStore = store) {
@@ -91,7 +93,7 @@ async function compute(freshStore = store) {
 
 function renderSummary() {
   const { lines, totals: t } = view;
-  $("mini").innerHTML = lines.map((l) => `<div class="mini-line"><img src="${esc(safeHttps(l.image) || PLACEHOLDER)}" alt="" loading="lazy"><div class="n"><b>${esc(l.name)}</b><span>${l.qty} × ${l.priced ? brl(l.unitPrice) : "sob consulta"} · REF. ${esc(l.sku || "—")}</span></div><strong style="font-size:12px">${l.priced ? brl(l.subtotal) : "—"}</strong></div>`).join("");
+  $("mini").innerHTML = lines.map((l) => `<div class="mini-line"><img src="${esc(safeHttps(l.image) || PLACEHOLDER)}" alt="" loading="lazy"><div class="n"><b>${esc(l.name)}</b>${l.variant ? `<span class="item-var">${esc(l.variant)}</span>` : ""}<span>${l.qty} × ${l.priced ? brl(l.unitPrice) : "sob consulta"} · REF. ${esc(l.sku || "—")}</span></div><strong style="font-size:12px">${l.priced ? brl(l.subtotal) : "—"}</strong></div>`).join("");
   const r = [`<div class="row"><span>Peças</span><span>${t.pieces}</span></div>`];
   if (t.promoDiscount > 0) r.push(`<div class="row ok"><span>Promoções</span><span>− ${brl(t.promoDiscount)}</span></div>`);
   r.push(`<div class="row"><span>Subtotal</span><span>${brl(t.subtotal)}</span></div>`);
@@ -99,7 +101,8 @@ function renderSummary() {
   if (t.pixDiscount > 0) r.push(`<div class="row ok"><span>Desconto PIX (${t.pixPercent}%)</span><span>− ${brl(t.pixDiscount)}</span></div>`);
   r.push(`<div class="row"><span>Frete</span><span>${t.shippingMode === "tbd" ? "a combinar" : t.shipping === 0 ? "Grátis" : brl(t.shipping)}</span></div>`);
   r.push(`<div class="row total"><span>TOTAL</span><span>${brl(t.total)}</span></div>`);
-  $("totals").innerHTML = r.join("");
+  const qt = quoteFor(lines, view.coupon, store.rawSettings, payment());
+  $("totals").innerHTML = r.join("") + (payment() === "Cartão" && qt?.installments ? `<p class="installment">ou em até <b>${qt.installments.count}x de ${brl(qt.installments.each)}</b> no cartão, sem juros</p>` : "");
   view.shown = t.total;
   const blocked = t.belowMin;
   $("submit-alert").hidden = !blocked;
@@ -108,10 +111,18 @@ function renderSummary() {
 }
 
 function renderPayments() {
-  const pix = store.settings.pixDiscount;
-  const opts = { "PIX": pix > 0 ? `${pix}% de desconto` : "Pagamento à vista", "Cartão": "Condições no atendimento", "A combinar": "Definimos juntos" };
-  const current = document.querySelector('input[name="payment"]:checked')?.value || "PIX";
-  $("pay").innerHTML = PAYMENT_METHODS.map((m, i) => `<label><input type="radio" name="payment" value="${esc(m)}" ${current === m ? "checked" : ""}><b>${esc(m)}</b><small>${esc(opts[m])}</small></label>`).join("");
+  const st = store.settings, pix = st.pixDiscount;
+  const quotes = view.lines.length ? paymentQuotes({ lines: view.lines, coupon: view.coupon, settings: store.rawSettings }) : [];
+  const enabled = st.payments;
+  const checked = document.querySelector('input[name="payment"]:checked')?.value || getPayment();
+  const current = enabled.includes(checked) ? checked : enabled[0];
+  setPayment(current);
+  $("pay").innerHTML = PAYMENT_METHODS.filter((m) => enabled.includes(m)).map((m) => {
+    const q = quotes.find((x) => x.method === m);
+    const sub = m === "PIX" ? (pix > 0 ? `${pix}% de desconto` : "Pagamento à vista")
+      : (st.cardNote || (q?.installments ? `Em até ${q.installments.count}x de ${brl(q.installments.each)} sem juros` : "Link de pagamento enviado pelo WhatsApp"));
+    return `<label><input type="radio" name="payment" value="${esc(m)}" ${current === m ? "checked" : ""}><b>${esc(m === "Cartão" ? "Cartão de crédito" : m)}${q ? ` — ${brl(q.total)}` : ""}</b><small>${esc(sub)}</small></label>`;
+  }).join("");
 }
 
 function toggleDelivery() {
@@ -144,7 +155,7 @@ function showDone({ order, saved, phone }) {
   return url;
 }
 
-$("form").addEventListener("input", (e) => { if (e.target.name === "payment") { view.totals = computeTotals({ lines: view.lines, coupon: view.coupon, payment: payment(), settings: store.rawSettings }); renderSummary(); } else if (e.target.classList.contains("invalid")) e.target.classList.remove("invalid"); });
+$("form").addEventListener("input", (e) => { if (e.target.name === "payment") { setPayment(e.target.value); view.totals = computeTotals({ lines: view.lines, coupon: view.coupon, payment: payment(), settings: store.rawSettings }); renderSummary(); } else if (e.target.classList.contains("invalid")) e.target.classList.remove("invalid"); });
 F("later").addEventListener("change", toggleDelivery);
 
 $("form").addEventListener("submit", async (e) => {
@@ -168,7 +179,8 @@ $("form").addEventListener("submit", async (e) => {
       btn.disabled = false; btn.textContent = "Enviar pedido pelo WhatsApp"; return;
     }
     const number = newOrderNumber();
-    const order = buildOrder({ number, form: values, lines: now.lines, totals: now.totals, deliveryOptional: later });
+    const quote = quoteFor(now.lines, now.coupon, fresh.rawSettings, values.payment);
+    const order = buildOrder({ number, form: values, lines: now.lines, totals: now.totals, deliveryOptional: later, installments: quote?.installments || null });
     remember(values);
     let saved = true;
     try { await setDoc(doc(db, "orders", number), { ...order, createdAt: serverTimestamp() }); }
@@ -187,8 +199,10 @@ $("form").addEventListener("submit", async (e) => {
   try {
     store = await loadStore();
     const logo = safeHttps(store.rawSettings.logoUrl); if (logo) $("brand-emblem").innerHTML = `<img src="${esc(logo)}" alt="">`;
-    renderPayments(); restore(); toggleDelivery();
+    restore(); toggleDelivery();
     view = { ...view, ...(await compute()) };
+    renderPayments();
+    view.totals = computeTotals({ lines: view.lines, coupon: view.coupon, payment: payment(), settings: store.rawSettings });
     $("loading").hidden = true;
     if (!view.lines.length) { $("empty").hidden = false; return; }
     $("form").hidden = false; renderSummary();

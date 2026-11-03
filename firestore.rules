@@ -1,10 +1,11 @@
 // Regras do Firestore da Luary — REVISE e TESTE no "Simulador de regras" antes de publicar.
-// 1) Troque SEU_EMAIL_ADMIN@exemplo.com pelo(s) e-mail(s) dos administradores (mesmo e-mail do login do painel).
+// 1) Confira o(s) e-mail(s) dos administradores (mesmo e-mail do login do painel).
 // 2) Em Authentication → Configurações → "Ações do usuário", DESATIVE "Permitir criação (cadastro)" de contas,
 //    para que ninguém consiga criar usuários novos usando a chave pública do app.
 //
 // Resumo:
 //  - catálogo, banners, categorias, marketplaces e configurações: leitura pública, escrita só de admin;
+//  - variationTypes (opções de variação do painel): só admin;
 //  - promoções: a LISTAGEM pública só devolve promoções automáticas ativas; cupons (documentos cp_CODIGO)
 //    só são lidos pelo ID exato, então a lista de códigos não fica exposta;
 //  - pedidos: qualquer visitante pode CRIAR um pedido com o formato validado; só admin lê, edita ou exclui;
@@ -20,7 +21,7 @@ service cloud.firestore {
 
     function isAdmin() {
       return request.auth != null
-        && request.auth.token.email in ['SEU_EMAIL_ADMIN@exemplo.com'];
+        && request.auth.token.email in ['luarysemijoias@gmail.com'];
     }
 
     function validOrder(d) {
@@ -42,7 +43,7 @@ service cloud.firestore {
 
     match /products/{id}         { allow read: if true; allow write: if isAdmin(); }
     match /categories/{id}       { allow read: if true; allow write: if isAdmin(); }
-    match /subcategories/{id}    { allow read: if true; allow write: if isAdmin(); }
+    match /variationTypes/{id}   { allow read, write: if isAdmin(); }   // lista de opções (Banho, Inicial...) só do painel
     match /banners/{id}          { allow read: if true; allow write: if isAdmin(); }
     match /marketplaceGrids/{id} { allow read: if true; allow write: if isAdmin(); }
     match /siteSettings/public   { allow read: if true; allow write: if isAdmin(); }

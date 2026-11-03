@@ -2,10 +2,11 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://www.gstatic.com https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#23384a">
 <title>Meu pedido | Luary Shop</title>
+<link rel="icon" type="image/webp" href="public/images/luary-logo-instagram.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="store.css">
@@ -39,6 +40,7 @@
       <p class="msg" id="coupon-msg" role="status"></p>
     </div>
     <div id="min-alert" class="alert" hidden></div>
+    <div id="pay-box"><p class="pay-title">Como você prefere pagar?</p><div id="pay-options" class="pay-options" role="radiogroup" aria-label="Forma de pagamento"></div></div>
     <div id="totals"></div>
     <button class="btn btn-primary btn-block" id="go-checkout" type="button" style="margin-top:18px">Continuar para dados e envio →</button>
     <p style="margin:12px 0 0;color:#93958f;font-size:11px;line-height:1.6;text-align:center">Sem pagamento no site. O pedido é enviado pelo WhatsApp e a equipe Luary confirma valores, disponibilidade e frete.</p>
@@ -48,8 +50,8 @@
 <footer class="mini">© Luary Shop</footer>
 
 <script type="module">
-import { $, esc, brl, safeHttps, PLACEHOLDER, readCart, saveCart, cartCount, getCouponCode, setCouponCode, clearCart, loadStore, resolveCart, resolveCoupon } from "./store-core.js";
-import { computeTotals } from "./order-calc.js";
+import { $, esc, brl, safeHttps, PLACEHOLDER, readCart, saveCart, cartCount, getCouponCode, setCouponCode, clearCart, getPayment, setPayment, loadStore, resolveCart, resolveCoupon } from "./store-core.js";
+import { computeTotals, paymentQuotes } from "./order-calc.js";
 
 let store = null, cart = readCart(), state = { lines: [], coupon: null };
 
@@ -57,7 +59,7 @@ async function recompute() {
   const { lines, couponLines, missing } = resolveCart(cart, store.products, store.promotions);
   if (missing.length) { missing.forEach((id) => delete cart[id]); saveCart(cart); }
   state.lines = lines;
-  for (const l of lines) if (cart[l.productId] !== l.qty) cart[l.productId] = l.qty; // respeita o mínimo por SKU
+  for (const l of lines) if (cart[l.cartKey] !== l.qty) cart[l.cartKey] = l.qty; // respeita o mínimo por SKU
   saveCart(cart);
   const code = getCouponCode();
   const res = await resolveCoupon(code, couponLines);
@@ -80,20 +82,29 @@ function render(missingCount = 0) {
   $("items").innerHTML = state.lines.map((l) => {
     const img = safeHttps(l.image) || PLACEHOLDER;
     const promo = l.promoName && l.unitOriginal > l.unitPrice;
-    return `<article class="cart-row" data-id="${esc(l.productId)}"><img src="${esc(img)}" alt="" loading="lazy"><div><div class="item-name">${esc(l.name)}</div><div class="item-ref">REF. ${esc(l.sku || "a confirmar")}</div>${promo ? `<span class="item-promo">${esc(l.promoName)}</span>` : ""}
+    return `<article class="cart-row" data-id="${esc(l.cartKey)}"><img src="${esc(img)}" alt="" loading="lazy"><div><div class="item-name">${esc(l.name)}</div><div class="item-ref">REF. ${esc(l.sku || "a confirmar")}</div>${l.variant ? `<div class="item-var">${esc(l.variant)}</div>` : ""}${promo ? `<span class="item-promo">${esc(l.promoName)}</span>` : ""}
       ${l.minQty > 1 ? `<div class="item-ref" style="color:#9e7739">Pedido mínimo deste item: ${l.minQty} un.</div>` : ""}<div class="qty"><button type="button" data-act="minus" aria-label="Diminuir" ${l.qty <= l.minQty ? "disabled" : ""}>−</button><input type="number" min="${l.minQty}" max="999" value="${l.qty}" data-act="set" aria-label="Quantidade de ${esc(l.name)}"><button type="button" data-act="plus" aria-label="Aumentar">+</button></div> <button class="link-btn" data-act="remove" type="button" style="margin-left:10px">Remover</button></div>
       <div class="price-col"><strong>${l.priced ? brl(l.subtotal) : "Sob consulta"}</strong>${l.priced ? `<small>${promo ? `<s>${brl(l.unitOriginal)}</s> ` : ""}${brl(l.unitPrice)} /un.</small>` : ""}</div></article>`;
   }).join("");
 
-  const t = computeTotals({ lines: state.lines, coupon: state.coupon, payment: "A combinar", settings: store.rawSettings });
+  const quotes = paymentQuotes({ lines: state.lines, coupon: state.coupon, settings: store.rawSettings });
+  let sel = getPayment(); if (!quotes.some((x) => x.method === sel)) sel = quotes[0].method; setPayment(sel);
+  const q = quotes.find((x) => x.method === sel);
+  const t = computeTotals({ lines: state.lines, coupon: state.coupon, payment: sel, settings: store.rawSettings });
+  const hasPrice = state.lines.some((l) => l.priced);
+  $("pay-options").innerHTML = quotes.map((x) => {
+    const label = x.method === "Cartão" ? "Cartão de crédito" : "PIX";
+    const sub = x.method === "PIX" ? (x.pixPercent > 0 ? `${x.pixPercent}% de desconto` : "pagamento à vista") : (x.installments ? `em até ${x.installments.count}x de ${brl(x.installments.each)} sem juros` : "à vista no cartão");
+    return `<label class="pay-opt"><input type="radio" name="cart-pay" value="${esc(x.method)}" ${x.method === sel ? "checked" : ""}><span><b>${esc(label)}</b><small>${esc(sub)}</small></span><strong>${hasPrice ? brl(x.total) : "—"}${x.shippingMode === "tbd" ? "<em>+ frete</em>" : ""}</strong></label>`;
+  }).join("");
   const rows = [`<div class="row"><span>Peças</span><span>${t.pieces}</span></div>`];
   if (t.promoDiscount > 0) rows.push(`<div class="row"><span>Valor de tabela</span><span>${brl(t.subtotalOriginal)}</span></div><div class="row ok"><span>Promoções</span><span>− ${brl(t.promoDiscount)}</span></div>`);
   rows.push(`<div class="row"><span>Subtotal</span><span>${brl(t.subtotal)}</span></div>`);
   if (t.couponDiscount > 0) rows.push(`<div class="row ok"><span>Cupom ${esc(t.couponCode)}</span><span>− ${brl(t.couponDiscount)}</span></div>`);
   rows.push(`<div class="row"><span>Frete</span><span>${t.shippingMode === "tbd" ? "a combinar" : t.shipping === 0 ? "Grátis" : brl(t.shipping)}</span></div>`);
-  if (store.settings.pixDiscount > 0) rows.push(`<div class="row ok"><span>Pagando no PIX</span><span>${store.settings.pixDiscount}% off</span></div>`);
+  if (t.pixDiscount > 0) rows.push(`<div class="row ok"><span>Desconto PIX (${t.pixPercent}%)</span><span>− ${brl(t.pixDiscount)}</span></div>`);
   rows.push(`<div class="row total"><span>TOTAL</span><span>${brl(t.total)}</span></div>`);
-  $("totals").innerHTML = rows.join("");
+  $("totals").innerHTML = rows.join("") + (sel === "Cartão" && q.installments ? `<p class="installment">ou em até <b>${q.installments.count}x de ${brl(q.installments.each)}</b> no cartão, sem juros</p>` : "");
 
   $("coupon-form").hidden = !!state.coupon; $("coupon-applied").hidden = !state.coupon;
   if (state.coupon) { $("coupon-code").textContent = state.coupon.code; $("coupon-msg").textContent = ""; }
@@ -129,6 +140,7 @@ $("coupon-form").addEventListener("submit", async (e) => {
   if (!res.coupon) { $("coupon-msg").className = "msg err"; $("coupon-msg").textContent = res.message; return; }
   setCouponCode(code); $("coupon-input").value = ""; $("coupon-msg").className = "msg ok"; await refresh();
 });
+$("pay-options").addEventListener("change", (e) => { if (e.target.name === "cart-pay") { setPayment(e.target.value); render(); } });
 $("coupon-remove").addEventListener("click", () => { setCouponCode(""); refresh(); });
 $("go-checkout").addEventListener("click", () => { location.href = "checkout.html"; });
 

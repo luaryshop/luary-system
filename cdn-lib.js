@@ -23,20 +23,45 @@ export const slugFileName = (fileName) => {
   return (base || "imagem") + ".webp";
 };
 
-// Converte qualquer imagem para WebP, limitando o lado maior (peso menor, carregamento mais rápido).
-export async function toWebP(file, { quality = 0.85, maxSide = 1600 } = {}) {
+// Converte qualquer imagem para WebP.
+// frame: "original" mantém a proporção; "fit" gera um QUADRADO 1:1 com a foto inteira (sem cortar, com fundo);
+//        "crop" gera um quadrado 1:1 cortando o excesso no centro.
+export async function toWebP(file, { quality = 0.85, maxSide = 1600, frame = "original", background = "#ffffff" } = {}) {
   const bitmap = await createImageBitmap(file);
-  const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
-  const width = Math.max(1, Math.round(bitmap.width * scale));
-  const height = Math.max(1, Math.round(bitmap.height * scale));
+  const bg = /^#[0-9a-f]{6}$/i.test(background) ? background : "#ffffff";
   const canvas = document.createElement("canvas");
-  canvas.width = width; canvas.height = height;
-  canvas.getContext("2d").drawImage(bitmap, 0, 0, width, height);
+  const ctx = canvas.getContext("2d");
+  if (frame === "fit" || frame === "crop") {
+    const natural = frame === "fit" ? Math.max(bitmap.width, bitmap.height) : Math.min(bitmap.width, bitmap.height);
+    const side = Math.max(1, Math.round(Math.min(natural, maxSide)));
+    canvas.width = side; canvas.height = side;
+    if (frame === "fit") {
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, side, side);
+      const scale = side / Math.max(bitmap.width, bitmap.height);
+      const w = Math.max(1, Math.round(bitmap.width * scale)), h = Math.max(1, Math.round(bitmap.height * scale));
+      ctx.drawImage(bitmap, Math.round((side - w) / 2), Math.round((side - h) / 2), w, h);
+    } else {
+      const sq = Math.min(bitmap.width, bitmap.height);
+      ctx.drawImage(bitmap, Math.round((bitmap.width - sq) / 2), Math.round((bitmap.height - sq) / 2), sq, sq, 0, 0, side, side);
+    }
+  } else {
+    const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale)); canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  }
   bitmap.close?.();
   const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/webp", quality));
-  if (!blob) throw new Error("Não foi possível converter " + file.name + " para WebP.");
+  if (!blob) throw new Error("Não foi possível converter " + (file.name || "a imagem") + " para WebP.");
   return blob;
 }
+export async function imageSize(blob) {
+  const bitmap = await createImageBitmap(blob);
+  const size = { width: bitmap.width, height: bitmap.height };
+  bitmap.close?.();
+  return size;
+}
+// Pastas em que as fotos devem ser quadradas (1:1) por padrão.
+export const SQUARE_FOLDERS = ["products", "categories", "subcategorias"];
 
 async function toBase64(blob) {
   const bytes = new Uint8Array(await blob.arrayBuffer());

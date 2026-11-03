@@ -1,0 +1,38 @@
+// Variações (Banho, Inicial...): escolha no modal, carrinho, pedido gravado.
+const BASE=process.env.BASE||'http://localhost:8765';
+const {chromium}=require('playwright');const stubs=require('./stubs.js');
+(async()=>{const b=await chromium.launch();let ok=true;const t=(n,c)=>{console.log((c?'PASS':'FAIL')+' '+n);if(!c)ok=false};
+const mk=async(db,url,pre='')=>{const p=await (await b.newContext({viewport:{width:1280,height:900}})).newPage();p.errs=[];p.on('pageerror',e=>p.errs.push(e.message));p.on('dialog',d=>d.accept());
+ await p.route('**/*',r=>{const u=new URL(r.request().url());if(u.host==='www.gstatic.com')return r.fulfill({contentType:'text/javascript',body:stubs[u.pathname.split('/').pop()]});if(u.hostname==='localhost')return r.continue();return r.abort()});
+ await p.addInitScript(`window.__DB=${JSON.stringify(db)};${pre}`);await p.goto(BASE+'/'+url);await p.waitForTimeout(900);return p};
+const DB=()=>({products:{a:{sku:'CH-1',name:'Cruz',category:'C',priceWholesale:50,variations:{Banho:['Ouro','Prata'],Inicial:['A','B']}},b:{sku:'AN-1',name:'Anel',category:'C',priceWholesale:30}},siteSettings:{public:{whatsapp:'19988207658',pixDiscount:5}}});
+const NB=x=>x.replace(/\s+/g,' ');
+let p=await mk(DB(),'index.html');
+await p.click('[data-product-id="a"], .product-card >> nth=0').catch(()=>{});
+await p.waitForTimeout(300);
+if(!(await p.locator('#product-modal').isVisible())){const c=p.locator('article, .product-card').first();await c.click();await p.waitForTimeout(300)}
+t('modal mostra grupos Banho e Inicial',(await p.locator('#modal-variations .var-group').count())===2);
+await p.click('#add-to-cart-btn');
+t('sem escolher: não adiciona e avisa',(await p.locator('#modal-status').textContent()).includes('Escolha')&&Object.keys(await p.evaluate(()=>JSON.parse(localStorage.getItem('luary-atacado-cart-v1')||'{}'))).length===0);
+await p.locator('#modal-variations input[value="Prata"]').check({force:true});await p.locator('#modal-variations input[value="B"]').check({force:true});
+await p.click('#add-to-cart-btn');
+let cart=await p.evaluate(()=>JSON.parse(localStorage.getItem('luary-atacado-cart-v1')||'{}'));
+t('carrinho usa chave com variação',JSON.stringify(Object.keys(cart))==='["a::Banho=Prata|Inicial=B"]');
+await p.locator('#modal-variations input[value="Ouro"]').check({force:true});await p.click('#add-to-cart-btn');
+cart=await p.evaluate(()=>JSON.parse(localStorage.getItem('luary-atacado-cart-v1')||'{}'));
+t('outra combinação = outra linha',Object.keys(cart).length===2);
+t('modal sem erros JS',p.errs.length===0);console.log(p.errs);await p.close();
+const pre=`localStorage.setItem('luary-atacado-cart-v1',JSON.stringify({'a::Banho=Prata|Inicial=B':2,'a::Banho=Ouro|Inicial=A':3,'a::Banho=Bronze|Inicial=A':1,'a':1,'b':2}));`;
+p=await mk(DB(),'carrinho.html',pre);
+t('carrinho: 3 linhas (opção inválida e produto sem escolha somem)',(await p.locator('.cart-row').count())===3);
+t('carrinho mostra a variação',NB(await p.locator('#items').textContent()).includes('Banho: Prata · Inicial: B'));
+await p.locator('.cart-row',{hasText:'Banho: Ouro'}).locator('[data-act="plus"]').click();await p.waitForTimeout(300);
+t('mais um na linha certa (4 + 2 + 2 = 8 peças)',(await p.locator('#totals .row').first().textContent()).includes('8'));
+await p.close();
+p=await mk(DB(),'checkout.html',pre);await p.fill('#name','Ana Souza');await p.fill('#whatsapp','11988887777');await p.fill('#city','SP');await p.check('#later');
+t('checkout lista variação no resumo',NB(await p.locator('#mini').textContent()).includes('Banho: Ouro'));
+await p.click('#submit');await p.waitForTimeout(700);
+const o=Object.values(await p.evaluate(()=>window.__DB.orders||{}))[0];
+t('pedido grava variação por item',o&&o.items.some(i=>i.variant==='Banho: Prata · Inicial: B'&&i.name.includes('Banho: Prata')));
+t('WhatsApp cita a variação',decodeURIComponent(await p.locator('#wa-link').getAttribute('href')).includes('Banho: Prata'));
+await p.close();await b.close();process.exit(ok?0:1)})();

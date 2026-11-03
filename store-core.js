@@ -2,7 +2,7 @@
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, getDocs, getDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { couponDiscount, norm } from "./pricing.js";
-import { lineFromProduct, normalizeSettings } from "./order-calc.js";
+import { lineFromProduct, normalizeSettings, splitCartKey, validChoice } from "./order-calc.js";
 
 export const firebaseConfig = { apiKey: "AIzaSyCanlMwdfuD9gmVt62nJYYetj4K2-BfWEc", authDomain: "luary-system.firebaseapp.com", projectId: "luary-system", storageBucket: "luary-system.firebasestorage.app", messagingSenderId: "996287172742", appId: "1:996287172742:web:4ff8c22a01cabe4015c107" };
 export const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
@@ -24,7 +24,10 @@ export const saveCart = (cart) => write(CART_KEY, cart);
 export const cartCount = (cart = readCart()) => Object.values(cart).reduce((a, q) => a + (Number(q) || 0), 0);
 export const getCouponCode = () => String(read(COUPON_KEY, "") || "");
 export const setCouponCode = (code) => { try { code ? localStorage.setItem(COUPON_KEY, JSON.stringify(norm(code))) : localStorage.removeItem(COUPON_KEY); } catch {} };
-export const clearCart = () => { try { localStorage.removeItem(CART_KEY); localStorage.removeItem(COUPON_KEY); } catch {} };
+export const PAY_KEY = "luary-payment-v1";
+export const getPayment = () => String(read(PAY_KEY, "") || "");
+export const setPayment = (method) => { try { method ? localStorage.setItem(PAY_KEY, JSON.stringify(String(method))) : localStorage.removeItem(PAY_KEY); } catch {} };
+export const clearCart = () => { try { localStorage.removeItem(CART_KEY); localStorage.removeItem(COUPON_KEY); localStorage.removeItem(PAY_KEY); } catch {} };
 
 // Catálogo + promoções automáticas vigentes + configurações comerciais.
 export async function loadStore() {
@@ -37,7 +40,7 @@ export async function loadStore() {
   const rawSettings = settingsSnap && settingsSnap.exists() ? settingsSnap.data() : {};
   const settings = normalizeSettings(rawSettings);
   // Quantidade mínima: a do produto vale; sem ela, vale o padrão da empresa.
-  const products = productsSnap.docs.map((d) => { const p = { id: d.id, ...d.data() }; if (!(Number(p.minQty) > 0)) p.minQty = settings.defaultMinQty; return p; });
+  const products = productsSnap.docs.map((d) => { const p = { id: d.id, ...d.data() }; if (!(Number(p.minQty) > 0)) p.minQty = settings.defaultMinQty; return p; }).filter((p) => p.active !== false);
   return { products, promotions, rawSettings, settings };
 }
 
@@ -53,13 +56,17 @@ export async function fetchCoupon(code) {
 export function resolveCart(cart, products, promotions) {
   const byId = new Map(products.map((p) => [String(p.id), p]));
   const lines = [], couponLines = [], missing = [];
-  for (const [id, qty] of Object.entries(cart)) {
+  for (const [key, qty] of Object.entries(cart)) {
+    const { id, choice: wanted } = splitCartKey(key);
     const p = byId.get(String(id));
-    if (!p) { missing.push(id); continue; }
-    const line = lineFromProduct(p, qty, promotions);
+    if (!p) { missing.push(key); continue; }
+    const { choice, complete } = validChoice(p, wanted);
+    // opção que deixou de existir (ou grupo novo sem escolha): a linha sai do pedido
+    if (!complete || Object.keys(choice).length !== Object.keys(wanted).length) { missing.push(key); continue; }
+    const line = lineFromProduct(p, qty, promotions, { choice });
     lines.push(line); couponLines.push({ product: p, quantity: line.qty, unit: line.unitPrice });
   }
-  lines.sort((a, b) => a.sku.localeCompare(b.sku, "pt-BR", { numeric: true, sensitivity: "base" }));
+  lines.sort((a, b) => a.sku.localeCompare(b.sku, "pt-BR", { numeric: true, sensitivity: "base" }) || a.variant.localeCompare(b.variant, "pt-BR"));
   return { lines, couponLines, missing };
 }
 

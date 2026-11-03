@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Importar produtos | Luary Admin</title>
+<link rel="icon" type="image/webp" href="public/images/luary-logo-instagram.webp">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>*,*::before,*::after{box-sizing:border-box}.field{width:100%;border:1px solid #cbd5e1;border-radius:.5rem;padding:.55rem .75rem;background:#fff}.chip{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600}
+#drop.over{border-color:#4f46e5;background:#eef2ff}.tbl td,.tbl th{padding:.4rem .6rem;text-align:left;vertical-align:top;border-bottom:1px solid #e2e8f0;font-size:13px}.tbl th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#64748b;background:#f8fafc;position:sticky;top:0}</style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+<header class="bg-slate-900 text-white"><div class="max-w-6xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
+<div><div class="text-xl font-bold">Luary <span class="text-amber-300">Studio</span></div><div class="text-xs text-slate-300">Importar produtos em massa · <span id="app-version">versão 2026.11.03-e</span></div></div>
+<div class="flex gap-2"><a href="admin.html" class="rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20"><i class="fa-solid fa-box mr-1"></i> Produtos</a><a href="content-admin.html" class="rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20"><i class="fa-solid fa-sliders mr-1"></i> Conteúdo do Site</a></div></div></header>
+<main class="max-w-6xl mx-auto p-4 md:p-8">
+<div id="login" class="hidden max-w-md mx-auto bg-white rounded-2xl shadow p-6 mt-12"><h1 class="text-xl font-bold mb-4">Acesso administrativo</h1><form id="login-form" class="space-y-3"><input id="email" type="email" required placeholder="E-mail" class="field"><input id="password" type="password" required placeholder="Senha" class="field"><button class="w-full bg-slate-900 text-white rounded-lg p-3">Entrar</button><p id="login-error" class="text-rose-600 text-sm"></p></form></div>
+
+<div id="app" class="hidden space-y-6">
+<div><h1 class="text-2xl font-bold">Migrador de produtos</h1><p class="text-slate-500">Envie uma planilha (.xlsx ou .csv), confira a prévia e só então grave. Nada é alterado antes de você clicar em <b>Importar</b>.</p></div>
+
+<section class="bg-white rounded-2xl border shadow-sm p-5 space-y-4">
+<h2 class="font-bold text-lg">1. Escolha a planilha</h2>
+<label id="drop" class="block cursor-pointer rounded-xl border-2 border-dashed border-slate-300 p-8 text-center text-slate-500"><i class="fa-solid fa-file-arrow-up text-3xl mb-2"></i><div><b>Clique para escolher</b> ou arraste o arquivo aqui</div><div class="text-xs mt-1">Aceita o <b>modelo de importação da Luary</b> e a <b>Planilha Universal de Marketplaces</b> (abas Mestre_Produtos + Mestre_Variacoes)</div><input id="file" type="file" accept=".xlsx,.csv,.txt" class="hidden"></label>
+<div class="flex flex-wrap gap-2 text-sm"><button type="button" id="dl-template" class="rounded-lg border px-3 py-2 hover:bg-slate-50"><i class="fa-solid fa-download mr-1"></i> Baixar modelo (CSV)</button><button type="button" id="dl-backup" class="rounded-lg border px-3 py-2 hover:bg-slate-50"><i class="fa-solid fa-shield mr-1"></i> Baixar backup dos produtos atuais (JSON)</button></div>
+<p id="file-status" class="text-sm text-slate-600" role="status"></p>
+</section>
+
+<section id="step-options" class="hidden bg-white rounded-2xl border shadow-sm p-5 space-y-4">
+<h2 class="font-bold text-lg">2. Opções</h2>
+<div class="grid md:grid-cols-2 gap-4">
+<label class="text-sm">Se o SKU já existir no sistema<select id="opt-mode" class="field mt-1"><option value="upsert">Atualizar os campos preenchidos e criar os novos</option><option value="create">Só criar produtos novos (ignorar os existentes)</option><option value="update">Só atualizar os existentes (não criar novos)</option></select></label>
+<label class="text-sm">Categoria quando a linha não tiver<input id="opt-defcat" class="field mt-1" list="cat-list" placeholder="(deixe vazio para tratar como erro)"></label>
+<label id="opt-group-wrap" class="text-sm hidden">As cores da planilha universal viram o grupo<select id="opt-group" class="field mt-1"><option>Banho</option><option>Cor</option></select></label>
+<div class="text-sm space-y-2 self-end"><label class="flex gap-2"><input id="opt-cost" type="checkbox" checked> Calcular preço de atacado = custo × (1 + margem) quando não houver preço</label></div>
+</div>
+<datalist id="cat-list"></datalist>
+<div><h3 class="font-semibold text-sm mb-2">Categorias da planilha → categorias do site</h3><div id="cat-map" class="space-y-2"></div><p class="text-xs text-slate-500 mt-2">Digite o nome de uma categoria existente para juntar, ou um nome novo para criá-la. Subcategorias não existem mais e são ignoradas.</p></div>
+<p id="ignored" class="text-xs text-slate-500"></p>
+</section>
+
+<section id="step-preview" class="hidden bg-white rounded-2xl border shadow-sm p-5 space-y-4">
+<h2 class="font-bold text-lg">3. Prévia</h2>
+<div id="summary" class="flex flex-wrap gap-2"></div>
+<div class="flex flex-wrap items-center gap-2 text-sm"><span>Mostrar:</span><select id="flt" class="field !w-auto"><option value="all">Todos</option><option value="new">Novos</option><option value="update">A atualizar</option><option value="same">Sem mudança</option><option value="skip">Ignorados</option><option value="error">Com erro</option><option value="warn">Com aviso</option></select><span id="shown" class="text-slate-500"></span></div>
+<div class="max-h-[28rem] overflow-auto rounded-lg border"><table class="tbl w-full"><thead><tr><th>Lin.</th><th>SKU</th><th>Nome</th><th>Categoria</th><th>Preço atacado</th><th>Situação</th><th>Observações</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="flex flex-wrap items-center gap-3"><button id="go" class="rounded-lg bg-indigo-600 px-5 py-2.5 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> Importar</button><span id="progress" class="text-sm text-slate-600" role="status"></span></div>
+<p class="text-xs text-slate-500">Dica: baixe o backup antes de importar. Campos vazios na planilha nunca apagam dados que já existem. Produtos sem preço entram com preço zero (a loja mostra “consulte”) — ajuste depois em <a class="underline" href="content-admin.html">Conteúdo do Site → Preços em massa</a>.</p>
+</section>
+<section id="step-done" class="hidden rounded-2xl border border-emerald-300 bg-emerald-50 p-5"><h2 class="font-bold text-lg text-emerald-800">Importação concluída</h2><p id="done-text" class="text-sm text-emerald-900 mt-1"></p></section>
+</div>
+</main>
+
+<script type="module">
+import {initializeApp,getApps} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import {getFirestore,doc,collection,addDoc,getDocs,writeBatch,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import {readXlsx,readCsv} from "./xlsx-lite.js";
+import {recordsFromSheets,planImport,suggestCategoryMap,docIdForSku,detectFormat} from "./import-core.js";
+
+const firebaseConfig={apiKey:"AIzaSyCanlMwdfuD9gmVt62nJYYetj4K2-BfWEc",authDomain:"luary-system.firebaseapp.com",projectId:"luary-system",storageBucket:"luary-system.firebasestorage.app",messagingSenderId:"996287172742",appId:"1:996287172742:web:4ff8c22a01cabe4015c107"};
+const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const $=id=>document.getElementById(id), esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const brl=n=>Number(n).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const MAX_FILE=20*1024*1024, SHOW_LIMIT=400;
+let sheets=null, parsed=null, existing=[], categories=[], plan=null, fileName="", busy=false;
+
+async function logAdmin(type,summary,extra={}){try{await addDoc(collection(db,"adminLogs"),{type,summary,user:auth.currentUser?.email||"",at:serverTimestamp(),...extra})}catch(err){console.warn("Histórico não gravado.",err)}}
+function download(name,text,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+
+async function loadExisting(){
+  existing=(await getDocs(collection(db,"products"))).docs.map(d=>({id:d.id,...d.data()}));
+  categories=(await getDocs(collection(db,"categories"))).docs.map(d=>({id:d.id,...d.data()}));
+  $("cat-list").innerHTML=categories.map(c=>`<option value="${esc(c.name)}">`).join("");
+}
+
+// ---------- arquivo ----------
+async function handleFile(file){
+  if(!file)return;
+  $("step-options").classList.add("hidden");$("step-preview").classList.add("hidden");$("step-done").classList.add("hidden");
+  if(file.size>MAX_FILE){$("file-status").textContent="Arquivo grande demais (máximo 20 MB).";return}
+  fileName=file.name;$("file-status").textContent="Lendo "+esc(file.name)+"…";
+  try{
+    const name=file.name.toLowerCase();
+    if(name.endsWith(".xlsx"))sheets=await readXlsx(await file.arrayBuffer());
+    else if(name.endsWith(".csv")||name.endsWith(".txt"))sheets=readCsv(await file.text());
+    else throw new Error("Formato não suportado. Use .xlsx ou .csv (se o arquivo for .xls, abra no Excel e salve como .xlsx).");
+    await loadExisting();
+    buildParsed();
+  }catch(err){console.error(err);sheets=null;$("file-status").textContent="Não foi possível ler: "+(err.message||"arquivo inválido");}
+}
+function currentOpts(){return{mode:$("opt-mode").value,defaultCategory:$("opt-defcat").value.trim(),useCostMargin:$("opt-cost").checked,categoryMap:readCatMap()}}
+function readCatMap(){const m={};document.querySelectorAll("#cat-map [data-file-cat]").forEach(i=>{m[i.dataset.fileCat]=i.value.trim()});return m}
+function buildParsed(){
+  parsed=recordsFromSheets(sheets,{colorGroup:$("opt-group").value});
+  const fmt=detectFormat(sheets);
+  $("opt-group-wrap").classList.toggle("hidden",fmt.kind!=="universal");
+  if(!parsed.records.length){$("file-status").textContent="Nenhum produto encontrado no arquivo. Confira se a primeira linha tem os nomes das colunas (SKU, Nome, Categoria…).";return}
+  $("file-status").innerHTML=`<b>${esc(fileName)}</b> — formato reconhecido: ${esc(parsed.label)} · ${parsed.records.length} produto(s).`;
+  const fileCats=[...new Set(parsed.records.map(r=>r.category).filter(Boolean))];
+  const map=suggestCategoryMap(fileCats,categories.map(c=>c.name));
+  $("cat-map").innerHTML=fileCats.length?fileCats.map(c=>`<div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-sm"><span class="truncate rounded bg-slate-100 px-2 py-1" title="${esc(c)}">${esc(c)}</span><i class="fa-solid fa-arrow-right text-slate-400"></i><input class="field" list="cat-list" data-file-cat="${esc(c)}" value="${esc(map[c])}"></div>`).join(""):'<p class="text-sm text-slate-500">A planilha não tem categorias — escolha uma categoria padrão acima.</p>';
+  const ign=[...new Set(parsed.records.flatMap(r=>r.ignoredColumns))];
+  $("ignored").textContent=ign.length?"Colunas não utilizadas (ignoradas): "+ign.join(", ")+".":"";
+  $("step-options").classList.remove("hidden");
+  refresh();
+}
+function refresh(){
+  if(!parsed||!parsed.records.length)return;
+  plan=planImport(parsed.records,existing,currentOpts());
+  const s=plan.summary,chip=(t,c)=>`<span class="chip ${c}">${t}</span>`;
+  $("summary").innerHTML=[chip(`${s.total} linhas`,"bg-slate-100 text-slate-700"),chip(`${s.new} novos`,"bg-emerald-100 text-emerald-800"),chip(`${s.update} a atualizar`,"bg-sky-100 text-sky-800"),chip(`${s.same} sem mudança`,"bg-slate-100 text-slate-600"),s.skip?chip(`${s.skip} ignorados`,"bg-slate-100 text-slate-600"):"",s.error?chip(`${s.error} com erro`,"bg-rose-100 text-rose-800"):"",s.noPrice?chip(`${s.noPrice} sem preço`,"bg-amber-100 text-amber-800"):""].join("");
+  renderRows();
+  const writable=s.new+s.update;
+  $("go").disabled=busy||writable===0;
+  $("go").innerHTML=`<i class="fa-solid fa-cloud-arrow-up mr-1"></i> Importar ${writable} produto(s)`;
+  $("step-preview").classList.remove("hidden");
+}
+const STATUS={new:["Novo","bg-emerald-100 text-emerald-800"],update:["Atualizar","bg-sky-100 text-sky-800"],same:["Sem mudança","bg-slate-100 text-slate-600"],skip:["Ignorado","bg-slate-100 text-slate-600"],error:["Erro","bg-rose-100 text-rose-800"]};
+function renderRows(){
+  const f=$("flt").value;
+  const list=plan.items.filter(i=>f==="all"||i.status===f||(f==="warn"&&i.issues.some(x=>x.level==="warn")));
+  const part=list.slice(0,SHOW_LIMIT);
+  $("shown").textContent=list.length>SHOW_LIMIT?`mostrando ${SHOW_LIMIT} de ${list.length}`:`${list.length} linha(s)`;
+  $("rows").innerHTML=part.map(i=>{const [t,c]=STATUS[i.status];const notes=i.issues.map(x=>`<div class="${x.level==="error"?"text-rose-700":x.level==="warn"?"text-amber-700":"text-slate-500"}">${esc(x.text)}</div>`).join("")+(i.status==="update"?`<div class="text-slate-500">Muda: ${esc(i.changes.join(", "))}</div>`:"");
+    return `<tr><td>${esc(i.row)}</td><td class="font-mono">${esc(i.sku)}</td><td>${esc(i.name)}</td><td>${esc(i.category)}</td><td>${i.doc.priceWholesale>0?brl(i.doc.priceWholesale):"—"}</td><td><span class="chip ${c}">${t}</span></td><td>${notes}</td></tr>`}).join("");
+}
+
+// ---------- gravar ----------
+async function runImport(){
+  if(busy||!plan)return;
+  const todo=plan.items.filter(i=>i.status==="new"||i.status==="update");
+  if(!todo.length)return;
+  const errors=plan.summary.error;
+  if(!confirm(`Importar ${todo.length} produto(s)?${errors?`\n${errors} linha(s) com erro serão ignoradas.`:""}\n\nRecomendado: ter baixado o backup antes.`))return;
+  busy=true;$("go").disabled=true;
+  try{
+    // 1) categorias novas
+    const have=new Set(categories.map(c=>String(c.name).trim().toUpperCase()));
+    const newCats=[...new Set(todo.map(i=>i.category).filter(Boolean))].filter(n=>!have.has(n.toUpperCase()));
+    let pos=categories.reduce((m,c)=>Math.max(m,Number(c.position)||0),0);
+    const slug=t=>String(t).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+    for(const name of newCats){pos+=1;await addDoc(collection(db,"categories"),{name,slug:slug(name),active:true,position:pos,imageUrl:"",createdAt:serverTimestamp(),updatedAt:serverTimestamp()})}
+    // 2) produtos em lotes
+    const now=new Date().toISOString();let done=0,created=0,updated=0;
+    for(let i=0;i<todo.length;i+=400){
+      const batch=writeBatch(db);
+      for(const it of todo.slice(i,i+400)){
+        if(it.status==="new"){batch.set(doc(db,"products",docIdForSku(it.sku)),{...it.doc,createdAt:now,updatedAt:now,importedAt:now});created++}
+        else{const patch={};it.changes.forEach(k=>{patch[k]=it.doc[k]});patch.updatedAt=now;batch.update(doc(db,"products",it.id),patch);updated++}
+      }
+      await batch.commit();done=Math.min(todo.length,i+400);$("progress").textContent=`Gravando… ${done} de ${todo.length}`;
+    }
+    await logAdmin("products",`Importou produtos de ${fileName}: ${created} novos, ${updated} atualizados${newCats.length?`, ${newCats.length} categoria(s) criada(s)`:""}`,{imported:{created,updated,categories:newCats.length}});
+    $("step-done").classList.remove("hidden");
+    $("done-text").textContent=`${created} produto(s) criado(s), ${updated} atualizado(s)${newCats.length?`, ${newCats.length} categoria(s) nova(s)`:""}. Veja em Produtos.`;
+    $("progress").textContent="";
+    await loadExisting();buildParsed();
+  }catch(err){
+    console.error(err);
+    $("progress").textContent="Falha ao gravar: "+(err.code==="permission-denied"?"sem permissão (confira as regras do Firestore e o login).":"tente novamente. Produtos já gravados não são duplicados ao repetir.");
+  }finally{busy=false;if(plan)$("go").disabled=(plan.summary.new+plan.summary.update)===0}
+}
+
+// ---------- eventos ----------
+$("file").addEventListener("change",e=>{handleFile(e.target.files[0]);e.target.value=""});
+["dragenter","dragover"].forEach(ev=>$("drop").addEventListener(ev,e=>{e.preventDefault();$("drop").classList.add("over")}));
+["dragleave","drop"].forEach(ev=>$("drop").addEventListener(ev,e=>{e.preventDefault();$("drop").classList.remove("over")}));
+$("drop").addEventListener("drop",e=>handleFile(e.dataTransfer.files[0]));
+["opt-mode","opt-defcat","opt-cost"].forEach(id=>$(id).addEventListener("input",refresh));
+$("opt-group").addEventListener("change",()=>{buildParsed()});
+$("cat-map").addEventListener("input",refresh);
+$("flt").addEventListener("change",()=>plan&&renderRows());
+$("go").addEventListener("click",runImport);
+$("dl-template").addEventListener("click",()=>download("modelo-importacao-luary.csv","﻿SKU;Nome;Categoria;Marca;Cor;Material;Custo Base (R$);Peso Base (g);Margem Alvo (%);Estoque Inicial;Banho;Comprimento (cm);Largura (cm);Altura (cm);Atributos (chave:valor; chave:valor);Diferenciais (separados por ;);Status;Preço Atacado;Preço Varejo;Descrição\nCH-0001;Chaveiro São Bento;Chaveiros;Luary;Dourado;Metal folheado;12,50;15;40;25;\"Ouro; Prata\";8;5;1;Tema: Religioso;\"Acabamento resistente; Tamanho compacto\";Ativo;19,90;29,90;Chaveiro folheado de São Bento.\n","text/csv;charset=utf-8"));
+$("dl-backup").addEventListener("click",async()=>{try{await loadExisting();download(`backup-produtos-${new Date().toISOString().slice(0,10)}.json`,JSON.stringify(existing,null,2),"application/json")}catch(e){alert("Não foi possível gerar o backup.")}});
+$("login-form").addEventListener("submit",async e=>{e.preventDefault();$("login-error").textContent="";try{await signInWithEmailAndPassword(auth,$("email").value,$("password").value)}catch{$("login-error").textContent="Erro ao entrar: verifique suas credenciais."}});
+onAuthStateChanged(auth,async user=>{$("login").classList.toggle("hidden",!!user);$("app").classList.toggle("hidden",!user);if(user){try{await loadExisting()}catch(e){console.error(e);alert("Sem permissão para ler os produtos. Confira as regras do Firestore.")}}});
+</script>
+</body>
+</html>

@@ -4,9 +4,10 @@
 <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Imagens da CDN | Luary Admin</title>
+<link rel="icon" type="image/webp" href="public/images/luary-logo-instagram.webp">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>.field{box-sizing:border-box;display:block;width:100%;margin-top:.35rem;border:1px solid #cbd5e1;border-radius:.6rem;padding:.65rem;background:#fff}.btn{border-radius:.6rem;padding:.65rem 1rem;font-weight:600;font-size:.875rem}.btn-dark{background:#0f172a;color:#fff}.btn-dark:disabled{background:#cbd5e1;cursor:not-allowed}.btn-line{border:1px solid #cbd5e1;background:#fff}.tile{position:relative;border:1px solid #e2e8f0;border-radius:.8rem;background:#fff;padding:.5rem}.tile img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:.5rem;background:#f1f5f9}.tile .mini{display:grid;place-items:center;width:1.9rem;height:1.9rem;border-radius:.45rem;background:#f1f5f9;color:#334155}.tile .mini:hover{background:#e2e8f0}.tile .mini:disabled{opacity:.35;cursor:not-allowed}.pill{position:absolute;top:.75rem;left:.75rem;border-radius:.4rem;padding:.1rem .45rem;font-size:.7rem;font-weight:700;color:#fff;background:#0f172a}</style>
+<style>.field{box-sizing:border-box;display:block;width:100%;margin-top:.35rem;border:1px solid #cbd5e1;border-radius:.6rem;padding:.65rem;background:#fff}.btn{border-radius:.6rem;padding:.65rem 1rem;font-weight:600;font-size:.875rem}.btn-dark{background:#0f172a;color:#fff}.btn-dark:disabled{background:#cbd5e1;cursor:not-allowed}.btn-line{border:1px solid #cbd5e1;background:#fff}.tile{position:relative;border:1px solid #e2e8f0;border-radius:.8rem;background:#fff;padding:.5rem}.tile img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:.5rem;background:#fff;border:1px solid #f1f5f9}.tile .mini{display:grid;place-items:center;width:1.9rem;height:1.9rem;border-radius:.45rem;background:#f1f5f9;color:#334155}.tile .mini:hover{background:#e2e8f0}.tile .mini:disabled{opacity:.35;cursor:not-allowed}.pill{position:absolute;top:.75rem;left:.75rem;border-radius:.4rem;padding:.1rem .45rem;font-size:.7rem;font-weight:700;color:#fff;background:#0f172a}</style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
 <header class="bg-slate-900 text-white"><div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
@@ -35,7 +36,7 @@
 
 <section id="workspace" class="bg-white rounded-2xl border p-5 hidden">
 <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><h2 class="font-bold text-lg"><i class="fa-solid fa-images mr-2"></i>3. Imagens <span id="count" class="text-sm font-normal text-slate-500"></span></h2>
-<div class="flex flex-wrap items-center gap-3 text-sm"><label>Qualidade WebP <input id="quality" type="number" min="0.5" max="1" step="0.05" value="0.85" class="w-20 border rounded-lg p-1.5"></label><label>Lado máx. (px) <input id="maxside" type="number" min="400" max="4000" step="100" value="1600" class="w-24 border rounded-lg p-1.5"></label></div></div>
+<div class="flex flex-wrap items-center gap-3 text-sm"><label>Qualidade WebP <input id="quality" type="number" min="0.5" max="1" step="0.05" value="0.85" class="w-20 border rounded-lg p-1.5"></label><label>Lado máx. (px) <input id="maxside" type="number" min="400" max="4000" step="100" value="1200" class="w-24 border rounded-lg p-1.5"></label><label>Enquadramento <select id="frame" class="border rounded-lg p-1.5"><option value="auto">Automático (1:1 em produtos e categorias)</option><option value="fit">Quadrado 1:1 — foto inteira, com fundo</option><option value="crop">Quadrado 1:1 — cortar no centro</option><option value="original">Manter proporção original</option></select></label><label>Fundo <input id="frame-bg" type="color" value="#ffffff" class="h-8 w-10 border rounded"></label><button id="square-existing" type="button" class="btn border" title="Reprocessa as fotos já publicadas desta pasta para 1:1 (só vale após publicar)"><i class="fa-solid fa-crop-simple mr-1"></i>Padronizar fotos atuais em 1:1</button></div></div>
 <div id="drop" class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center bg-slate-50 cursor-pointer hover:border-indigo-500"><i class="fa-solid fa-cloud-arrow-up text-3xl text-indigo-500"></i><p class="text-sm font-medium mt-2">Arraste as fotos ou clique para selecionar</p><p class="text-xs text-slate-500 mt-1">JPG, PNG ou WebP · convertidas para WebP automaticamente</p><input id="files" type="file" accept="image/*" multiple class="hidden"></div>
 <p id="hint" class="text-xs text-slate-500 mt-2"></p>
 <div id="grid" class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3"></div>
@@ -47,7 +48,7 @@
 import {initializeApp,getApps} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import {getFirestore,collection,getDocs,updateDoc,doc,query,where,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import {CDN,FOLDERS,MAX_PRODUCT_IMAGES,GitHubCDN,cdnUrl,normalizeSku,isValidSku,numberedName,slugFileName,toWebP} from "./cdn-lib.js";
+import {CDN,FOLDERS,MAX_PRODUCT_IMAGES,GitHubCDN,cdnUrl,normalizeSku,isValidSku,numberedName,slugFileName,toWebP,imageSize,SQUARE_FOLDERS} from "./cdn-lib.js";
 
 const firebaseConfig={apiKey:"AIzaSyCanlMwdfuD9gmVt62nJYYetj4K2-BfWEc",authDomain:"luary-system.firebaseapp.com",projectId:"luary-system",storageBucket:"luary-system.firebasestorage.app",messagingSenderId:"996287172742",appId:"1:996287172742:web:4ff8c22a01cabe4015c107"};
 const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
@@ -123,13 +124,26 @@ async function addFiles(fileList){
   for(const file of files){
     if(isProducts()&&items.length>=MAX_PRODUCT_IMAGES){errors.push(`Limite de ${MAX_PRODUCT_IMAGES} fotos: "${file.name}" ignorada.`);continue}
     $("result").textContent=`Convertendo ${file.name}…`;
-    try{const blob=await toWebP(file,{quality:q,maxSide});const preview=URL.createObjectURL(blob);
+    try{const blob=await toWebP(file,{quality:q,maxSide,...frameOpts()});const preview=URL.createObjectURL(blob);
       if(isProducts())items.push({id:++uid,name:"",blob,preview,isNew:true});
       else{const name=slugFileName(file.name),at=items.findIndex(x=>x.name===name);const item={id:++uid,name,blob,preview,isNew:true};if(at>=0)items[at]=item;else items.push(item)}}
     catch(err){errors.push(err.message)}}
   $("result").textContent=errors.join(" ");if(errors.length)$("result").className="text-sm mt-3 text-rose-600";
   if(files.length)markDirty();
 }
+function frameOpts(){let frame=$("frame").value;if(frame==="auto")frame=SQUARE_FOLDERS.includes($("folder").value)?"fit":"original";return{frame,background:$("frame-bg").value}}
+$("square-existing").addEventListener("click",async()=>{
+  const old=items.filter(it=>!it.isNew);if(!old.length){$("result").textContent="Não há fotos publicadas nesta pasta para padronizar.";return}
+  const o=frameOpts();if(o.frame==="original")o.frame="fit";
+  const q=Math.min(1,Math.max(.5,Number($("quality").value)||.85)),maxSide=Math.min(4000,Math.max(400,Number($("maxside").value)||1200));
+  let changed=0;const errors=[];$("result").className="text-sm mt-3 text-slate-600";
+  for(const it of old){$("result").textContent=`Verificando ${it.name}…`;
+    try{const res=await fetch(it.preview);if(!res.ok)throw new Error("não foi possível baixar "+it.name);const src=await res.blob();const{width,height}=await imageSize(src);
+      if(width===height)continue;
+      const blob=await toWebP(src,{quality:q,maxSide,...o});Object.assign(it,{blob,sha:undefined,preview:URL.createObjectURL(blob),isNew:true});changed++}
+    catch(err){errors.push(err.message)}}
+  $("result").textContent=changed?`${changed} foto(s) ajustada(s) para 1:1. Clique em Publicar na CDN para aplicar.`+(errors.length?" Erros: "+errors.join("; "):""):(errors.length?errors.join("; "):"Todas as fotos desta pasta já são quadradas (1:1).");
+  if(errors.length)$("result").className="text-sm mt-3 text-rose-600";if(changed)markDirty()});
 $("drop").addEventListener("click",()=>$("files").click());
 $("drop").addEventListener("dragover",e=>{e.preventDefault()});
 $("drop").addEventListener("drop",e=>{e.preventDefault();addFiles(e.dataTransfer.files)});

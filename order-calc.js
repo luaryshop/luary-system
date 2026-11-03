@@ -9,7 +9,9 @@
 import { round2, unitPrice, norm } from "./pricing.js";
 
 export const ORDER_STATUSES = ["Novo", "Aprovado", "Entregue", "Cancelado"];
-export const PAYMENT_METHODS = ["PIX", "Cartão", "A combinar"];
+export const PAYMENT_METHODS = ["PIX", "Cartão"];
+// Pedidos antigos podem ter "A combinar"; o painel ainda exibe/edita esse valor, mas a loja não oferece mais.
+export const ALL_PAYMENT_LABELS = [...PAYMENT_METHODS, "A combinar"];
 
 const num = (v) => { const n = Number(v); return Number.isFinite(n) ? n : 0; };
 
@@ -21,6 +23,9 @@ export function normalizeSettings(raw = {}) {
     freeShippingFrom: Math.max(0, num(raw.freeShippingFrom)),
     minOrder: Math.max(0, num(raw.minOrder)),
     defaultMinQty: Math.max(1, Math.min(999, Math.trunc(num(raw.defaultMinQty)) || 1)),
+    payments: (() => { const on = PAYMENT_METHODS.filter((m) => (m === "PIX" ? raw.payPix : raw.payCard) !== false); return on.length ? on : ["PIX"]; })(),
+    cardNote: String(raw.cardNote || "").trim().slice(0, 120),
+    cardInstallments: Math.max(0, Math.min(24, Math.trunc(num(raw.cardInstallments)) || 0)),
     storeName: String(raw.companyName || "Luary Shop").trim() || "Luary Shop",
     whatsapp: normalizePhone(raw.whatsapp),
   };
@@ -33,10 +38,42 @@ export function normalizePhone(raw) {
   return digits;
 }
 
+// ---- Variações (Banho, Inicial, Cor...) ----
+// O produto guarda `variations: { "Banho": ["Ouro","Prata"], "Inicial": ["A","B"] }` (grupos que o cliente escolhe).
+// No carrinho cada combinação é uma linha: chave = `${productId}::Banho=Ouro|Inicial=A` (grupos em ordem alfabética).
+const tok = (s) => String(s ?? "").replace(/[|=:]/g, " ").replace(/\s+/g, " ").trim().slice(0, 40);
+export function productVariations(product) {
+  const raw = product?.variations, out = {};
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return out;
+  for (const [g, opts] of Object.entries(raw)) {
+    const name = tok(g); const list = [...new Set((Array.isArray(opts) ? opts : []).map(tok).filter(Boolean))].slice(0, 60);
+    if (name && list.length) out[name] = list;
+  }
+  return out;
+}
+export const cartKey = (id, choice = {}) => {
+  const parts = Object.keys(choice || {}).sort((a, b) => a.localeCompare(b, "pt-BR")).map((g) => `${tok(g)}=${tok(choice[g])}`).filter((p) => !p.startsWith("=") && !p.endsWith("="));
+  return parts.length ? `${id}::${parts.join("|")}` : String(id);
+};
+export function splitCartKey(key) {
+  const s = String(key), i = s.indexOf("::");
+  if (i < 0) return { id: s, choice: {} };
+  const choice = {};
+  for (const part of s.slice(i + 2).split("|")) { const j = part.indexOf("="); if (j > 0) choice[part.slice(0, j)] = part.slice(j + 1); }
+  return { id: s.slice(0, i), choice };
+}
+export const variantLabel = (choice = {}) => Object.keys(choice).sort((a, b) => a.localeCompare(b, "pt-BR")).map((g) => `${g}: ${choice[g]}`).join(" · ");
+// Mantém só escolhas válidas. `complete` = todos os grupos do produto foram escolhidos.
+export function validChoice(product, choice = {}) {
+  const groups = productVariations(product), clean = {};
+  for (const [g, opts] of Object.entries(groups)) if (opts.includes(tok(choice[g]))) clean[g] = tok(choice[g]);
+  return { choice: clean, complete: Object.keys(groups).every((g) => clean[g] !== undefined) };
+}
+
 // Quantidade mínima por SKU (campo `minQty` do produto). Vazio/inválido = 1.
 export const productMinQty = (product) => Math.max(1, Math.min(999, Math.trunc(num(product?.minQty)) || 1));
 
-export function lineFromProduct(product, quantity, promos, { now } = {}) {
+export function lineFromProduct(product, quantity, promos, { now, choice = {} } = {}) {
   const minQty = productMinQty(product);
   const qty = Math.max(minQty, Math.min(999, Math.trunc(num(quantity)) || 1));
   const info = unitPrice(product, promos, now ? { now } : {});
@@ -45,6 +82,9 @@ export function lineFromProduct(product, quantity, promos, { now } = {}) {
   const img = images.map((i) => (typeof i === "string" ? i : i?.url || "")).find(Boolean) || "";
   return {
     productId: String(product.id ?? ""),
+    cartKey: cartKey(String(product.id ?? ""), choice),
+    choice,
+    variant: variantLabel(choice),
     sku: String(product.sku || product.reference || ""),
     name: String(product.name || "Peça Luary"),
     image: img,
@@ -59,7 +99,7 @@ export function lineFromProduct(product, quantity, promos, { now } = {}) {
 }
 
 // lines: resultado de lineFromProduct;  coupon: { code, name, discount } | null
-export function computeTotals({ lines, coupon = null, payment = "A combinar", settings = {} }) {
+export function computeTotals({ lines, coupon = null, payment = "Cartão", settings = {} }) {
   const s = normalizeSettings(settings);
   const pieces = lines.reduce((a, l) => a + l.qty, 0);
   const subtotalOriginal = round2(lines.reduce((a, l) => a + (l.priced ? l.unitOriginal * l.qty : 0), 0));
@@ -109,11 +149,32 @@ export function newOrderNumber(now = new Date(), rnd = Math.random) {
   return `LUA-${String(now.getFullYear()).slice(2)}${p(now.getMonth() + 1)}${p(now.getDate())}-${suffix}`;
 }
 
+// { method, installments?: {count, each} } — parcelas só existem no cartão.
+function paymentInfo(method, installments) {
+  const m = PAYMENT_METHODS.includes(method) ? method : "PIX";
+  const n = Math.trunc(num(installments?.count));
+  return m === "Cartão" && n > 1 ? { method: m, installments: n, installmentValue: round2(num(installments.each)) } : { method: m };
+}
+export function paymentText(payment = {}) {
+  const base = String(payment.method || "—");
+  return payment.installments > 1 ? `${base} — em até ${payment.installments}x de ${brl(payment.installmentValue)}` : base;
+}
+
+// Valor a pagar em cada forma habilitada (para o cliente escolher vendo o total).
+export function paymentQuotes({ lines, coupon = null, settings = {} }) {
+  const s = normalizeSettings(settings);
+  return s.payments.map((method) => {
+    const t = computeTotals({ lines, coupon, payment: method, settings });
+    const n = method === "Cartão" ? s.cardInstallments : 0;
+    return { method, total: t.total, pixDiscount: t.pixDiscount, pixPercent: t.pixPercent, shippingMode: t.shippingMode, installments: n > 1 ? { count: n, each: round2(t.total / n) } : null };
+  });
+}
+
 const clip = (v, n) => String(v ?? "").trim().slice(0, n);
 const safeHttps = (u) => { try { return new URL(u).protocol === "https:" ? String(u) : ""; } catch { return ""; } };
 
 // Documento gravado em orders/{number}. (createdAt do servidor é acrescentado por quem grava.)
-export function buildOrder({ number, form, lines, totals, deliveryOptional = false, source = "site", now = new Date() }) {
+export function buildOrder({ number, form, lines, totals, deliveryOptional = false, source = "site", now = new Date(), installments = null }) {
   return {
     number, status: "Novo", source, createdAtIso: now.toISOString(),
     customer: { name: clip(form.name, 120), whatsapp: String(form.whatsapp ?? "").replace(/\D/g, "").slice(0, 15), city: clip(form.city, 80) },
@@ -122,10 +183,10 @@ export function buildOrder({ number, form, lines, totals, deliveryOptional = fal
       recipient: clip(form.recipient, 120), street: clip(form.street, 120), number: clip(form.number, 20),
       complement: clip(form.complement, 80), district: clip(form.district, 80), city: clip(form.deliveryCity, 80), state: clip(form.state, 2).toUpperCase(),
     },
-    payment: { method: PAYMENT_METHODS.includes(form.payment) ? form.payment : "A combinar" },
+    payment: paymentInfo(form.payment, installments),
     notes: clip(form.notes, 500),
     items: lines.map((l) => ({
-      productId: clip(l.productId, 60), sku: clip(l.sku, 40), name: clip(l.name, 140), image: safeHttps(l.image),
+      productId: clip(l.productId, 60), sku: clip(l.sku, 40), name: clip(l.variant ? `${l.name} — ${l.variant}` : l.name, 140), variant: clip(l.variant, 120), image: safeHttps(l.image),
       qty: l.qty, unitOriginal: l.unitOriginal, unitPrice: l.unitPrice, promoName: clip(l.promoName, 80), subtotal: l.subtotal,
     })),
     totals: {
@@ -169,7 +230,7 @@ export function buildWhatsappMessage(order, { storeName = "Luary Shop", saved = 
   if (t.pixDiscount > 0) tail.push(`*Desconto PIX (${t.pixPercent}%):* -${brl(t.pixDiscount)}`);
   if (t.extraDiscount > 0) tail.push(`*Desconto:* -${brl(t.extraDiscount)}`);
   tail.push(t.shippingMode === "tbd" ? "*Frete:* a combinar" : t.shipping === 0 ? "*Frete:* grátis" : `*Frete:* ${brl(t.shipping)}`);
-  tail.push(`*Total:* ${brl(t.total)}${t.shippingMode === "tbd" ? " + frete" : ""}`, `*Pagamento:* ${order.payment.method}`);
+  tail.push(`*Total:* ${brl(t.total)}${t.shippingMode === "tbd" ? " + frete" : ""}`, `*Pagamento:* ${paymentText(order.payment)}`);
   if (order.notes) tail.push(`*Obs.:* ${order.notes}`);
   if (!saved) tail.push("", "_(Pedido enviado só por aqui: confirmem os valores no atendimento.)_");
 

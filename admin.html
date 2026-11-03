@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Administrativo - Luary</title>
+<link rel="icon" type="image/webp" href="public/images/luary-logo-instagram.webp">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome para Ícones -->
@@ -96,7 +97,8 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Categoria</label>
-                            <input type="text" id="prod-category" required placeholder="Ex: Anéis" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            <select id="prod-category" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white focus:ring-indigo-500 focus:border-indigo-500"><option value="">Carregando categorias…</option></select>
+                            <p class="mt-1 text-xs text-gray-500">Lista vinda de <a class="text-indigo-600 underline" href="content-admin.html">Central de conteúdo → Categorias</a>.</p>
                         </div>
                     </div>
 
@@ -115,6 +117,39 @@
                         <label class="block text-sm font-medium text-gray-700">Quantidade mínima por pedido (un.)</label>
                         <input type="number" min="1" max="999" step="1" id="prod-min-qty" placeholder="Padrão da empresa" class="mt-1 block w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                         <p class="mt-1 text-xs text-gray-500">Na loja, o cliente não consegue pedir menos que isso deste SKU. Deixe em branco para usar o mínimo padrão definido em Empresa e Identidade.</p>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-6 space-y-4">
+                        <h3 class="text-sm font-semibold text-gray-800">Detalhes do produto</h3>
+                        <label class="flex items-center gap-2 text-sm text-gray-700"><input type="checkbox" id="prod-active" checked class="h-4 w-4"> Visível na loja (desmarque para ocultar sem excluir)</label>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Descrição</label>
+                            <textarea id="prod-desc" rows="4" maxlength="2000" placeholder="Aparece na página do produto e nos marketplaces" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Atributos (chave: valor; chave: valor)</label>
+                                <input type="text" id="prod-attrs" maxlength="600" placeholder="Material: Metal folheado; Tema: Religioso" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Diferenciais (separados por ;)</label>
+                                <input type="text" id="prod-highlights" maxlength="800" placeholder="Acabamento resistente; Tamanho compacto" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+                            <label class="text-xs text-gray-600">Estoque (un.)<input type="number" min="0" step="1" id="prod-stock" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg"></label>
+                            <label class="text-xs text-gray-600">Custo (R$)<input type="number" min="0" step="0.01" id="prod-cost" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg"></label>
+                            <label class="text-xs text-gray-600">Peso (g)<input type="number" min="0" step="0.1" id="prod-weight" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg"></label>
+                            <label class="text-xs text-gray-600">Comprim. (cm)<input type="number" min="0" step="0.1" id="prod-len" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg"></label>
+                            <label class="text-xs text-gray-600">Largura (cm)<input type="number" min="0" step="0.1" id="prod-wid" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg"></label>
+                            <label class="text-xs text-gray-600">Altura (cm)<input type="number" min="0" step="0.1" id="prod-hei" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg"></label>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-sm font-semibold text-gray-800">Variações que o cliente escolhe</h3>
+                        <p class="text-xs text-gray-500 mt-1 mb-3">Marque as opções que existem para este produto (ex.: Banho → Ouro e Prata). O cliente precisa escolher uma opção de cada grupo marcado antes de adicionar ao pedido. Crie e edite os grupos em <a class="text-indigo-600 underline" href="content-admin.html">Central de conteúdo → Variações</a>.</p>
+                        <div id="prod-variations" class="space-y-3"><p class="text-xs text-gray-400">Carregando variações…</p></div>
                     </div>
 
                     <div class="grid grid-cols-1 gap-3">
@@ -189,6 +224,7 @@
         };
 
         import { publicProductImages, normalizeSku, isValidSku } from "./cdn-lib.js";
+        import { parseAttributes, formatAttributes, parseList } from "./import-core.js";
         const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
 
         const app = initializeApp(firebaseConfig);
@@ -211,6 +247,45 @@
         const cancelEditBtn = document.getElementById('cancel-edit-btn');
 
         let productsCache = [];
+        let categoriesCache = [], typesCache = [];
+        const numOrNull = (id) => { const v = document.getElementById(id).value; if (v === '') return null; const n = Number(v); return Number.isFinite(n) && n >= 0 ? n : null; };
+        const setNum = (id, v) => { document.getElementById(id).value = v === null || v === undefined ? '' : v; };
+
+        // Categorias: uma única lista (Central de conteúdo → Categorias). Categorias que só existem em produtos antigos também aparecem.
+        function fillCategorySelect(selected) {
+            const sel = document.getElementById('prod-category');
+            const names = [...categoriesCache].filter(c => c.active !== false).sort((a, b) => (Number(a.position) || 0) - (Number(b.position) || 0) || String(a.name).localeCompare(String(b.name), 'pt-BR')).map(c => String(c.name));
+            const known = new Set(names.map(n => n.trim().toUpperCase()));
+            const extra = [...new Set(productsCache.map(p => String(p.category || '').trim()).filter(c => c && !known.has(c.toUpperCase())))];
+            const keep = selected !== undefined ? selected : sel.value;
+            if (keep && !known.has(String(keep).trim().toUpperCase()) && !extra.includes(keep)) extra.push(keep);
+            sel.innerHTML = '<option value="">Selecione…</option>' + names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('') + extra.map(n => `<option value="${esc(n)}">${esc(n)} (não cadastrada)</option>`).join('');
+            sel.value = keep || '';
+        }
+        async function loadCategories() {
+            try { categoriesCache = (await getDocs(collection(db, 'categories'))).docs.map(d => ({ id: d.id, ...d.data() })); } catch (e) { console.error('Categorias:', e); categoriesCache = []; }
+            fillCategorySelect();
+        }
+
+        // Variações: grupos vindos de Central de conteúdo → Variações (+ grupos que o produto já tem)
+        function renderVariationPicker(current = {}) {
+            const box = document.getElementById('prod-variations');
+            const groups = new Map();
+            typesCache.filter(t => t.active !== false).forEach(t => groups.set(t.name, [...(t.values || [])]));
+            Object.entries(current || {}).forEach(([g, vals]) => { const list = groups.get(g) || []; (vals || []).forEach(v => { if (!list.includes(v)) list.push(v); }); groups.set(g, list); });
+            if (!groups.size) { box.innerHTML = '<p class="text-xs text-gray-400">Nenhum grupo de variação cadastrado ainda.</p>'; return; }
+            box.innerHTML = [...groups].map(([g, vals]) => `<fieldset class="rounded-lg border border-gray-200 p-3"><legend class="px-1 text-sm font-medium text-gray-700">${esc(g)}</legend><div class="flex flex-wrap gap-2">${vals.map(v => `<label class="inline-flex items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm"><input type="checkbox" class="var-opt" data-group="${esc(g)}" data-value="${esc(v)}" ${((current || {})[g] || []).includes(v) ? 'checked' : ''}> ${esc(v)}</label>`).join('')}</div></fieldset>`).join('');
+        }
+        async function loadVariationTypes() {
+            try { typesCache = (await getDocs(collection(db, 'variationTypes'))).docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (Number(a.position) || 0) - (Number(b.position) || 0) || String(a.name).localeCompare(String(b.name), 'pt-BR')); } catch (e) { console.error('Variações:', e); typesCache = []; }
+            renderVariationPicker();
+        }
+        function readVariations() {
+            const out = {};
+            document.querySelectorAll('#prod-variations .var-opt:checked').forEach(i => { (out[i.dataset.group] = out[i.dataset.group] || []).push(i.dataset.value); });
+            return out;
+        }
+        function resetExtraFields() { document.getElementById('prod-active').checked = true; renderVariationPicker(); }
 
         async function loadAdminProducts() {
             try {
@@ -233,11 +308,11 @@
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <img src="${esc(mainImage)}" class="h-12 w-12 object-cover rounded-lg border border-gray-200" alt="${esc(product.sku)}">
+                            <img src="${esc(mainImage)}" class="h-12 w-12 object-contain bg-white rounded-lg border border-gray-200" alt="${esc(product.sku)}">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm font-bold text-gray-900">${esc(product.sku)}</div><div class="text-xs text-gray-400">${(product.images||[]).length} foto(s)</div>
-                            <div class="text-sm text-gray-500 truncate max-w-xs">${esc(product.name)}</div>
+                            <div class="text-sm text-gray-500 truncate max-w-xs">${esc(product.name)}</div>${product.active === false ? '<span class="mt-1 inline-block rounded bg-slate-200 px-2 py-0.5 text-xs text-slate-600">Oculto na loja</span>' : ''}${product.stock !== undefined && product.stock !== null ? `<span class="ml-1 text-xs text-gray-400">Estoque: ${esc(product.stock)}</span>` : ''}${Object.keys(product.variations || {}).length ? `<div class="text-xs text-indigo-500">${esc(Object.entries(product.variations).map(([g, v]) => g + ": " + v.join("/")).join(" · "))}</div>` : ''}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${esc(product.category)}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -263,7 +338,8 @@
                 loginScreen.classList.add('hidden');
                 adminPanel.classList.remove('hidden');
                 userEmailDisplay.textContent = user.email;
-                loadAdminProducts();
+                loadAdminProducts().then(loadCategories);
+                loadVariationTypes();
             } else {
                 adminPanel.classList.add('hidden');
                 loginScreen.classList.remove('hidden');
@@ -301,12 +377,19 @@
             editingDocIdInput.value = product.id;
             document.getElementById('prod-sku').value = product.sku;
             document.getElementById('prod-name').value = product.name;
-            document.getElementById('prod-category').value = product.category;
+            fillCategorySelect(product.category);
             document.getElementById('prod-price-wholesale').value = product.priceWholesale;
             document.getElementById('prod-price-retail').value = product.priceRetail;
             document.getElementById('prod-min-qty').value = parseInt(product.minQty, 10) > 0 ? parseInt(product.minQty, 10) : '';
             document.getElementById('prod-seo-title').value = product.seoTitle || '';
             document.getElementById('prod-seo-desc').value = product.seoDescription || '';
+            document.getElementById('prod-active').checked = product.active !== false;
+            document.getElementById('prod-desc').value = product.description || '';
+            document.getElementById('prod-attrs').value = formatAttributes(product.attributes);
+            document.getElementById('prod-highlights').value = (product.highlights || []).join('; ');
+            setNum('prod-stock', product.stock); setNum('prod-cost', product.cost); setNum('prod-weight', product.weightG);
+            setNum('prod-len', product.lengthCm); setNum('prod-wid', product.widthCm); setNum('prod-hei', product.heightCm);
+            renderVariationPicker(product.variations);
 
             formTitle.innerHTML = `<i class="fa-solid fa-pen-to-square mr-2 text-indigo-600"></i>Editar Produto: ${product.sku}`;
             submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-2"></i>Atualizar Produto';
@@ -316,6 +399,7 @@
 
         cancelEditBtn.addEventListener('click', () => {
             productForm.reset();
+            resetExtraFields();
             editingDocIdInput.value = '';
             formTitle.innerHTML = `<i class="fa-solid fa-box-open mr-2 text-indigo-600"></i>Novo Produto / Referência`;
             submitBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-2"></i>Salvar Produto no Firestore';
@@ -353,6 +437,15 @@
             const seoTitle = document.getElementById('prod-seo-title').value.trim().slice(0, 70);
             const seoDescription = document.getElementById('prod-seo-desc').value.trim().slice(0, 200);
             if (!isValidSku(sku)) return alert('Informe um SKU válido (letras, números e hífen).');
+            const extra = {
+                active: document.getElementById('prod-active').checked,
+                description: document.getElementById('prod-desc').value.trim().slice(0, 2000),
+                attributes: parseAttributes(document.getElementById('prod-attrs').value),
+                highlights: parseList(document.getElementById('prod-highlights').value),
+                stock: numOrNull('prod-stock') === null ? null : Math.trunc(numOrNull('prod-stock')), cost: numOrNull('prod-cost'), weightG: numOrNull('prod-weight'),
+                lengthCm: numOrNull('prod-len'), widthCm: numOrNull('prod-wid'), heightCm: numOrNull('prod-hei'),
+                variations: readVariations(),
+            };
 
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Salvando...';
@@ -371,18 +464,19 @@
                 if (docId) {
                     // Atualizar produto existente
                     await updateDoc(doc(db, "products", docId), {
-                        sku, name, category, priceWholesale, priceRetail, minQty, seoTitle, seoDescription, images: imageUrls
+                        sku, name, category, priceWholesale, priceRetail, minQty, seoTitle, seoDescription, images: imageUrls, ...extra
                     });
                     alert(`Produto ${sku} atualizado com sucesso!`);
                 } else {
                     // Criar novo produto
                     await addDoc(collection(db, "products"), {
-                        sku, name, category, priceWholesale, priceRetail, minQty, seoTitle, seoDescription, images: imageUrls, createdAt: new Date().toISOString()
+                        sku, name, category, priceWholesale, priceRetail, minQty, seoTitle, seoDescription, images: imageUrls, ...extra, createdAt: new Date().toISOString()
                     });
                     alert(`Produto ${sku} cadastrado com sucesso!`);
                 }
 
                 productForm.reset();
+                resetExtraFields();
                 editingDocIdInput.value = '';
                 formTitle.innerHTML = `<i class="fa-solid fa-box-open mr-2 text-indigo-600"></i>Novo Produto / Referência`;
                 submitBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-2"></i>Salvar Produto no Firestore';
