@@ -9,6 +9,12 @@
 .site-header.is-scrolled{background:rgba(251,249,244,.78);-webkit-backdrop-filter:saturate(1.5) blur(16px);backdrop-filter:saturate(1.5) blur(16px);box-shadow:0 10px 34px rgba(23,39,51,.08)}
 .site-header.is-hidden{transform:translate3d(0,-101%,0)}
 
+/* logo grande no topo; encolhe ao rolar para ganhar espaço */
+.brand-emblem,.brand-name,.header-inner{transition:width .4s cubic-bezier(.2,.7,.2,1),height .4s cubic-bezier(.2,.7,.2,1),font-size .4s,min-height .4s}
+.site-header.is-scrolled .brand-emblem{width:46px;height:46px}
+.site-header.is-scrolled .brand-name{font-size:34px}
+.site-header.is-scrolled .header-inner{min-height:72px}
+
 /* ---------- revelar ao rolar (escalonado) ---------- */
 @keyframes fx-up{from{opacity:0;transform:translate3d(0,34px,0) scale(.985);filter:blur(7px)}to{opacity:1;transform:none;filter:none}}
 .fx-reveal{opacity:0}
