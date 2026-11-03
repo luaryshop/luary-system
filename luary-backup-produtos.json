@@ -1,0 +1,3001 @@
+{
+ "format": "luary-backup",
+ "version": 1,
+ "createdAt": "2026-11-03T08:09:08.000Z",
+ "by": "importacao-planilha",
+ "collections": {
+  "products": [
+   {
+    "id": "CH-0002",
+    "data": {
+     "sku": "CH-0002",
+     "name": "CRUZ VAZADA 3D",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [
+      "https://cdn.jsdelivr.net/gh/luaryshop/luary-cdn@main/products/CH-0002/01.webp",
+      "https://cdn.jsdelivr.net/gh/luaryshop/luary-cdn@main/products/CH-0002/02.webp",
+      "https://cdn.jsdelivr.net/gh/luaryshop/luary-cdn@main/products/CH-0002/03.webp",
+      "https://cdn.jsdelivr.net/gh/luaryshop/luary-cdn@main/products/CH-0002/04.webp",
+      "https://cdn.jsdelivr.net/gh/luaryshop/luary-cdn@main/products/CH-0002/05.webp",
+      "https://cdn.jsdelivr.net/gh/luaryshop/luary-cdn@main/products/CH-0002/06.webp",
+      "https://cdn.jsdelivr.net/gh/luaryshop/luary-cdn@main/products/CH-0002/07.webp",
+      "https://cdn.jsdelivr.net/gh/luaryshop/luary-cdn@main/products/CH-0002/08.webp",
+      "https://cdn.jsdelivr.net/gh/luaryshop/luary-cdn@main/products/CH-0002/09.webp",
+      "https://cdn.jsdelivr.net/gh/luaryshop/luary-cdn@main/products/CH-0002/10.webp"
+     ],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0004",
+    "data": {
+     "sku": "CH-0004",
+     "name": "CRUZ PORTUGUESA C/ CRISTO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0005",
+    "data": {
+     "sku": "CH-0005",
+     "name": "CRUZ VAZADA",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0006",
+    "data": {
+     "sku": "CH-0006",
+     "name": "CRUZ VAZADA C/ CRISTO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0026",
+    "data": {
+     "sku": "CH-0026",
+     "name": "PINGENTE REDONDO C/ ESPÍRITO SANTO E RAIOS 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0030",
+    "data": {
+     "sku": "CH-0030",
+     "name": "PINGENTE OVAL VAZADO N. SRA. APARECIDA 20X16MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0139",
+    "data": {
+     "sku": "CH-0139",
+     "name": "CRUZ EGIPCIA 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0141",
+    "data": {
+     "sku": "CH-0141",
+     "name": "PLACA RET C/ CRUZ VAZADA 15X8MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0162",
+    "data": {
+     "sku": "CH-0162",
+     "name": "CRUZ C/ CRISTO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0163",
+    "data": {
+     "sku": "CH-0163",
+     "name": "CRUZ LISA",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0166",
+    "data": {
+     "sku": "CH-0166",
+     "name": "CRUZ VAZADA C/ FACE DE CRISTO 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0168",
+    "data": {
+     "sku": "CH-0168",
+     "name": "PINGENTE SÃO JORGE VAZADO 40MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0212",
+    "data": {
+     "sku": "CH-0212",
+     "name": "CRUZ SAGRADA",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0268",
+    "data": {
+     "sku": "CH-0268",
+     "name": "CRUZ PALITO 16MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0292",
+    "data": {
+     "sku": "CH-0292",
+     "name": "PLACA C/ CRUZ VAZADA 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0303",
+    "data": {
+     "sku": "CH-0303",
+     "name": "CORAÇAO DUPLO VAZADO 25X27MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0346",
+    "data": {
+     "sku": "CH-0346",
+     "name": "PINGENTE NOSSA SRA. DAS GRAÇAS 18MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0483",
+    "data": {
+     "sku": "CH-0483",
+     "name": "PINGENTE REDONDO COM ORAÇÃO PAI NOSSO 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0534",
+    "data": {
+     "sku": "CH-0534",
+     "name": "PINGENTE SÃO JORGE VAZADO 30MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0535",
+    "data": {
+     "sku": "CH-0535",
+     "name": "PINGENTE REDONDO COM ORAÇÃO PAI NOSSO 40MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0576",
+    "data": {
+     "sku": "CH-0576",
+     "name": "CRUZ C/ CRISTO BORDA DIAMANTADA",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0583",
+    "data": {
+     "sku": "CH-0583",
+     "name": "PINGENTE OVAL VAZADO N. SRA. APARECIDA 30X24MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0601",
+    "data": {
+     "sku": "CH-0601",
+     "name": "CRUZ SAGRADA C/ CRUZ LISA CENTRO C/ CRISTO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0602",
+    "data": {
+     "sku": "CH-0602",
+     "name": "CRUZ PONTAS ARREDONDADAS C/ CRISTO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0603",
+    "data": {
+     "sku": "CH-0603",
+     "name": "CRUZ SAGRADA VAZADA C/ DETALHE PICOTADO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0604",
+    "data": {
+     "sku": "CH-0604",
+     "name": "CRUZ RETICULADA C/ CRUZ LISA CENTRO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0605",
+    "data": {
+     "sku": "CH-0605",
+     "name": "CRUZ PORTUGUESA C/ CRISTO LISA DETALHE NAS PONTAS",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0607",
+    "data": {
+     "sku": "CH-0607",
+     "name": "CRUZ VAZADA C/ FACE DE CRISTO 35MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0611",
+    "data": {
+     "sku": "CH-0611",
+     "name": "PINGENTE CAVALO C/ FERRADURA 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0623",
+    "data": {
+     "sku": "CH-0623",
+     "name": "CRUZ PORTUGUESA C/ CRISTO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0626",
+    "data": {
+     "sku": "CH-0626",
+     "name": "CRUZ PORTUGUESA FACETADA",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0631",
+    "data": {
+     "sku": "CH-0631",
+     "name": "PINGENTE OVAL N. SRA. APARECIDA C/ FAIXA VAZADA 24X30MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0633",
+    "data": {
+     "sku": "CH-0633",
+     "name": "PINGENTE N. SRA. APARECIDA 30MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0639",
+    "data": {
+     "sku": "CH-0639",
+     "name": "PINGENTE CARA METADE BEST FRIENDS 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0655",
+    "data": {
+     "sku": "CH-0655",
+     "name": "CRUZ PORTUGUESA C/ CRISTO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0658",
+    "data": {
+     "sku": "CH-0658",
+     "name": "CRUZ C/ CORDA NO CENTRO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0659",
+    "data": {
+     "sku": "CH-0659",
+     "name": "CRUZ SAGRADA C/ CRUZ LISA CENTRO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0664",
+    "data": {
+     "sku": "CH-0664",
+     "name": "CRUZ PORTUGUESA C/ CRISTO PONTAS RETICULADAS",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0674",
+    "data": {
+     "sku": "CH-0674",
+     "name": "ESCUDO DA FÉ 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0675",
+    "data": {
+     "sku": "CH-0675",
+     "name": "ESCUDO DA FÉ 25MM VAZADO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0677",
+    "data": {
+     "sku": "CH-0677",
+     "name": "PINGENTE SÃO BENTO 35MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0678",
+    "data": {
+     "sku": "CH-0678",
+     "name": "CRUZ C/ ORAÇÃO DO PAI NOSSO E FACE DE CRISTO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0713",
+    "data": {
+     "sku": "CH-0713",
+     "name": "PINGENTE CAVALO C/ FERRADURA 35MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0715",
+    "data": {
+     "sku": "CH-0715",
+     "name": "PINGENTE REDONDO COM ORAÇÃO SÃO BENTO E SANTO 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0716",
+    "data": {
+     "sku": "CH-0716",
+     "name": "PINGENTE REDONDO COM ORAÇÃO E 10 MANDAMENTOS 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0717",
+    "data": {
+     "sku": "CH-0717",
+     "name": "PINGENTE REDONDO COM ORAÇÃO E AVE MARIA 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0718",
+    "data": {
+     "sku": "CH-0718",
+     "name": "PINGENTE REDONDO C/ ORAÇÃO E CRUZ NO MEIO 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0719",
+    "data": {
+     "sku": "CH-0719",
+     "name": "PINGENTE REDONDO COM ORAÇÃO E N. SRA. APARECIDA 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0720",
+    "data": {
+     "sku": "CH-0720",
+     "name": "PINGENTE REDONDO COM ORAÇÃO E ESPÍRITO SANTO 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0785",
+    "data": {
+     "sku": "CH-0785",
+     "name": "PINGENTE OVAL N. SRA. APARECIDA C/ BORDA FLORES 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0792",
+    "data": {
+     "sku": "CH-0792",
+     "name": "CRUZ RETICULADA VAZADA",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0817",
+    "data": {
+     "sku": "CH-0817",
+     "name": "CRUZ PONTAS RETICULADA C/ CRUZ DE SÃO BENTO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0830",
+    "data": {
+     "sku": "CH-0830",
+     "name": "PINGENTE REDONDO COM ORAÇÃO VINDE ESP. SANTO E ESPÍRITO SANTO 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0834",
+    "data": {
+     "sku": "CH-0834",
+     "name": "PINGENTE REDONDO BORDA DE FLORES C/ N. SRA. APARECIDA 25M",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0836",
+    "data": {
+     "sku": "CH-0836",
+     "name": "PINGENTE OVAL N. SRA. APARECIDA C/ BORDA FLORES 35MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0858",
+    "data": {
+     "sku": "CH-0858",
+     "name": "ESCUDO DA FÉ 35MM VAZADO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0863",
+    "data": {
+     "sku": "CH-0863",
+     "name": "ESCUDO DA FÉ 35MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0869",
+    "data": {
+     "sku": "CH-0869",
+     "name": "CRUZ C/ FÉ",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0877",
+    "data": {
+     "sku": "CH-0877",
+     "name": "PINGENTE CIFRÃO VAZADO 35MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0929",
+    "data": {
+     "sku": "CH-0929",
+     "name": "CRUZ MODERNA 28MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0930",
+    "data": {
+     "sku": "CH-0930",
+     "name": "CRUZ C/ ORAÇÃO DO PAI NOSSO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0931",
+    "data": {
+     "sku": "CH-0931",
+     "name": "CRUZ JESUS VAZADA",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0937",
+    "data": {
+     "sku": "CH-0937",
+     "name": "PINGENTE FACE DE CRISTO LÁGRIMA 15MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-0938",
+    "data": {
+     "sku": "CH-0938",
+     "name": "PINGENTE FACE DE CRISTO LÁGRIMA 23MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-1029",
+    "data": {
+     "sku": "CH-1029",
+     "name": "PINGENTE SÃO JORGE VAZADO 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-1334",
+    "data": {
+     "sku": "CH-1334",
+     "name": "Placa O Senhor É O Meu Pastor... 20mm",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-1335",
+    "data": {
+     "sku": "CH-1335",
+     "name": "Placa Tudo Posso Naquele Que Me Fortalece 20mm",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-1619",
+    "data": {
+     "sku": "CH-1619",
+     "name": "PINGENTE ESPIRITO SANTO ESTAMPADO 22MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-1788",
+    "data": {
+     "sku": "CH-1788",
+     "name": "PINGENTE FACE DE CRISTO LÁGRIMA 36MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-1863",
+    "data": {
+     "sku": "CH-1863",
+     "name": "PINGENTE SÃO BENTO 15MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-1864",
+    "data": {
+     "sku": "CH-1864",
+     "name": "PINGENTE SÃO BENTO 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-1865",
+    "data": {
+     "sku": "CH-1865",
+     "name": "PINGENTE SÃO BENTO 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-1879",
+    "data": {
+     "sku": "CH-1879",
+     "name": "PINGENTE REDONDO N. SRA. DE FÁTIMA 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-1908",
+    "data": {
+     "sku": "CH-1908",
+     "name": "PINGENTE OVAL N. SRA. DE FÁTIMA 15X11MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-1909",
+    "data": {
+     "sku": "CH-1909",
+     "name": "PINGENTE OVAL N. SRA. DE FÁTIMA 20X14MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-1932",
+    "data": {
+     "sku": "CH-1932",
+     "name": "PINGENTE N. SRA. APARECIDA 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-1981",
+    "data": {
+     "sku": "CH-1981",
+     "name": "PINGENTE REDONDO 12MM C/ ESPIRITO SANTO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2026",
+    "data": {
+     "sku": "CH-2026",
+     "name": "PINGENTE FACE DE CRISTO GRANDE 40MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2104",
+    "data": {
+     "sku": "CH-2104",
+     "name": "PINGENTE ESPIRITO SANTO ESTAMPADO 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2127",
+    "data": {
+     "sku": "CH-2127",
+     "name": "PINGENTE TERÇO C/ N. SRA. APARECIDA VAZADA 27MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2133",
+    "data": {
+     "sku": "CH-2133",
+     "name": "CRUZ ESTAMPADA C/ CRISTO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2135",
+    "data": {
+     "sku": "CH-2135",
+     "name": "PINGENTE REDONDO COM ORAÇÃO PAI NOSSO 15MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2142",
+    "data": {
+     "sku": "CH-2142",
+     "name": "PINGENTE N. SRA. APARECIDA 12MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2172",
+    "data": {
+     "sku": "CH-2172",
+     "name": "CORAÇÃO VAZADO C/ N. SRA. APARECIDA 16MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2299",
+    "data": {
+     "sku": "CH-2299",
+     "name": "PLACA DIAMANTADA N.S. APARECIDA 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2302",
+    "data": {
+     "sku": "CH-2302",
+     "name": "PINGENTE FACE DE CAVALO 35MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2303",
+    "data": {
+     "sku": "CH-2303",
+     "name": "MEDALHA RISCADA C/ FACE DE CAVALO 40MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2304",
+    "data": {
+     "sku": "CH-2304",
+     "name": "MEDALHA RISCADA C/ FACE DE CAVALO 15MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2306",
+    "data": {
+     "sku": "CH-2306",
+     "name": "PINGENTE GOTA C/ N. SRA. APARECIDA 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2339",
+    "data": {
+     "sku": "CH-2339",
+     "name": "PINGENTE FERRADURA C/ CASAL CAWBOY 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2341",
+    "data": {
+     "sku": "CH-2341",
+     "name": "PINGENTE FERRADURA C/ CHAPÉU CAWBOY 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2343",
+    "data": {
+     "sku": "CH-2343",
+     "name": "PINGENTE FERRADURA C/ CASAL CAWBOY 35MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2345",
+    "data": {
+     "sku": "CH-2345",
+     "name": "PINGENTE FERRADURA C/ CHAPÉU CAWBOY 35MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2349",
+    "data": {
+     "sku": "CH-2349",
+     "name": "PINGENTE FACE DE CAVALO 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2389",
+    "data": {
+     "sku": "CH-2389",
+     "name": "PINGENTE FERRADURA C/ CASAL CAWBOY 13MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2390",
+    "data": {
+     "sku": "CH-2390",
+     "name": "PINGENTE FERRADURA C/ CHAPÉU CAWBOY 13MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2486",
+    "data": {
+     "sku": "CH-2486",
+     "name": "PINGENTE MÃO DE FÁTIMA VAZADA 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2508",
+    "data": {
+     "sku": "CH-2508",
+     "name": "PINGENTE CAVALO C/ FERRADURA 18MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2515",
+    "data": {
+     "sku": "CH-2515",
+     "name": "PINGENTE CAVALO C/ FERRADURA 13MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2589",
+    "data": {
+     "sku": "CH-2589",
+     "name": "PINGENTE REDONDO C/ N. SRA. APARECIDA RETICULADA 15MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2590",
+    "data": {
+     "sku": "CH-2590",
+     "name": "PINGENTE REDONDO C/ CRUZ RETICULADA 15MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2630",
+    "data": {
+     "sku": "CH-2630",
+     "name": "PINGENTE REDONDO COM ORAÇÃO VINDE ESP. SANTO E ESPÍRITO SANTO 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2656",
+    "data": {
+     "sku": "CH-2656",
+     "name": "PINGENTE OVAL 20X14 C/ ESPÍRITO SANTO E DIZERES",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2692",
+    "data": {
+     "sku": "CH-2692",
+     "name": "MEDALHA RISCADA C/ FACE DE CAVALO 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2735",
+    "data": {
+     "sku": "CH-2735",
+     "name": "PINGENTE REDONDO C/ ESPÍRITO SANTO RAIOS E DIZERES 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2799",
+    "data": {
+     "sku": "CH-2799",
+     "name": "PINGENTE REDONDO BORDA CORAÇÃO C/ N. SRA. APARECIDA 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2805",
+    "data": {
+     "sku": "CH-2805",
+     "name": "PINGENTE REDONDO BORDA CORAÇÕES C/ ESPÍRITO SANTO VAZADO 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-2841",
+    "data": {
+     "sku": "CH-2841",
+     "name": "PINGENTE C/ ESPÍRITO SANTO RAIOS E DIZERES 25MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3210",
+    "data": {
+     "sku": "CH-3210",
+     "name": "PINGENTE ESPIRITO SANTO CENTRO C/ BORDA DIAMANTADA 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3260",
+    "data": {
+     "sku": "CH-3260",
+     "name": "PLACA CHANFRADA E DIAMANTADA C/ N. SRA. DAS GRAÇAS 15MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3263",
+    "data": {
+     "sku": "CH-3263",
+     "name": "PLACA CHANFRADA C/ CRUZ E DIAMANTADO 15MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3558",
+    "data": {
+     "sku": "CH-3558",
+     "name": "PINGENTE N. SRA. APARECIDA 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3708",
+    "data": {
+     "sku": "CH-3708",
+     "name": "PINGENTE OVAL N. SRA. APARECIDA C/ BORDA TORCIDA 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3733",
+    "data": {
+     "sku": "CH-3733",
+     "name": "PINGENTE OVAL VAZADO N. SRA. APARECIDA 16X13MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3744",
+    "data": {
+     "sku": "CH-3744",
+     "name": "PINGENTE REDONDO BORDA TORCIDA C/ ARVORE DA VIDA 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3782",
+    "data": {
+     "sku": "CH-3782",
+     "name": "PINGENTE N. SRA. APARECIDA VAZADA MANTO RETICULADO 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3808",
+    "data": {
+     "sku": "CH-3808",
+     "name": "PLACA ARREDONDADO COM CRUZ RETICULADA 20mm",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3809",
+    "data": {
+     "sku": "CH-3809",
+     "name": "PLACA ARREDONDADO COM ESPÍRITO SANTO RETICULADO 20mm",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3820",
+    "data": {
+     "sku": "CH-3820",
+     "name": "CRUZ RETICULADA C/ CRISTO BORDA LISA",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3823",
+    "data": {
+     "sku": "CH-3823",
+     "name": "CRUZ C/ LEÃO JUDÁ BORDA BOLINHAS",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3828",
+    "data": {
+     "sku": "CH-3828",
+     "name": "MEDALHA 20M VAZ C/ CRUZ (TUD POSSO NAQUELE...)",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3838",
+    "data": {
+     "sku": "CH-3838",
+     "name": "CRUZ PAI NOSSO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3840",
+    "data": {
+     "sku": "CH-3840",
+     "name": "CRUZ RETICULADA C/ BOLINHAS 22MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3879",
+    "data": {
+     "sku": "CH-3879",
+     "name": "CRUZ FÉ DEGRADÊ 21X18MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3880",
+    "data": {
+     "sku": "CH-3880",
+     "name": "MEDALHA VAZADA N. SRA. APARECIDA 20MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3884",
+    "data": {
+     "sku": "CH-3884",
+     "name": "CRUZ RETICULADA C/ JESUS (CORAÇÃO & CRUZ)BORDA LISA",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-3944",
+    "data": {
+     "sku": "CH-3944",
+     "name": "PINGENTE CRUZ C/ CRISTO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-4150",
+    "data": {
+     "sku": "CH-4150",
+     "name": "CRUZ LISA CENTRO ESTAMPADO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-4151",
+    "data": {
+     "sku": "CH-4151",
+     "name": "CRUZ LISA CENTRO DIAMANTADA",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-4152",
+    "data": {
+     "sku": "CH-4152",
+     "name": "CRUZ LISO BORDA BOLINHA",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-4153",
+    "data": {
+     "sku": "CH-4153",
+     "name": "CRUZ LISA C/ RETICULADO",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-4353",
+    "data": {
+     "sku": "CH-4353",
+     "name": "PINGENTE OVAL C/ N. SRA. DAS GRAÇAS BORDA DIAMANTADA 18MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-4355",
+    "data": {
+     "sku": "CH-4355",
+     "name": "PINGENTE OVAL C/ GUADALUPE BORDA DIAMANTADA 18MM",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "CH-5001",
+    "data": {
+     "sku": "CH-5001",
+     "name": "PLACA COM RAMO OLIVEIRA E VERSICULO MT21:22 20mm",
+     "category": "Chaveiro",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0001",
+    "data": {
+     "sku": "PF-0001",
+     "name": "Piercing Fake Duplo",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0002",
+    "data": {
+     "sku": "PF-0002",
+     "name": "Piercing Fake Olho",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0005",
+    "data": {
+     "sku": "PF-0005",
+     "name": "Piercing Fake Serpente",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0008",
+    "data": {
+     "sku": "PF-0008",
+     "name": "Piercing Fake Coração",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0009",
+    "data": {
+     "sku": "PF-0009",
+     "name": "Piercing Fake Especial",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0011",
+    "data": {
+     "sku": "PF-0011",
+     "name": "Piercing Fake Navete",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0012",
+    "data": {
+     "sku": "PF-0012",
+     "name": "Piercing Fake Escama",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0013",
+    "data": {
+     "sku": "PF-0013",
+     "name": "Piercing Parafuso",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0014",
+    "data": {
+     "sku": "PF-0014",
+     "name": "Piercing Fake Especial",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0015",
+    "data": {
+     "sku": "PF-0015",
+     "name": "Piercing Fake Coração",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0016",
+    "data": {
+     "sku": "PF-0016",
+     "name": "Piercing Fake Fases da Lua",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0017",
+    "data": {
+     "sku": "PF-0017",
+     "name": "Piercing Fake Escama 1 Furo",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0018",
+    "data": {
+     "sku": "PF-0018",
+     "name": "Piercing Fake Liso",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0019",
+    "data": {
+     "sku": "PF-0019",
+     "name": "Piercing Fake Olho",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   },
+   {
+    "id": "PF-0021",
+    "data": {
+     "sku": "PF-0021",
+     "name": "Piercing Fake Liso Pequeno",
+     "category": "Piercing",
+     "priceWholesale": null,
+     "priceRetail": null,
+     "minQty": 0,
+     "seoTitle": "",
+     "seoDescription": "",
+     "images": [],
+     "brand": "Luary",
+     "color": "Dourado",
+     "material": "Metal",
+     "plating": "Ouro",
+     "importSource": "planilha-modelo-importacao",
+     "createdAt": "2026-11-03T08:09:08.000Z"
+    }
+   }
+  ]
+ }
+}
