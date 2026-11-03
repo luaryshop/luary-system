@@ -38,7 +38,7 @@ p=await mk(DB(),'content-admin.html');await p.click('[data-tab=banners]');await 
 await p.click('[data-tab=backup]');await p.waitForTimeout(400);t('excluir registro entra no histórico',(await p.locator('#log-list').textContent()).includes('Excluiu'));await p.close();
 // tabela de produtos (delegação, sem handlers inline)
 p=await mk({products:{a:{sku:"X'),alert(1),('",name:'Cruz',category:'C',priceWholesale:5,priceRetail:9}}},'admin.html');
-t('admin: botões sem onclick inline',(await p.locator('#products-table-body [onclick]').count())===0&&(await p.locator('#products-table-body button[data-act]').count())===3);
+t('admin: botões sem onclick inline',(await p.locator('#products-table-body [onclick]').count())===0&&(await p.locator('#products-table-body button[data-act]').count())===4);
 await p.locator('#products-table-body [data-act=edit]').click();await p.waitForTimeout(200);t('editar preenche o formulário',(await p.inputValue('#prod-name'))==='Cruz');
 await p.locator('#products-table-body [data-act=delete]').click();await p.waitForTimeout(500);t('excluir remove o produto',Object.keys(await p.evaluate(()=>window.__DB.products||{})).length===0);
 t('admin sem erros JS',p.errs.length===0);await p.close();

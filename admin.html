@@ -321,6 +321,7 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                             <button type="button" data-act="images" data-sku="${esc(product.sku)}" class="text-emerald-700 hover:text-emerald-900 bg-emerald-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-images mr-1"></i>Imagens</button>
+                            <button type="button" data-act="toggle" data-id="${esc(product.id)}" class="${product.active === false ? 'text-emerald-700 bg-emerald-50 hover:text-emerald-900' : 'text-amber-700 bg-amber-50 hover:text-amber-900'} px-3 py-1.5 rounded-lg transition" title="${product.active === false ? 'Voltar a mostrar na loja' : 'Esconder da loja sem excluir'}"><i class="fa-solid ${product.active === false ? 'fa-play' : 'fa-pause'} mr-1"></i>${product.active === false ? 'Ativar' : 'Pausar'}</button>
                             <button type="button" data-act="edit" data-id="${esc(product.id)}" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-pen-to-square mr-1"></i>Editar</button>
                             <button type="button" data-act="delete" data-id="${esc(product.id)}" class="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-trash mr-1"></i>Excluir</button>
                         </td>
@@ -367,9 +368,23 @@
             const b = e.target.closest('button[data-act]');
             if (!b) return;
             if (b.dataset.act === 'images') window.open('cdn.html?sku=' + encodeURIComponent(b.dataset.sku), '_blank', 'noopener');
+            if (b.dataset.act === 'toggle') window.toggleProduct(b.dataset.id);
             if (b.dataset.act === 'edit') window.editProduct(b.dataset.id);
             if (b.dataset.act === 'delete') window.deleteProduct(b.dataset.id);
         });
+        window.toggleProduct = async (id) => {
+            const p = productsCache.find(x => x.id === id);
+            if (!p) return;
+            const next = p.active === false; // pausado → ativa; ativo → pausa
+            try {
+                await updateDoc(doc(db, "products", id), { active: next });
+                try { await addDoc(collection(db, "adminLogs"), { type: "products", summary: `${next ? "Ativou" : "Pausou"} o produto ${p.sku}`, user: auth.currentUser?.email || "", at: new Date().toISOString() }); } catch (e) { console.warn("Histórico não gravado.", e); }
+                loadAdminProducts();
+            } catch (error) {
+                console.error("Erro ao pausar/ativar:", error);
+                alert("Não foi possível alterar o produto.");
+            }
+        };
         window.editProduct = (id) => {
             const product = productsCache.find(p => p.id === id);
             if (!product) return;
