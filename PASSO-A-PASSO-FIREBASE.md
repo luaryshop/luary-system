@@ -114,3 +114,21 @@ npm run verify      # auditoria + checagem de arquivos + todos os testes
    - Coluna **Banho/Cor** com um valor (Ouro) vira atributo do produto; com vários (Ouro; Prata) vira variação escolhida pelo cliente.
    - Produtos sem preço entram com preço zero; ajuste em *Preços em massa*.
 4. Novos campos do produto: visível na loja (ativo), descrição, atributos, diferenciais, estoque, custo, peso e dimensões. Produto desmarcado como visível some da loja e do carrinho, sem ser excluído.
+
+## 12. Variações para o cliente escolher (versão 2026.11.03-f)
+
+- *Conteúdo do Site → Variações* oferece grupos prontos: **Banho** (Ouro, Prata, Níquel, Ródio, Ouro Rosé), **Inicial** (A–Z) e **Signo** (12 signos). Crie outros (Cor, Tamanho…) com um item por linha.
+- **Aplicar a vários produtos de uma vez** (mesma aba): escolha o grupo e as opções, depois todos os produtos, uma categoria ou uma lista de SKUs. Modos: *acrescentar*, *substituir* ou *remover o grupo*. Mostra quantos produtos serão alterados antes de aplicar.
+- No cadastro do produto cada grupo tem **Marcar todas / Limpar** e contador.
+- Na loja o cartão do produto mostra os grupos (com bolinhas de cor para os banhos) e, na página do produto, o cliente escolhe uma opção de cada grupo antes de adicionar. A escolha aparece no carrinho, no pedido e no WhatsApp.
+
+## 13. Efeitos modernos da vitrine (versão 2026.11.03-g)
+
+**Arquivos novos:** `fx.js` e `fx.css` (suba junto com os demais). Se eles faltarem, a loja funciona normalmente, só sem os efeitos.
+
+- **Banners:** transições (esmaecer, deslizar, cortina, zoom, desfoque), movimento da imagem (zoom aproximando/afastando, panorâmica), frase e botão animados sobre a imagem, setas, arrastar com o dedo, teclado ← →, bolinha com barra de progresso e pausa ao passar o mouse. Em *Conteúdo do Site → Banners* cada banner tem **Frase**, **Texto do botão**, **Movimento** e **Transição** (o padrão é Automático: varia a cada banner).
+- **Topo da página:** título com palavras subindo e brilho dourado; imagem de fundo com zoom lento.
+- **Ao rolar:** barra dourada de leitura, cabeçalho que vira vidro, some ao descer e volta ao subir, seções e produtos que aparecem escalonados.
+- **Produtos:** foto inclina em 3D com brilho que segue o mouse (só mouse); botões principais com leve efeito magnético.
+- **Carrinho:** ao adicionar, a foto voa até o botão "Meu pedido" e o contador pula.
+- **Controle:** *Empresa e identidade → Animações da vitrine*: Completas, Suaves ou Desligadas. Quem ativa "reduzir movimento" no aparelho nunca vê animações.

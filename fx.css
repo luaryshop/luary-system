@@ -1,0 +1,126 @@
+/* Efeitos modernos da vitrine — só CSS/JS leves (transform e opacity), sem bibliotecas.
+   Respeitam "reduzir movimento" do aparelho e a chave Empresa → Animações (data-fx="full|soft|off"). */
+
+/* ---------- barra de leitura no topo ---------- */
+.fx-progress{position:fixed;inset:0 0 auto 0;height:3px;z-index:120;pointer-events:none;transform-origin:0 50%;transform:scaleX(var(--p,0));background:linear-gradient(90deg,#b28a4b,#f0d899 55%,#b28a4b);box-shadow:0 0 10px rgba(178,138,75,.55)}
+
+/* ---------- cabeçalho: vidro ao rolar + some ao descer / volta ao subir ---------- */
+.site-header{transition:transform .5s cubic-bezier(.2,.7,.2,1),background-color .35s,box-shadow .35s}
+.site-header.is-scrolled{background:rgba(251,249,244,.78);-webkit-backdrop-filter:saturate(1.5) blur(16px);backdrop-filter:saturate(1.5) blur(16px);box-shadow:0 10px 34px rgba(23,39,51,.08)}
+.site-header.is-hidden{transform:translate3d(0,-101%,0)}
+
+/* ---------- revelar ao rolar (escalonado) ---------- */
+@keyframes fx-up{from{opacity:0;transform:translate3d(0,34px,0) scale(.985);filter:blur(7px)}to{opacity:1;transform:none;filter:none}}
+.fx-reveal{opacity:0}
+.fx-reveal.is-in{opacity:1;animation:fx-up .95s cubic-bezier(.2,.75,.2,1) backwards;animation-delay:var(--d,0ms)}
+
+/* ---------- hero: palavras que sobem + brilho dourado + zoom lento no fundo ---------- */
+@keyframes fx-word{to{transform:translate3d(0,0,0)}}
+.fx-word{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em}
+.fx-word>span{display:inline-block;transform:translate3d(0,112%,0);animation:fx-word 1s cubic-bezier(.16,.84,.24,1) forwards;animation-delay:calc(var(--i,0) * 75ms + 180ms)}
+@keyframes fx-shimmer{to{background-position:-200% 0}}
+.hero h1 em .fx-word>span{background:linear-gradient(105deg,#b28a4b 35%,#f3dc9f 50%,#b28a4b 65%) 0 0/200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:fx-word 1s cubic-bezier(.16,.84,.24,1) forwards,fx-shimmer 6s linear 1.4s infinite;animation-delay:calc(var(--i,0) * 75ms + 180ms),1.4s}
+@keyframes fx-kb-hero{from{transform:scale(1.02) translate3d(0,0,0)}to{transform:scale(1.13) translate3d(-1.4%,-1%,0)}}
+.hero:before{animation:fx-kb-hero 26s ease-in-out infinite alternate;will-change:transform}
+@keyframes fx-rise{from{opacity:0;transform:translate3d(0,18px,0)}to{opacity:1;transform:none}}
+.hero .eyebrow,.hero .hero-description,.hero .hero-actions,.hero .hero-signature{animation:fx-rise .9s cubic-bezier(.2,.75,.2,1) backwards}
+.hero .eyebrow{animation-delay:.05s}.hero .hero-description{animation-delay:.75s}.hero .hero-actions{animation-delay:.95s}.hero .hero-signature{animation-delay:1.15s}
+
+/* ---------- cartões de produto: inclinação 3D + brilho que segue o mouse ---------- */
+.product-photo{--rx:0deg;--ry:0deg}
+.fx-glare{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity .35s;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.55),rgba(255,255,255,0) 52%);mix-blend-mode:soft-light}
+.product-card:hover .fx-glare{opacity:1}
+html[data-fx="full"] .product-card:hover .product-photo{transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) scale(1.015);transition:transform .18s ease-out}
+html[data-fx="full"] .product-card .product-photo{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+
+/* ---------- botões magnéticos ---------- */
+.fx-magnet{transition:transform .25s cubic-bezier(.2,.7,.2,1)}
+.fx-magnet.is-pulled{transform:translate3d(var(--tx,0),var(--ty,0),0)}
+
+/* ---------- carrinho: foto voa até o botão + selo "pulando" ---------- */
+.fx-fly{position:fixed;z-index:300;margin:0;pointer-events:none;object-fit:cover;border-radius:12px;box-shadow:0 18px 40px rgba(23,39,51,.35);will-change:transform,opacity}
+@keyframes fx-pop{0%{transform:scale(1)}35%{transform:scale(1.55)}70%{transform:scale(.92)}100%{transform:scale(1)}}
+.fx-pop{animation:fx-pop .55s cubic-bezier(.3,1.4,.5,1)}
+@keyframes fx-ring{from{box-shadow:0 0 0 0 rgba(178,138,75,.55)}to{box-shadow:0 0 0 16px rgba(178,138,75,0)}}
+.fx-ring{animation:fx-ring .8s ease-out}
+
+/* =====================  CARROSSEL DE BANNERS  ===================== */
+.fx-stage .banner-track{display:block;position:relative;overflow:hidden;aspect-ratio:21/8;scroll-snap-type:none;touch-action:pan-y;border:1px solid var(--line);background:#e5e0d6}
+@media(max-width:700px){.fx-stage .banner-track{aspect-ratio:16/9}}
+.fx-stage .banner-slide{position:absolute;inset:0;aspect-ratio:auto;display:block;opacity:0;visibility:hidden;color:#fff;overflow:hidden}
+.fx-stage .banner-slide.is-active,.fx-stage .banner-slide.is-leaving{visibility:visible}
+.fx-stage .banner-slide.is-active{opacity:1;z-index:2}
+.fx-stage .banner-slide.is-leaving{z-index:1}
+.bn-media{position:absolute;inset:0;overflow:hidden;will-change:transform}
+.bn-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bn-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(15,26,34,.62) 0%,rgba(15,26,34,.28) 42%,rgba(15,26,34,0) 70%),linear-gradient(0deg,rgba(15,26,34,.28),rgba(15,26,34,0) 38%)}
+.bn-shade.is-empty{display:none}
+
+/* movimento da imagem (enquanto o slide está visível) */
+@keyframes bn-kb{from{transform:scale(1) translate3d(0,0,0)}to{transform:scale(1.14) translate3d(-2%,-1.4%,0)}}
+@keyframes bn-zoomout{from{transform:scale(1.18)}to{transform:scale(1)}}
+@keyframes bn-pan{from{transform:scale(1.1) translate3d(-3.2%,0,0)}to{transform:scale(1.1) translate3d(3.2%,0,0)}}
+.banner-slide.is-active[data-effect="kenburns"] .bn-media,.banner-slide.is-leaving[data-effect="kenburns"] .bn-media{animation:bn-kb 9s ease-out both}
+.banner-slide.is-active[data-effect="zoom"] .bn-media,.banner-slide.is-leaving[data-effect="zoom"] .bn-media{animation:bn-zoomout 9s ease-out both}
+.banner-slide.is-active[data-effect="pan"] .bn-media,.banner-slide.is-leaving[data-effect="pan"] .bn-media{animation:bn-pan 9s ease-in-out both}
+
+/* entradas */
+@keyframes bn-in-fade{from{opacity:0}to{opacity:1}}
+@keyframes bn-in-slide{from{opacity:0;transform:translate3d(calc(9% * var(--dir,1)),0,0)}to{opacity:1;transform:none}}
+@keyframes bn-in-wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes bn-in-zoom{from{opacity:0;transform:scale(1.14)}to{opacity:1;transform:none}}
+@keyframes bn-in-blur{from{opacity:0;filter:blur(22px);transform:scale(1.05)}to{opacity:1;filter:none;transform:none}}
+.banner-slide.is-active[data-transition="fade"]{animation:bn-in-fade .9s ease both}
+.banner-slide.is-active[data-transition="slide"]{animation:bn-in-slide .95s cubic-bezier(.2,.75,.2,1) both}
+.banner-slide.is-active[data-transition="wipe"]{animation:bn-in-wipe 1.05s cubic-bezier(.77,0,.18,1) both}
+.banner-slide.is-active[data-transition="zoom"]{animation:bn-in-zoom 1s cubic-bezier(.2,.75,.2,1) both}
+.banner-slide.is-active[data-transition="blur"]{animation:bn-in-blur 1s ease both}
+/* saída: o anterior some por baixo */
+@keyframes bn-out{from{opacity:1}to{opacity:0}}
+@keyframes bn-out-slide{from{opacity:1;transform:none}to{opacity:0;transform:translate3d(calc(-6% * var(--dir,1)),0,0)}}
+.banner-slide.is-leaving{animation:bn-out 1s ease both}
+.banner-slide.is-leaving[data-leave="slide"]{animation:bn-out-slide .95s cubic-bezier(.2,.75,.2,1) both}
+
+/* legenda animada */
+.bn-caption{position:absolute;z-index:3;left:clamp(22px,5vw,72px);bottom:clamp(22px,10%,64px);max-width:min(560px,78%);display:grid;gap:14px;justify-items:start}
+.bn-caption h3{margin:0;font:500 clamp(24px,3.6vw,52px)/1.02 var(--serif,Georgia,serif);letter-spacing:-.02em;text-shadow:0 2px 22px rgba(0,0,0,.35)}
+.bn-cta{display:inline-flex;align-items:center;gap:10px;padding:11px 20px;border:1px solid rgba(255,255,255,.75);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);background:rgba(255,255,255,.14);color:#fff;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;transition:background .3s,color .3s,gap .3s}
+.bn-cta:after{content:'→';transition:transform .3s}
+a.banner-slide:hover .bn-cta{background:#fff;color:#23384a;gap:14px}
+a.banner-slide:hover .bn-cta:after{transform:translateX(3px)}
+.banner-slide.is-active .bn-caption h3{animation:fx-rise .9s cubic-bezier(.2,.75,.2,1) .35s backwards}
+.banner-slide.is-active .bn-caption .bn-cta{animation:fx-rise .9s cubic-bezier(.2,.75,.2,1) .6s backwards}
+
+/* setas */
+.bn-arrow{position:absolute;z-index:5;top:50%;width:46px;height:46px;margin-top:-23px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.6);border-radius:50%;background:rgba(15,26,34,.28);color:#fff;cursor:pointer;opacity:0;transform:scale(.85);transition:opacity .3s,transform .3s,background .3s;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.bn-prev{left:14px}.bn-next{right:14px}
+.banner-track:hover .bn-arrow,.bn-arrow:focus-visible{opacity:1;transform:none}
+.bn-arrow:hover{background:rgba(15,26,34,.55)}
+@media(hover:none){.bn-arrow{display:none}}
+
+/* bolinhas com barra de progresso */
+.fx-stage .banner-dots{align-items:center;gap:7px;margin-top:14px}
+.fx-stage .banner-dots button{position:relative;overflow:hidden;width:9px;height:9px;border-radius:999px;background:#cfc5b3;transition:width .5s cubic-bezier(.2,.75,.2,1)}
+.fx-stage .banner-dots button.active{width:44px;background:#cfc5b3}
+@keyframes bn-dot{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.fx-stage .banner-dots button.active:after{content:'';position:absolute;inset:0;border-radius:inherit;background:var(--navy,#23384a);transform-origin:0 50%;animation:bn-dot var(--bn-dur,6500ms) linear forwards}
+.fx-stage.is-paused .banner-dots button.active:after{animation-play-state:paused}
+.fx-stage.is-static .banner-dots button.active:after{animation:none;transform:none}
+
+/* ---------- chaves: suave / desligado / reduzir movimento ---------- */
+html[data-fx="soft"] .hero:before,html[data-fx="soft"] .banner-slide .bn-media,html[data-fx="soft"] .hero h1 em .fx-word>span{animation-name:none!important}
+html[data-fx="soft"] .fx-reveal.is-in{animation-name:fx-fade!important}
+@keyframes fx-fade{from{opacity:0}to{opacity:1}}
+html[data-fx="soft"] .banner-slide.is-active[data-transition]{animation:bn-in-fade .8s ease both!important}
+html[data-fx="off"] *,html[data-fx="off"] *:before,html[data-fx="off"] *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+html[data-fx="off"] .fx-reveal{opacity:1!important}
+html[data-fx="off"] .fx-word>span{transform:none!important}
+html[data-fx="off"] .hero h1 em .fx-word>span{-webkit-text-fill-color:currentColor;background:none;color:var(--gold,#b28a4b)}
+html[data-fx="off"] .fx-progress,html[data-fx="off"] .fx-glare,html[data-fx="off"] .bn-arrow{display:none}
+html[data-fx="off"] .site-header.is-hidden{transform:none}
+html[data-fx="off"] .fx-stage .banner-dots button.active:after{transform:none}
+html[data-fx="off"] .banner-slide.is-leaving{opacity:0}
+@media (prefers-reduced-motion:reduce){
+  .fx-progress,.fx-glare{display:none}
+  .fx-reveal{opacity:1}
+}

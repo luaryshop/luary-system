@@ -7,10 +7,11 @@ const mk=async(db,url)=>{const p=await (await b.newContext({viewport:{width:1280
  await p.addInitScript(`window.__DB=${JSON.stringify(db)}`);await p.goto(BASE+'/'+url);await p.waitForTimeout(900);return p};
 let p=await mk({products:{a:{sku:'CH-1',name:'Cruz',category:'C',priceWholesale:5,variations:{Banho:['Ouro','Prata']}}}},'content-admin.html');
 await p.click('[data-tab=variations]');
-t('sem grupos: oferece criar Banho e Inicial',await p.evaluate(()=>!document.getElementById('variation-seed').classList.contains('hidden')));
+t('sugestões Banho, Inicial e Signo oferecidas',await p.evaluate(()=>!document.getElementById('variation-seed').classList.contains('hidden')));
 await p.click('#variation-presets');await p.waitForTimeout(600);
 let types=Object.values(await p.evaluate(()=>window.__DB.variationTypes||{}));
-t('pré-cadastro cria Banho (5) e Inicial (A–Z)',types.length===2&&types.find(x=>x.name==='Banho').values.length===5&&types.find(x=>x.name==='Inicial').values.length===26);
+t('pré-cadastro cria Banho (5), Inicial (A–Z) e Signo (12)',types.length===3&&types.find(x=>x.name==='Banho').values.length===5&&types.find(x=>x.name==='Inicial').values.length===26&&types.find(x=>x.name==='Signo').values.length===12);
+t('depois de criar, a sugestão some',await p.evaluate(()=>document.getElementById('variation-seed').classList.contains('hidden')));
 t('lista mostra uso em produtos',(await p.locator('#variation-list').textContent()).includes('usado em 1 produto'));
 // novo grupo com valores soltos + duplicados
 await p.fill('#variation-form [name=name]','Tamanho');await p.fill('#variation-form [name=values]','P, M\nG\nm');await p.click('#variation-form .save-btn');await p.waitForTimeout(500);
@@ -33,6 +34,23 @@ t('excluir remove o grupo',!Object.values(await p.evaluate(()=>window.__DB.varia
 t('histórico das variações',Object.values(await p.evaluate(()=>window.__DB.adminLogs||{})).some(l=>l.type==='variationTypes'));
 t('painel sem erros JS',p.errs.length===0);console.log(p.errs);await p.close();
 
+// aplicar a vários produtos
+p=await mk({categories:{c1:{name:'Chaveiros',active:true}},variationTypes:{v:{name:'Banho',values:['Ouro','Prata','Níquel'],active:true}},products:{a:{sku:'CH-1',name:'A',category:'Chaveiros',priceWholesale:5},b:{sku:'CH-2',name:'B',category:'Chaveiros',priceWholesale:5,variations:{Banho:['Ouro'],Signo:['Áries']}},c:{sku:'AN-1',name:'C',category:'Anéis',priceWholesale:5}}},'content-admin.html');
+await p.click('[data-tab=variations]');
+await p.selectOption('#bulkvar-form [name=group]','Banho');await p.selectOption('#bulkvar-form [name=scope]','category');await p.selectOption('#bulkvar-form [name=category]','Chaveiros');
+await p.locator('#bulkvar-values input[value="Prata"]').check();await p.locator('#bulkvar-values input[value="Ouro"]').check();
+t('aviso mostra quantos produtos serão alterados',(await p.locator('#bulkvar-info').textContent()).includes('2 produto(s)')&&(await p.locator('#bulkvar-info').textContent()).includes('2 opção'));
+await p.click('#bulkvar-form .save-btn');await p.waitForTimeout(700);
+let db=await p.evaluate(()=>window.__DB.products);
+t('acrescentar: junta às existentes, mantém ordem do grupo e outros grupos; fora da categoria intacto',JSON.stringify(db.a.variations)==='{"Banho":["Ouro","Prata"]}'&&JSON.stringify(db.b.variations)==='{"Banho":["Ouro","Prata"],"Signo":["Áries"]}'&&!db.c.variations);
+await p.selectOption('#bulkvar-form [name=mode]','replace');await p.selectOption('#bulkvar-form [name=scope]','skus');await p.fill('#bulkvar-form [name=skus]','an-1, ch-2');
+await p.locator('#bulkvar-values input').evaluateAll(l=>l.forEach(i=>i.checked=false));await p.locator('#bulkvar-values input[value="Níquel"]').check();
+await p.click('#bulkvar-form .save-btn');await p.waitForTimeout(700);db=await p.evaluate(()=>window.__DB.products);
+t('substituir por lista de SKUs',JSON.stringify(db.c.variations)==='{"Banho":["Níquel"]}'&&JSON.stringify(db.b.variations.Banho)==='["Níquel"]'&&JSON.stringify(db.a.variations)==='{"Banho":["Ouro","Prata"]}');
+await p.selectOption('#bulkvar-form [name=mode]','remove');await p.selectOption('#bulkvar-form [name=scope]','all');await p.click('#bulkvar-form .save-btn');await p.waitForTimeout(700);db=await p.evaluate(()=>window.__DB.products);
+t('remover grupo de todos mantém os outros grupos',!db.a.variations.Banho&&!db.c.variations.Banho&&JSON.stringify(db.b.variations)==='{"Signo":["Áries"]}');
+t('histórico da aplicação em massa',Object.values(await p.evaluate(()=>window.__DB.adminLogs||{})).some(l=>l.bulkVariation));
+t('aplicação em massa sem erros JS',p.errs.length===0);console.log(p.errs);await p.close();
 // loja
 p=await mk({products:{a:{sku:'CH-1',name:'Cruz Visível',category:'C',priceWholesale:50,description:'Linha 1\nLinha 2',highlights:['Resistente','<b>x</b>'],attributes:{Material:'Metal',Tema:'Fé'}},h:{sku:'CH-2',name:'Cruz Oculta',category:'C',priceWholesale:50,active:false}},siteSettings:{public:{whatsapp:'19988207658'}}},'index.html');
 t('loja: produto oculto não aparece',(await p.locator('body').textContent()).includes('Cruz Visível')&&!(await p.locator('body').textContent()).includes('Cruz Oculta'));
@@ -40,6 +58,23 @@ await p.locator('article, .product-card').first().click();await p.waitForTimeout
 t('modal: diferenciais e atributos',(await p.locator('#modal-highlights li').count())===2&&(await p.locator('#modal-attrs dt').allTextContents()).join()==='Material,Tema'&&(await p.locator('#modal-highlights b').count())===0);
 t('modal: descrição mantém quebra de linha',(await p.locator('#modal-description').evaluate(e=>getComputedStyle(e).whiteSpace))==='pre-line');
 t('loja sem erros JS',p.errs.length===0);console.log(p.errs);await p.close();
+p=await mk({products:{a:{sku:'CH-1',name:'Cruz',category:'C',priceWholesale:50,variations:{Banho:['Ouro','Prata','Níquel'],Signo:['Áries','Touro','Gêmeos','Câncer','Leão','Virgem','Libra','Escorpião','Sagitário','Capricórnio','Aquário','Peixes']}}},siteSettings:{public:{whatsapp:'19988207658'}}},'index.html');
+t('card mostra grupos com bolinhas e contagem',(await p.locator('.card-var').count())===2&&(await p.locator('.card-var .sw').count())===3&&(await p.locator('.card-vars').textContent()).includes('12 opções'));
+await p.locator('.product-card').first().click();await p.waitForTimeout(300);
+t('modal: bolinhas só nas opções de banho',(await p.locator('#modal-variations .var-opt .sw').count())===3&&(await p.locator('.var-opts-many').count())===1);
+t('modal: legenda convida a escolher',(await p.locator('[data-picked="Banho"]').textContent()).includes('escolha'));
+await p.locator('#modal-variations input[value="Prata"]').check({force:true});
+t('modal: legenda mostra a opção escolhida',(await p.locator('[data-picked="Banho"]').textContent())==='Prata'&&(await p.locator('[data-picked="Banho"]').getAttribute('class')).includes('done'));
+await p.close();
+// editor de produto: marcar todas / limpar / contador
+p=await mk({categories:{c:{name:'C',active:true}},variationTypes:{v:{name:'Signo',values:['Áries','Touro','Gêmeos'],active:true},w:{name:'Banho',values:['Ouro','Prata'],active:true}},products:{}},'admin.html');
+t('editor: contador inicial',(await p.locator('[data-group-box="Signo"] .var-count').textContent()).includes('nenhuma'));
+await p.click('[data-vall="Signo"]');
+t('editor: Marcar todas',(await p.locator('.var-opt[data-group="Signo"]:checked').count())===3&&(await p.locator('[data-group-box="Signo"] .var-count').textContent()).includes('3 de 3'));
+await p.click('[data-vnone="Signo"]');
+t('editor: Limpar',(await p.locator('.var-opt:checked').count())===0);
+t('editor: bolinha de cor no banho Ouro',(await p.locator('[data-group-box="Banho"] i').count())===2);
+t('editor sem erros JS',p.errs.length===0);console.log(p.errs);await p.close();
 // carrinho: produto oculto some
 p=await mk({products:{h:{sku:'CH-2',name:'Cruz Oculta',category:'C',priceWholesale:50,active:false}},siteSettings:{public:{}}},'carrinho.html');
 await p.evaluate(()=>localStorage.setItem('luary-atacado-cart-v1',JSON.stringify({h:2})));await p.reload();await p.waitForTimeout(700);

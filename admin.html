@@ -225,6 +225,7 @@
 
         import { publicProductImages, normalizeSku, isValidSku } from "./cdn-lib.js";
         import { parseAttributes, formatAttributes, parseList } from "./import-core.js";
+        import { variationSwatch } from "./order-calc.js";
         const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
 
         const app = initializeApp(firebaseConfig);
@@ -274,8 +275,23 @@
             typesCache.filter(t => t.active !== false).forEach(t => groups.set(t.name, [...(t.values || [])]));
             Object.entries(current || {}).forEach(([g, vals]) => { const list = groups.get(g) || []; (vals || []).forEach(v => { if (!list.includes(v)) list.push(v); }); groups.set(g, list); });
             if (!groups.size) { box.innerHTML = '<p class="text-xs text-gray-400">Nenhum grupo de variação cadastrado ainda.</p>'; return; }
-            box.innerHTML = [...groups].map(([g, vals]) => `<fieldset class="rounded-lg border border-gray-200 p-3"><legend class="px-1 text-sm font-medium text-gray-700">${esc(g)}</legend><div class="flex flex-wrap gap-2">${vals.map(v => `<label class="inline-flex items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm"><input type="checkbox" class="var-opt" data-group="${esc(g)}" data-value="${esc(v)}" ${((current || {})[g] || []).includes(v) ? 'checked' : ''}> ${esc(v)}</label>`).join('')}</div></fieldset>`).join('');
+            box.innerHTML = [...groups].map(([g, vals]) => `<fieldset class="rounded-lg border border-gray-200 p-3" data-group-box="${esc(g)}"><legend class="px-1 text-sm font-medium text-gray-700">${esc(g)} <span class="var-count ml-1 text-xs font-normal text-gray-400"></span></legend><div class="mb-2 flex gap-3 text-xs"><button type="button" class="text-indigo-600 underline" data-vall="${esc(g)}">Marcar todas</button><button type="button" class="text-gray-500 underline" data-vnone="${esc(g)}">Limpar</button></div><div class="flex flex-wrap gap-2">${vals.map(v => { const c = variationSwatch(v); return `<label class="inline-flex cursor-pointer items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm hover:bg-gray-50"><input type="checkbox" class="var-opt" data-group="${esc(g)}" data-value="${esc(v)}" ${((current || {})[g] || []).includes(v) ? 'checked' : ''}> ${c ? `<i style="display:inline-block;width:12px;height:12px;border-radius:50%;border:1px solid rgba(0,0,0,.25);background:${c}"></i>` : ''}${esc(v)}</label>`; }).join('')}</div></fieldset>`).join('');
+            updateVarCounts();
         }
+        function updateVarCounts() {
+            document.querySelectorAll('#prod-variations [data-group-box]').forEach(fs => {
+                const all = fs.querySelectorAll('.var-opt'), on = fs.querySelectorAll('.var-opt:checked');
+                const el = fs.querySelector('.var-count'); el.textContent = on.length ? `${on.length} de ${all.length} marcadas` : 'nenhuma marcada — o cliente não verá este grupo';
+                el.className = 'var-count ml-1 text-xs font-normal ' + (on.length ? 'text-emerald-600' : 'text-gray-400');
+            });
+        }
+        document.getElementById('prod-variations').addEventListener('click', (e) => {
+            const b = e.target.closest('[data-vall],[data-vnone]'); if (!b) return;
+            const g = b.dataset.vall ?? b.dataset.vnone;
+            document.querySelectorAll('#prod-variations .var-opt').forEach(i => { if (i.dataset.group === g) i.checked = b.dataset.vall !== undefined; });
+            updateVarCounts();
+        });
+        document.getElementById('prod-variations').addEventListener('change', updateVarCounts);
         async function loadVariationTypes() {
             try { typesCache = (await getDocs(collection(db, 'variationTypes'))).docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (Number(a.position) || 0) - (Number(b.position) || 0) || String(a.name).localeCompare(String(b.name), 'pt-BR')); } catch (e) { console.error('Variações:', e); typesCache = []; }
             renderVariationPicker();

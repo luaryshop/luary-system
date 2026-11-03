@@ -10,7 +10,7 @@
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
 <header class="bg-slate-900 text-white"><div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
-<div><div class="text-xl font-bold">Luary <span class="text-amber-300">Studio</span></div><div class="text-xs text-slate-300">Configurações, vitrines e campanhas · <span id="app-version">versão 2026.11.03-e</span></div></div>
+<div><div class="text-xl font-bold">Luary <span class="text-amber-300">Studio</span></div><div class="text-xs text-slate-300">Configurações, vitrines e campanhas · <span id="app-version">versão 2026.11.03-g</span></div></div>
 <div class="flex gap-2"><a href="pedidos.html" class="rounded-lg bg-amber-400 px-3 py-2 text-sm font-semibold text-slate-900 hover:bg-amber-300"><i class="fa-solid fa-clipboard-list mr-1"></i> Pedidos</a><a href="admin.html" class="rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20"><i class="fa-solid fa-box mr-1"></i> Produtos</a><a href="importar.html" class="rounded-lg bg-white/10 px-3 py-2 text-sm hover:bg-white/20"><i class="fa-solid fa-file-import mr-1"></i> Importar</a><button id="logout" class="rounded-lg bg-rose-600 px-3 py-2 text-sm">Sair</button></div>
 </div></header>
 <main class="max-w-7xl mx-auto p-4 md:p-8">
@@ -44,6 +44,7 @@
 <div class="md:col-span-2 mt-2 border-t pt-4"><h3 class="font-semibold">Pedido, frete e pagamento</h3><p class="text-xs text-slate-500">Valem para o carrinho e o checkout da loja. Deixe em branco para desligar.</p></div>
 <label class="text-sm">Pedido mínimo (R$)<input name="minOrder" type="number" min="0" step="0.01" class="field" placeholder="Ex.: 150"></label>
 <label class="text-sm">Desconto no PIX (%)<input name="pixDiscount" type="number" min="0" max="90" step="0.1" class="field" placeholder="Ex.: 5"></label>
+<label class="md:col-span-2 text-sm">Animações da vitrine<select name="fxIntensity" class="field mt-1"><option value="full">Completas (banners em movimento, revelar ao rolar, 3D nos cartões)</option><option value="soft">Suaves (só transições discretas)</option><option value="off">Desligadas</option></select><span class="text-xs text-slate-500">Quem ativa “reduzir movimento” no aparelho nunca vê animações, independentemente desta opção.</span></label>
 <div class="md:col-span-2 rounded-xl border p-3"><div class="font-semibold text-sm mb-2">Formas de pagamento no checkout</div>
 <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm"><label class="flex items-center gap-2"><input name="payPix" type="checkbox" checked> PIX (usa o desconto acima)</label><label class="flex items-center gap-2"><input name="payCard" type="checkbox" checked> Cartão de crédito/débito</label></div>
 <div class="grid md:grid-cols-2 gap-3 mt-3"><label class="text-sm">Parcelamento no cartão (máx. parcelas)<input name="cardInstallments" type="number" min="0" max="24" step="1" class="field" placeholder="Ex.: 3 (em branco = não informar)"></label><label class="text-sm">Texto do cartão no checkout<input name="cardNote" maxlength="120" class="field" placeholder="Ex.: Até 3x sem juros — enviamos o link pelo WhatsApp"></label></div></div>
@@ -55,7 +56,7 @@
 <section id="panel-banners" class="panel hidden bg-white rounded-2xl shadow-sm border p-5">
 <h2 class="font-bold text-lg mb-1">Banners e imagens da home</h2><p class="text-sm text-slate-500 mb-4">Cadastre imagem, destino, texto alternativo, posição e status. As imagens devem estar publicadas na CDN.</p>
 <div id="banner-seed" class="hidden mb-5 rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-900"><b>A imagem principal do site ainda não está cadastrada aqui.</b> Ela aparece no topo da home porque está fixa no código (<code>public/images/luary-hero.webp</code>). Cadastre-a para poder trocar, desativar ou excluir.<div class="mt-3"><button type="button" id="seed-hero" class="save-btn">Cadastrar imagem atual do topo</button></div></div>
-<form id="banner-form" class="grid md:grid-cols-2 gap-3 mb-6"><input type="hidden" name="id"><input name="title" placeholder="Título interno" class="field" required><input name="imageUrl" placeholder="URL da imagem na CDN" class="field" required><input name="linkUrl" placeholder="Link de destino (opcional)" class="field"><input name="alt" placeholder="Texto alternativo" class="field"><input name="position" type="number" min="0" value="0" placeholder="Ordem" class="field"><label class="text-sm">Onde aparece<select name="placement" class="field"><option value="carousel">Carrossel de destaques (abaixo do topo)</option><option value="hero">Imagem de fundo do topo da home</option></select></label><label class="flex items-center gap-2 text-sm"><input name="active" type="checkbox" checked> Ativo</label><div class="md:col-span-2 flex gap-2"><button class="save-btn">Salvar banner</button><button type="button" class="cancel-btn" data-cancel="banner-form">Limpar</button></div></form><div id="banner-list" class="space-y-2"></div></section>
+<form id="banner-form" class="grid md:grid-cols-2 gap-3 mb-6"><input type="hidden" name="id"><input name="title" placeholder="Título interno" class="field" required><input name="imageUrl" placeholder="URL da imagem na CDN" class="field" required><input name="linkUrl" placeholder="Link de destino (opcional)" class="field"><input name="alt" placeholder="Texto alternativo" class="field"><input name="position" type="number" min="0" value="0" placeholder="Ordem" class="field"><input name="caption" maxlength="90" placeholder="Frase sobre a imagem (opcional)" class="field"><input name="buttonLabel" maxlength="26" placeholder="Texto do botão (precisa do link)" class="field"><label class="text-sm">Movimento da imagem<select name="effect" class="field"><option value="auto">Automático (varia a cada banner)</option><option value="kenburns">Zoom aproximando</option><option value="zoom">Zoom afastando</option><option value="pan">Panorâmica lateral</option><option value="none">Parado</option></select></label><label class="text-sm">Transição ao entrar<select name="transition" class="field"><option value="auto">Automática (varia a cada banner)</option><option value="fade">Esmaecer</option><option value="slide">Deslizar</option><option value="wipe">Cortina</option><option value="zoom">Zoom</option><option value="blur">Desfoque</option></select></label><label class="text-sm">Onde aparece<select name="placement" class="field"><option value="carousel">Carrossel de destaques (abaixo do topo)</option><option value="hero">Imagem de fundo do topo da home</option></select></label><label class="flex items-center gap-2 text-sm"><input name="active" type="checkbox" checked> Ativo</label><div class="md:col-span-2 flex gap-2"><button class="save-btn">Salvar banner</button><button type="button" class="cancel-btn" data-cancel="banner-form">Limpar</button></div></form><div id="banner-list" class="space-y-2"></div></section>
 <section id="panel-seo" class="panel hidden bg-white rounded-2xl shadow-sm border p-5">
 <h2 class="font-bold text-lg mb-1">SEO e redes sociais</h2><p class="text-sm text-slate-500 mb-4">Como a loja aparece no Google e quando o link é enviado no WhatsApp, Instagram ou Facebook. Título e descrição de cada categoria ficam na aba Categorias; os de cada produto, em Produtos.</p>
 <div class="grid lg:grid-cols-2 gap-6">
@@ -114,7 +115,17 @@
 <label class="text-sm block">Ordem de exibição<input name="position" type="number" value="0" class="field"></label>
 <label class="flex gap-2 text-sm"><input name="active" type="checkbox" checked> Disponível para escolher nos produtos</label>
 <div class="flex gap-2"><button class="save-btn">Salvar grupo</button><button type="button" class="cancel-btn" id="variation-clear">Limpar</button></div></form>
-<div><div id="variation-seed" class="hidden mb-4 rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm">Nenhum grupo cadastrado ainda. <button type="button" id="variation-presets" class="ml-2 rounded-lg bg-amber-500 px-3 py-1.5 font-semibold text-white">Criar Banho e Inicial</button></div><div id="variation-list" class="space-y-2"></div></div></div></section>
+<div><div id="variation-seed" class="hidden mb-4 rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm"><span id="variation-seed-text"></span> <button type="button" id="variation-presets" class="ml-2 rounded-lg bg-amber-500 px-3 py-1.5 font-semibold text-white">Criar sugestões</button></div><div id="variation-list" class="space-y-2"></div></div></div>
+<div class="mt-8 border-t pt-6"><h3 class="font-semibold mb-1">Aplicar a vários produtos de uma vez</h3><p class="text-sm text-slate-500 mb-3">Escolha o grupo, as opções e quais produtos recebem. Ex.: Banho → Ouro, Prata e Níquel em toda a categoria Chaveiros.</p>
+<form id="bulkvar-form" class="grid md:grid-cols-3 gap-3">
+<label class="text-sm">Grupo<select name="group" class="field"><option value="">Selecione…</option></select></label>
+<label class="text-sm">Produtos<select name="scope" class="field"><option value="all">Todos os produtos</option><option value="category">De uma categoria</option><option value="skus">Lista de SKUs</option></select></label>
+<label class="text-sm">O que fazer<select name="mode" class="field"><option value="add">Acrescentar estas opções às que já existem</option><option value="replace">Substituir as opções do grupo</option><option value="remove">Remover o grupo dos produtos</option></select></label>
+<label class="text-sm bulkvar-cat hidden md:col-span-3">Categoria<select name="category" class="field"></select></label>
+<label class="text-sm bulkvar-skus hidden md:col-span-3">SKUs (separados por espaço, vírgula ou linha)<textarea name="skus" rows="3" class="field"></textarea></label>
+<div class="md:col-span-3 bulkvar-values"><span class="text-sm">Opções</span><div id="bulkvar-values" class="mt-1 flex flex-wrap gap-2"></div><div class="mt-2 flex gap-2 text-xs"><button type="button" class="cancel-btn" data-bv="all">Marcar todas</button><button type="button" class="cancel-btn" data-bv="none">Limpar</button></div></div>
+<div class="md:col-span-3 flex flex-wrap items-center gap-3"><button class="save-btn">Aplicar</button><span id="bulkvar-info" class="text-sm text-slate-600" role="status"></span></div></form></div>
+</section>
 <section id="panel-promotions" class="panel hidden bg-white rounded-2xl shadow-sm border p-5">
 <h2 class="font-bold text-lg mb-1">Promoções e cupons</h2><p class="text-sm text-slate-500 mb-4"><b>Automática:</b> o desconto aparece direto no preço do produto na vitrine (preço antigo riscado e selo de %). <b>Cupom:</b> o cliente digita o código no pedido; cupons nunca são exibidos publicamente.</p>
 <form id="promotion-form" class="grid md:grid-cols-3 gap-3 mb-3"><input type="hidden" name="id">
@@ -177,7 +188,7 @@ const forms={banners:"banner-form",marketplaces:"market-form",categories:"catego
 let cache={categories:[],products:[],promotions:[]};
 document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".panel").forEach(p=>p.classList.add("hidden"));$("panel-"+b.dataset.tab).classList.remove("hidden");document.querySelectorAll(".tab").forEach(x=>x.className="tab rounded-lg px-4 py-2 bg-white border");b.className="tab rounded-lg px-4 py-2 bg-slate-900 text-white"}));
 function formData(form){const fd=new FormData(form),o={};for(const [k,v] of fd.entries())o[k]=v;form.querySelectorAll('input[type="checkbox"]').forEach(x=>o[x.name]=x.checked);form.querySelectorAll('input[type="number"]').forEach(x=>{if(x.value!=="")o[x.name]=Number(x.value)});return o}
-function fillForm(form,obj){for(const el of form.elements){if(!el.name)continue;if(el.type==="checkbox")el.checked=obj[el.name]===undefined?el.defaultChecked:!!obj[el.name];else el.value=obj[el.name]??""}}
+function fillForm(form,obj){for(const el of form.elements){if(!el.name)continue;if(el.type==="checkbox")el.checked=obj[el.name]===undefined?el.defaultChecked:!!obj[el.name];else if(el.tagName==="SELECT"&&obj[el.name]===undefined){}else el.value=obj[el.name]??""}}
 function clearForm(id){$(id).reset();const h=$(id).querySelector('[name="id"]');if(h)h.value="";if($(id).elements.active)$(id).elements.active.checked=true}
 async function saveRecord(kind,formId){const f=$(formId),data=formData(f),id=data.id;delete data.id;data.updatedAt=serverTimestamp();if(id)await updateDoc(doc(db,collections[kind],id),data);else{data.createdAt=serverTimestamp();await addDoc(collection(db,collections[kind]),data)}await logAdmin(kind,`${id?"Editou":"Criou"} ${kind}: ${data.title||data.name||data.slug||""}`);clearForm(formId);await loadAll()}
 async function removeRecord(kind,id){if(kind==="categories"){const c=cache.categories.find(x=>x.id===id),n=c?productsOf(c.name).length:0;if(n){alert(`Há ${n} produto(s) nesta categoria. Mude a categoria deles (ou renomeie esta) antes de excluir.`);return}}if(!confirm("Excluir este registro? Esta ação não pode ser desfeita."))return;await deleteDoc(doc(db,collections[kind],id));await logAdmin(kind,`Excluiu ${kind} (${id})`);await loadAll()}
@@ -214,7 +225,7 @@ async function renameCategory(oldName,newName){
 document.addEventListener("click",e=>{if(e.target.closest("#cat-sync"))syncCategories().catch(err=>{console.error(err);alert("Não foi possível cadastrar as categorias.")})});
 
 // ===== Produtos (cache para escopo de promoções e reajuste de preços) =====
-async function loadProducts(){const snap=await getDocs(collection(db,"products"));cache.products=snap.docs.map(d=>({id:d.id,...d.data()}));fillCategoryOptions();renderBulkPreview();promoUi();renderCategories()}
+async function loadProducts(){const snap=await getDocs(collection(db,"products"));cache.products=snap.docs.map(d=>({id:d.id,...d.data()}));fillCategoryOptions();renderBulkPreview();promoUi();renderCategories();renderBulkVar()}
 function allCategoryNames(){return [...new Set([...cache.categories.map(c=>c.name),...cache.products.map(p=>p.category)].filter(Boolean).map(x=>String(x).trim()))].sort((a,b)=>a.localeCompare(b,"pt-BR"))}
 function fillCategoryOptions(){
   const names=allCategoryNames(),checked=new Set([...document.querySelectorAll("#promo-cats input:checked")].map(x=>x.value));
@@ -336,9 +347,11 @@ onAuthStateChanged(auth,async user=>{ $("login").classList.toggle("hidden",!!use
 // ===== Variações (Banho, Inicial...) — coleção variationTypes (só admin) =====
 let varTypes=[];
 const productsUsing=(group)=>cache.products.filter(p=>p.variations&&Array.isArray(p.variations[group])&&p.variations[group].length);
-function renderVariationTypes(){
+function renderVariationTypes(){try{renderBulkVar()}catch(e){}
   const rows=[...varTypes].sort((a,b)=>(Number(a.position)||0)-(Number(b.position)||0)||String(a.name).localeCompare(String(b.name),"pt-BR"));
-  $("variation-seed").classList.toggle("hidden",rows.length>0);
+  const missing=PRESET_VARIATION_TYPES.filter(p=>!varTypes.some(t=>String(t.name).toLowerCase()===p.name.toLowerCase()));
+  $("variation-seed").classList.toggle("hidden",!missing.length);
+  $("variation-seed-text").textContent=`Sugestões prontas ainda não criadas: ${missing.map(p=>`${p.name} (${p.values.length>12?"A–Z":p.values.length+" opções"})`).join(", ")}.`;
   $("variation-list").innerHTML=rows.length?rows.map(r=>{const n=productsUsing(r.name).length,vals=(r.values||[]);return `<div class="item"><div class="min-w-0"><b>${esc(r.name)}</b>${r.active===false?'<span class="ml-2 rounded bg-slate-200 px-2 py-0.5 text-xs text-slate-600">Oculto</span>':''}<small>${vals.length} opção(ões) · usado em ${n} produto(s)</small><div class="mt-1 flex flex-wrap gap-1">${vals.slice(0,40).map(v=>`<span class="rounded bg-slate-100 px-2 py-0.5 text-xs">${esc(v)}</span>`).join("")}${vals.length>40?`<span class="text-xs text-slate-400">+${vals.length-40}</span>`:""}</div></div><div class="flex gap-2"><button type="button" class="edit-btn" data-vact="edit" data-id="${esc(r.id)}">Editar</button><button type="button" class="del-btn" data-vact="delete" data-id="${esc(r.id)}">Excluir</button></div></div>`}).join(""):"";
 }
 async function loadVariationTypes(){const snap=await getDocs(collection(db,"variationTypes"));varTypes=snap.docs.map(d=>({id:d.id,...d.data()}));renderVariationTypes()}
@@ -361,5 +374,45 @@ $("variation-form").addEventListener("submit",async e=>{
 $("variation-list").addEventListener("click",async e=>{const b=e.target.closest("[data-vact]");if(!b)return;const t=varTypes.find(x=>x.id===b.dataset.id);if(!t)return;
   if(b.dataset.vact==="edit"){const f=$("variation-form").elements;f.id.value=t.id;f.oldName.value=t.name;f.name.value=t.name;f.values.value=(t.values||[]).join("\n");f.position.value=t.position??0;f.active.checked=t.active!==false;window.scrollTo({top:0,behavior:"smooth"})}
   else{const n=productsUsing(t.name).length;if(!confirm(n?`${n} produto(s) usam "${t.name}". Eles continuam com as opções já marcadas; só o grupo sai da lista de escolha. Excluir mesmo assim?`:`Excluir o grupo "${t.name}"?`))return;try{await deleteDoc(doc(db,"variationTypes",t.id));await logAdmin("variationTypes",`Excluiu variação ${t.name}`);await loadAll()}catch(err){console.error(err);alert("Não foi possível excluir.")}}});
-$("variation-presets").addEventListener("click",async()=>{try{for(const [i,p] of PRESET_VARIATION_TYPES.entries())if(!varTypes.some(t=>t.name===p.name))await addDoc(collection(db,"variationTypes"),{name:p.name,values:p.values,position:i,active:true,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});await logAdmin("variationTypes","Criou grupos Banho e Inicial");await loadAll()}catch(err){console.error(err);alert("Não foi possível criar os grupos.")}});
+$("variation-presets").addEventListener("click",async()=>{try{for(const [i,p] of PRESET_VARIATION_TYPES.entries())if(!varTypes.some(t=>String(t.name).toLowerCase()===p.name.toLowerCase()))await addDoc(collection(db,"variationTypes"),{name:p.name,values:p.values,position:i,active:true,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});await logAdmin("variationTypes","Criou grupos sugeridos (Banho, Inicial, Signo)");await loadAll()}catch(err){console.error(err);alert("Não foi possível criar os grupos.")}});
+
+// ===== Aplicar variações a vários produtos =====
+const bv=()=>$("bulkvar-form").elements;
+function bulkTargets(){const f=bv(),sc=f.scope.value;
+  if(sc==="category")return cache.products.filter(p=>f.category.value&&catKey(p.category)===catKey(f.category.value));
+  if(sc==="skus"){const set=new Set(parseSkus(f.skus.value));return cache.products.filter(p=>set.has(norm(p.sku)))}
+  return cache.products}
+function renderBulkVar(){
+  const f=bv(),cur=f.group.value,cat=f.category.value;
+  f.group.innerHTML='<option value="">Selecione…</option>'+varTypes.filter(t=>t.active!==false).map(t=>`<option value="${esc(t.name)}">${esc(t.name)}</option>`).join("");f.group.value=varTypes.some(t=>t.name===cur)?cur:"";
+  const cats=[...new Set([...cache.categories.map(c=>c.name),...cache.products.map(p=>p.category)].filter(Boolean).map(x=>String(x).trim()))].sort((a,b)=>a.localeCompare(b,"pt-BR"));
+  f.category.innerHTML='<option value="">Selecione…</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");f.category.value=cats.includes(cat)?cat:"";
+  const t=varTypes.find(x=>x.name===f.group.value),keep=new Set([...document.querySelectorAll("#bulkvar-values input:checked")].map(i=>i.value));
+  $("bulkvar-values").innerHTML=t?(t.values||[]).map(v=>`<label class="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-sm"><input type="checkbox" value="${esc(v)}" ${keep.has(v)?"checked":""}> ${esc(v)}</label>`).join(""):'<span class="text-xs text-slate-400">Escolha um grupo.</span>';
+  document.querySelector(".bulkvar-cat").classList.toggle("hidden",f.scope.value!=="category");document.querySelector(".bulkvar-skus").classList.toggle("hidden",f.scope.value!=="skus");
+  document.querySelector(".bulkvar-values").classList.toggle("hidden",f.mode.value==="remove");
+  updateBulkInfo()}
+function updateBulkInfo(){const f=bv(),n=bulkTargets().length,k=document.querySelectorAll("#bulkvar-values input:checked").length;
+  $("bulkvar-info").textContent=f.group.value?`${n} produto(s) serão alterados${f.mode.value==="remove"?"":` com ${k} opção(ões)`}.`:""}
+$("bulkvar-form").addEventListener("input",renderBulkVar);
+$("bulkvar-form").addEventListener("click",e=>{const b=e.target.closest("[data-bv]");if(!b)return;document.querySelectorAll("#bulkvar-values input").forEach(i=>i.checked=b.dataset.bv==="all");updateBulkInfo()});
+$("bulkvar-form").addEventListener("submit",async e=>{
+  e.preventDefault();const f=bv(),group=f.group.value,mode=f.mode.value;
+  const values=[...document.querySelectorAll("#bulkvar-values input:checked")].map(i=>i.value),targets=bulkTargets();
+  if(!group){alert("Escolha o grupo.");return}
+  if(mode!=="remove"&&!values.length){alert("Marque ao menos uma opção.");return}
+  if(f.scope.value==="category"&&!f.category.value){alert("Escolha a categoria.");return}
+  if(!targets.length){alert("Nenhum produto encontrado com esse filtro.");return}
+  if(!confirm(`${mode==="remove"?"Remover":"Aplicar"} "${group}" ${mode==="remove"?"de":"em"} ${targets.length} produto(s)?`))return;
+  try{
+    let changed=0;
+    for(let i=0;i<targets.length;i+=400){const b=writeBatch(db);
+      for(const p of targets.slice(i,i+400)){const v={...(p.variations||{})};
+        if(mode==="remove"){if(!(group in v))continue;delete v[group]}
+        else{const order=(varTypes.find(t=>t.name===group)?.values)||[];const merged=mode==="add"?[...new Set([...(v[group]||[]),...values])]:values;v[group]=[...merged].sort((a,b2)=>{const x=order.indexOf(a),y=order.indexOf(b2);return (x<0?999:x)-(y<0?999:y)})}
+        b.update(doc(db,"products",p.id),{variations:v});changed++}
+      await b.commit()}
+    await logAdmin("products",`${mode==="remove"?"Removeu":mode==="add"?"Acrescentou":"Definiu"} variação ${group} em ${changed} produto(s)`,{bulkVariation:{group,mode,count:changed}});
+    await loadAll();$("bulkvar-info").textContent=`Pronto: ${changed} produto(s) atualizado(s).`
+  }catch(err){console.error(err);alert("Não foi possível aplicar. Confira o login e as regras do Firestore.")}});
 </script></body></html>

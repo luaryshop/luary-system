@@ -40,9 +40,11 @@ export const parseList = (text) => [...new Set(String(text ?? "").split(/[;\n]+/
 export const variationValue = (s) => clean(String(s ?? "").replace(/[|=:]/g, " ")).slice(0, 40);
 export const parseValues = (text) => [...new Set(String(text ?? "").split(/[\n,;/]+/).map(variationValue).filter(Boolean))].slice(0, 60);
 export const LETTERS = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i));
+export const SIGNS = ["Áries", "Touro", "Gêmeos", "Câncer", "Leão", "Virgem", "Libra", "Escorpião", "Sagitário", "Capricórnio", "Aquário", "Peixes"];
 export const PRESET_VARIATION_TYPES = [
   { name: "Banho", values: ["Ouro", "Prata", "Níquel", "Ródio", "Ouro Rosé"] },
   { name: "Inicial", values: LETTERS },
+  { name: "Signo", values: SIGNS },
 ];
 
 // ---------- cabeçalhos ----------

@@ -51,6 +51,13 @@ export function productVariations(product) {
   }
   return out;
 }
+// Cor da bolinha para opções de banho/cor conhecidas (null = sem bolinha). Só dados fixos, nunca vem do banco.
+const SWATCHES = [[/\bouro ros|\brose\b|\brosa\b/, "#e0a58f"], [/\bouro\b|\bdourad[oa]s?\b|\bgold\b/, "#d4af37"], [/\bprata\b|\bpratead[oa]s?\b|\bsilver\b/, "#c4c7ce"], [/\bniquel\b|\brodio\b|\bgrafite cl/, "#b4b9c0"], [/\bgrafite\b|\bonix\b|\bpreto\b|\bnegro\b/, "#2b2e33"], [/\bcobre\b|\bbronze\b/, "#b87333"]];
+export function variationSwatch(value) {
+  const v = String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const hit = SWATCHES.find(([re]) => re.test(v));
+  return hit ? hit[1] : null;
+}
 export const cartKey = (id, choice = {}) => {
   const parts = Object.keys(choice || {}).sort((a, b) => a.localeCompare(b, "pt-BR")).map((g) => `${tok(g)}=${tok(choice[g])}`).filter((p) => !p.startsWith("=") && !p.endsWith("="));
   return parts.length ? `${id}::${parts.join("|")}` : String(id);
