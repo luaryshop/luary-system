@@ -132,3 +132,9 @@ npm run verify      # auditoria + checagem de arquivos + todos os testes
 - **Produtos:** foto inclina em 3D com brilho que segue o mouse (só mouse); botões principais com leve efeito magnético.
 - **Carrinho:** ao adicionar, a foto voa até o botão "Meu pedido" e o contador pula.
 - **Controle:** *Empresa e identidade → Animações da vitrine*: Completas, Suaves ou Desligadas. Quem ativa "reduzir movimento" no aparelho nunca vê animações.
+
+## 14. Modelo de planilha corrigido e planilha dos produtos atuais (versão 2026.11.04-h)
+
+Em `importar.html`:
+- **Baixar modelo (Excel .xlsx)** ou **Modelo em CSV**: colunas na ordem de preenchimento (SKU, Nome, Categoria, Preços, Estoque, Banho, Cor, Material, Marca, Descrição, Diferenciais, Atributos, Custo, Margem, Peso, Medidas, Status, Quantidade Mínima, Fotos, Variações). Os nomes das colunas não têm `;` nem parênteses, para o CSV não desalinhar. Vem com 2 linhas de exemplo (SKU `EXEMPLO-…`, ignoradas na importação) e uma aba de instruções.
+- **Baixar produtos atuais (Excel .xlsx)**: exporta todo o catálogo no mesmo formato do modelo, com uma coluna `Variação …` para cada grupo (Inicial, Signo…). Edite no Excel e envie de volta no mesmo importador: o que não mudou aparece como "sem mudança".

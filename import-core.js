@@ -64,6 +64,7 @@ const HEADERS = {
   description: ["descricao longa", "descricao"], shortDescription: ["descricao curta"],
   keywords: ["palavras chave", "keywords", "tags"],
   subcategory: ["subcategoria"],
+  minQty: ["quantidade minima", "qtd minima", "minimo por pedido"],
 };
 const LOOKUP = new Map(); for (const [field, names] of Object.entries(HEADERS)) for (const n of names) LOOKUP.set(n, field);
 export function fieldOf(header) {
@@ -73,6 +74,8 @@ export function fieldOf(header) {
   if (h.startsWith("atributos")) return "attributes";
   if (h.startsWith("diferenciais")) return "highlights";
   const photo = h.match(/^url foto (capa|\d+|lifestyle)$/); if (photo) return "photo";
+  if (/^fotos?( \d+)?$/.test(h)) return "photo";
+  if (h.startsWith("variacao ")) return "variation";
   return null;
 }
 // Linha {coluna: valor} → {campo: valor}; devolve também as colunas que não foram reconhecidas.
@@ -82,7 +85,8 @@ export function mapRow(row) {
     if (header.startsWith("__")) continue;
     const f = fieldOf(header);
     if (!f) { if (clean(header) && clean(value) !== "") ignored.push(clean(header)); continue; }
-    if (f === "photo") { out.photos.push(value); continue; }
+    if (f === "photo") { String(value ?? "").split(/[\s;]+/).filter(Boolean).forEach((u) => out.photos.push(u)); continue; }
+    if (f === "variation") { const g = variationValue(clean(header).replace(/^varia[cç][aã]o\s*[:\-–]?\s*/i, "")); if (g && clean(value) !== "") (out.variationCols ||= {})[g] = value; continue; }
     if (f === "subcategory") { if (clean(value) !== "") ignored.push(clean(header)); continue; }
     if (clean(value) !== "" && out[f] === undefined) out[f] = value;
   }
@@ -111,6 +115,7 @@ export function recordFromRow(row, rowNumber, opts = {}) {
     if (values.length > 1) variations[label] = values; else attributes[label] = clean(raw).slice(0, 120);
   };
   sortOut("bath", "Banho"); sortOut("color", "Cor");
+  for (const [g, raw] of Object.entries(f.variationCols || {})) { const values = parseValues(raw); if (values.length) variations[g] = values; }
   for (const [field, label] of [["brand", "Marca"], ["material", "Material"], ["theme", "Tema"], ["gender", "Gênero"]]) if (clean(f[field])) attributes[label] = clean(f[field]).slice(0, 120);
   const cost = toNumber(f.cost), margin = toNumber(f.margin);
   const weightG = toNumber(f.weightG) ?? (toNumber(f.weightKg) !== null ? round2(toNumber(f.weightKg) * 1000) : null);
@@ -120,6 +125,7 @@ export function recordFromRow(row, rowNumber, opts = {}) {
     description: clean(f.description).slice(0, 2000), highlights: parseList([f.highlights, ...(f.shortDescription ? String(f.shortDescription).split("\n") : [])].filter(Boolean).join(";")),
     keywords: parseList(String(f.keywords ?? "").replace(/,/g, ";")),
     cost, margin, priceWholesale: toNumber(f.priceWholesale), priceRetail: toNumber(f.priceRetail),
+    minQty: toNumber(f.minQty) > 0 ? Math.min(999, Math.trunc(toNumber(f.minQty))) : null,
     stock: toNumber(f.stock) !== null ? Math.max(0, Math.trunc(toNumber(f.stock))) : null,
     weightG, lengthCm: toNumber(f.length), widthCm: toNumber(f.width), heightCm: toNumber(f.height),
     active: parseStatus(f.status), attributes, variations, images, notes, ignoredColumns: ignored,
@@ -195,6 +201,9 @@ export function suggestCategoryMap(fileCategories, existingNames) {
   return map;
 }
 
+const stable = (v) => Array.isArray(v) ? v.map(stable) : v && typeof v === "object" ? Object.fromEntries(Object.keys(v).sort().map((k) => [k, stable(v[k])])) : v;
+export const sameValue = (a, b) => JSON.stringify(stable(a)) === JSON.stringify(stable(b));
+
 // ---------- plano de importação ----------
 // existing: produtos já cadastrados [{id, sku, ...}]; options.mode: "upsert" | "create" | "update"
 export function planImport(records, existing = [], options = {}) {
@@ -206,6 +215,7 @@ export function planImport(records, existing = [], options = {}) {
     const err = (t) => issues.push({ level: "error", text: t });
     const warn = (t) => issues.push({ level: "warn", text: t });
     rec.notes.forEach((n) => warn(n));
+    if (/^EXEMPLO(-|$)/.test(rec.sku)) { return { row: rec.row, sku: rec.sku, name: rec.name, category: rec.category, fileCategory: rec.category, status: "skip", id: null, doc: {}, changes: [], issues: [{ level: "info", text: "Linha de exemplo do modelo — ignorada." }], noPrice: false }; }
     if (!rec.sku) err("SKU vazio."); else if (!SKU_RE.test(rec.sku)) err(`SKU inválido "${rec.sku}" (use letras, números, hífen e _; até 40).`);
     if (rec.sku && seen.has(rec.sku)) err(`SKU repetido (também na linha ${seen.get(rec.sku)}).`); else if (rec.sku) seen.set(rec.sku, rec.row);
     if (!rec.name) err("Nome vazio.");
@@ -226,10 +236,14 @@ export function planImport(records, existing = [], options = {}) {
     put("description", rec.description); put("highlights", rec.highlights); put("keywords", rec.keywords);
     put("cost", rec.cost > 0 ? rec.cost : null);
     put("priceWholesale", priceWholesale > 0 ? round2(priceWholesale) : null); put("priceRetail", priceRetail > 0 ? round2(priceRetail) : null);
+    put("minQty", rec.minQty);
     put("stock", rec.stock); put("weightG", rec.weightG); put("lengthCm", rec.lengthCm); put("widthCm", rec.widthCm); put("heightCm", rec.heightCm);
     if (rec.active !== undefined) doc.active = rec.active;
     if (existingProduct) {
-      put("attributes", { ...(existingProduct.attributes || {}), ...rec.attributes });
+      // Banho/Cor com um valor que já é a única opção da variação do produto não vira atributo novo
+      const attrs = { ...rec.attributes };
+      for (const g of ["Banho", "Cor"]) if (attrs[g] !== undefined && (existingProduct.variations?.[g] || []).length === 1 && existingProduct.variations[g][0] === attrs[g]) delete attrs[g];
+      put("attributes", { ...(existingProduct.attributes || {}), ...attrs });
       put("variations", { ...(existingProduct.variations || {}), ...rec.variations });
       if (rec.images.length) doc.images = rec.images; // só substitui fotos quando a planilha traz URLs
     } else {
@@ -239,7 +253,7 @@ export function planImport(records, existing = [], options = {}) {
     }
     let status = "new", changes = [];
     if (existingProduct) {
-      changes = Object.keys(doc).filter((k) => JSON.stringify(doc[k]) !== JSON.stringify(existingProduct[k]));
+      changes = Object.keys(doc).filter((k) => !sameValue(doc[k], existingProduct[k]));
       status = changes.length ? "update" : "same";
     }
     if (issues.some((x) => x.level === "error")) status = "error";
@@ -253,3 +267,56 @@ export function planImport(records, existing = [], options = {}) {
 
 // Id do documento para produtos novos (só letras minúsculas, números e hífen)
 export const docIdForSku = (sku) => String(sku).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+
+// ---------- colunas do modelo e da exportação do catálogo ----------
+// Nomes de coluna SEM ponto e vírgula/vírgula/aspas/parênteses: assim o CSV nunca desalinha.
+const FIXED_GROUPS = ["Banho", "Cor"]; // têm coluna própria
+export const catalogColumns = (groupNames = []) => [...TEMPLATE_COLUMNS, "Quantidade Mínima", "Fotos", ...[...new Set(groupNames.map(variationValue).filter((g) => g && !FIXED_GROUPS.includes(g)))].map((g) => `Variação ${g}`)];
+export function productToRow(p, columns) {
+  const a = { ...(p.attributes && typeof p.attributes === "object" && !Array.isArray(p.attributes) ? p.attributes : {}) };
+  const v = p.variations && typeof p.variations === "object" && !Array.isArray(p.variations) ? p.variations : {};
+  const take = (k) => { const x = a[k]; delete a[k]; return x ?? ""; };
+  const marca = take("Marca"), material = take("Material");
+  const group = (g) => (Array.isArray(v[g]) && v[g].length ? v[g].join("; ") : take(g));
+  const banho = group("Banho"), cor = group("Cor");
+  const val = {
+    SKU: p.sku ?? "", Nome: p.name ?? "", Categoria: p.category ?? "", "Preço Atacado": Number(p.priceWholesale) > 0 ? Number(p.priceWholesale) : "", "Preço Varejo": Number(p.priceRetail) > 0 ? Number(p.priceRetail) : "",
+    "Estoque Inicial": p.stock ?? "", Banho: banho, Cor: cor, Material: material, Marca: marca, Descrição: p.description ?? "", Diferenciais: (p.highlights || []).join("; "), Atributos: formatAttributes(a),
+    "Custo Base (R$)": Number(p.cost) > 0 ? Number(p.cost) : "", "Margem Alvo (%)": "", "Peso Base (g)": p.weightG ?? "", "Comprimento (cm)": p.lengthCm ?? "", "Largura (cm)": p.widthCm ?? "", "Altura (cm)": p.heightCm ?? "",
+    Status: p.active === false ? "Inativo" : "Ativo", "Quantidade Mínima": Number(p.minQty) > 0 ? Number(p.minQty) : "", Fotos: (Array.isArray(p.images) ? p.images : []).map((i) => (typeof i === "string" ? i : i?.url || "")).filter(Boolean).join(" "),
+  };
+  for (const c of columns) if (c.startsWith("Variação ")) val[c] = Array.isArray(v[c.slice(9)]) ? v[c.slice(9)].join("; ") : "";
+  return columns.map((c) => val[c] ?? "");
+}
+export const groupsInProducts = (products) => [...new Set(products.flatMap((p) => Object.keys(p.variations && typeof p.variations === "object" ? p.variations : {})))];
+
+// ---------- modelo de planilha (usado pelos botões "Baixar modelo") ----------
+// Nomes de coluna SEM ponto e vírgula/vírgula/aspas: assim o CSV nunca desalinha.
+export const TEMPLATE_COLUMNS = ["SKU", "Nome", "Categoria", "Preço Atacado", "Preço Varejo", "Estoque Inicial", "Banho", "Cor", "Material", "Marca", "Descrição", "Diferenciais", "Atributos", "Custo Base (R$)", "Margem Alvo (%)", "Peso Base (g)", "Comprimento (cm)", "Largura (cm)", "Altura (cm)", "Status"];
+export const TEMPLATE_REQUIRED = ["SKU", "Nome", "Categoria"];
+export const TEMPLATE_SAMPLE = [
+  { SKU: "EXEMPLO-01", Nome: "Chaveiro São Bento", Categoria: "Chaveiros", "Preço Atacado": 19.9, "Preço Varejo": 29.9, "Estoque Inicial": 25, Banho: "Ouro; Prata; Níquel", Cor: "", Material: "Metal folheado", Marca: "Luary", Descrição: "Chaveiro folheado de São Bento.", Diferenciais: "Acabamento resistente; Tamanho compacto", Atributos: "Tema: Religioso; Gênero: Unissex", "Custo Base (R$)": 12.5, "Margem Alvo (%)": 40, "Peso Base (g)": 15, "Comprimento (cm)": 8, "Largura (cm)": 5, "Altura (cm)": 1, Status: "Ativo" },
+  { SKU: "EXEMPLO-02", Nome: "Pingente Cruz Vazada", Categoria: "Chaveiros", "Preço Atacado": 14.5, "Preço Varejo": "", "Estoque Inicial": "", Banho: "Ouro", Cor: "Dourado", Material: "Metal", Marca: "Luary", Descrição: "", Diferenciais: "", Atributos: "", "Custo Base (R$)": "", "Margem Alvo (%)": "", "Peso Base (g)": "", "Comprimento (cm)": "", "Largura (cm)": "", "Altura (cm)": "", Status: "Ativo" },
+];
+// Colunas do arquivo de modelo = as mesmas da exportação do catálogo (+ grupos Inicial e Signo prontos).
+export const TEMPLATE_FILE_COLUMNS = catalogColumns(["Inicial", "Signo"]);
+TEMPLATE_SAMPLE[0]["Quantidade Mínima"] = 12;
+TEMPLATE_SAMPLE[1]["Variação Inicial"] = "A; B; C";
+TEMPLATE_SAMPLE[1]["Variação Signo"] = "Áries; Touro";
+export const TEMPLATE_HELP = [
+  "COMO USAR ESTA PLANILHA",
+  "1. Apague as 2 linhas de exemplo (SKU EXEMPLO-01 e EXEMPLO-02) e preencha os seus produtos, um por linha. Não renomeie as colunas.",
+  "2. Obrigatórias: SKU, Nome e Categoria. As demais são opcionais — pode apagar as colunas que não usa.",
+  "3. Preços com vírgula ou ponto (19,90). Sem Preço Atacado, o sistema calcula Custo × (1 + Margem %) se esses dois estiverem preenchidos.",
+  "4. Banho / Cor: um valor só (Ouro) vira informação do produto. Vários separados por ; (Ouro; Prata; Níquel) viram variação que o cliente escolhe.",
+  "5. Diferenciais: frases separadas por ; (ex.: Acabamento resistente; Tamanho compacto).",
+  "6. Atributos: pares chave: valor separados por ; (ex.: Tema: Religioso; Gênero: Unissex).",
+  "7. Status: Ativo (aparece na loja) ou Inativo (oculto).",
+  "8. SKU que já existe é atualizado (só os campos preenchidos); SKU novo é criado. Campo vazio nunca apaga o que já está no sistema.",
+  "9. Quantidade Mínima: menor quantidade que o cliente pode pedir deste SKU. Fotos: endereços https das imagens, separados por espaço (deixe vazio para manter as atuais).",
+  "10. Colunas \"Variação ...\" (Inicial, Signo…): opções separadas por ;. A coluna Banho/Cor com várias opções também vira variação.",
+  "11. Linhas com SKU começando por EXEMPLO são ignoradas.",
+  "12. Se usar CSV, o separador é ponto e vírgula. Textos com ; dentro precisam estar entre aspas (o Excel faz isso sozinho ao salvar).",
+];
+export const csvCell = (v) => { const s = String(v ?? ""); return /[;,"\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+export const toCsv = (cols, rows, sep = ";") => "\uFEFF" + [cols, ...rows.map((r) => cols.map((c) => r[c] ?? ""))].map((l) => l.map(csvCell).join(sep)).join("\r\n") + "\r\n";
